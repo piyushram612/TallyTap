@@ -44,13 +44,12 @@ final dashboardProvider = Provider<DashboardState>((ref) {
   double totalSpent = 0.0;
   final Map<String, double> catSum = {};
 
+  final categoryMap = {for (var c in categories) c.toLowerCase(): c};
+
   String capitalizeCategory(String cat) {
     if (cat.isEmpty) return cat;
-    final match = categories.firstWhere(
-      (c) => c.toLowerCase() == cat.toLowerCase(),
-      orElse: () => '',
-    );
-    if (match.isNotEmpty) return match;
+    final match = categoryMap[cat.toLowerCase()];
+    if (match != null) return match;
     return cat.split(' ').map((word) {
       if (word.isEmpty) return word;
       return word[0].toUpperCase() + word.substring(1).toLowerCase();
@@ -73,24 +72,37 @@ final dashboardProvider = Provider<DashboardState>((ref) {
   }
 
   final now = DateTime.now();
-  final List<double> weeklyTrend = List.generate(7, (index) {
-    final targetDate = now.subtract(Duration(days: 6 - index));
-    double balance = 0.0;
-    
-    for (var tx in transactions) {
-      if (tx.category.toLowerCase() == 'transfer') continue;
-      final txDateOnly = DateTime(tx.date.year, tx.date.month, tx.date.day);
-      final targetDateOnly = DateTime(targetDate.year, targetDate.month, targetDate.day);
-      
-      if (txDateOnly.isBefore(targetDateOnly) || txDateOnly.isAtSameMomentAs(targetDateOnly)) {
-        if (tx.isIncome) {
-          balance += tx.amount;
-        } else {
-          balance -= tx.amount;
-        }
+  final oldestTrendDay = now.subtract(const Duration(days: 6));
+  final oldestDateOnly = DateTime(oldestTrendDay.year, oldestTrendDay.month, oldestTrendDay.day);
+
+  double initialBalance = 0.0;
+  final List<double> dailyChanges = List.filled(7, 0.0);
+
+  for (var tx in transactions) {
+    if (tx.category.toLowerCase() == 'transfer') continue;
+
+    final txDate = tx.date;
+    final txDateOnly = DateTime(txDate.year, txDate.month, txDate.day);
+
+    if (txDateOnly.isBefore(oldestDateOnly)) {
+      if (tx.isIncome) {
+        initialBalance += tx.amount;
+      } else {
+        initialBalance -= tx.amount;
+      }
+    } else {
+      final difference = txDateOnly.difference(oldestDateOnly).inDays;
+      if (difference >= 0 && difference < 7) {
+        final change = tx.isIncome ? tx.amount : -tx.amount;
+        dailyChanges[difference] += change;
       }
     }
-    return balance;
+  }
+
+  double currentBalance = initialBalance;
+  final List<double> weeklyTrend = List.generate(7, (index) {
+    currentBalance += dailyChanges[index];
+    return currentBalance;
   });
 
   final dynamicCategories = catSum.entries.map((entry) {

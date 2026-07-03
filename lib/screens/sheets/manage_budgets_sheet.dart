@@ -94,6 +94,8 @@ class _ManageBudgetsSheetState extends ConsumerState<ManageBudgetsSheet> {
     final categories = ref.watch(categoriesListProvider);
     final currency = ref.watch(currencyProvider);
     final excludedCategories = ref.watch(excludedCategoriesProvider);
+    final visibilities = ref.watch(categoryVisibilityProvider);
+    final expenseCategories = categories.where((cat) => visibilities[cat] != CategoryVisibility.income).toList();
 
     final double topPadding = MediaQuery.of(context).padding.top;
     final double bottomPadding = MediaQuery.of(context).padding.bottom;
@@ -313,10 +315,9 @@ class _ManageBudgetsSheetState extends ConsumerState<ManageBudgetsSheet> {
                     builder: (context, ref, child) {
                       final excludedCategories = ref.watch(excludedCategoriesProvider);
                       double totalAllocated = 0.0;
-                      for (final entry in _categoryControllers.entries) {
-                        final cat = entry.key;
-                        final ctrl = entry.value;
-                        if (!excludedCategories.contains(cat)) {
+                      for (final cat in expenseCategories) {
+                        final ctrl = _categoryControllers[cat];
+                        if (ctrl != null && !excludedCategories.contains(cat)) {
                           totalAllocated += double.tryParse(ctrl.text) ?? 0.0;
                         }
                       }
@@ -384,7 +385,7 @@ class _ManageBudgetsSheetState extends ConsumerState<ManageBudgetsSheet> {
                       );
                     },
                   ),
-                  if (categories.isEmpty)
+                  if (expenseCategories.isEmpty)
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.0),
                       child: Text(
@@ -393,13 +394,13 @@ class _ManageBudgetsSheetState extends ConsumerState<ManageBudgetsSheet> {
                       ),
                     )
                   else
-                    ...categories.map((cat) {
+                    ...expenseCategories.map((cat) {
                       final ctrl = _categoryControllers[cat] ??= TextEditingController();
                       final isDragging = _activeDragCategory == cat;
                       final isExcluded = excludedCategories.contains(cat);
                       
                       return GestureDetector(
-                        key: categories.indexOf(cat) == 0 ? TutorialService.adjustBudgetCategoryKey : null,
+                        key: expenseCategories.indexOf(cat) == 0 ? TutorialService.adjustBudgetCategoryKey : null,
                         onLongPressStart: isExcluded ? null : (details) {
                           HapticFeedback.heavyImpact();
                           setState(() {
@@ -615,7 +616,7 @@ class _ManageBudgetsSheetState extends ConsumerState<ManageBudgetsSheet> {
                       
                       // 2. Save entered category budgets
                       final Map<String, double> categoryBudgetsToSave = {};
-                      for (final cat in categories) {
+                      for (final cat in expenseCategories) {
                         final ctrl = _categoryControllers[cat];
                         if (ctrl != null && ctrl.text.isNotEmpty) {
                           final double? catLimit = double.tryParse(ctrl.text);

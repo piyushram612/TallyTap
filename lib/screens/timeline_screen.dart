@@ -26,6 +26,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
   bool _isSelectionMode = false;
   final Set<String> _selectedTransactionIds = {};
   MonthYear? _selectedMonth;
+  MonthYear? _lastLatestMonth;
 
   List<MonthYear> _getAvailableMonths(List<ExpenseTransaction> transactions) {
     if (transactions.isEmpty) {
@@ -536,9 +537,14 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
     final currency = ref.watch(currencyProvider);
 
     final availableMonths = _getAvailableMonths(transactions);
+    final latestMonth = availableMonths.isNotEmpty ? availableMonths.first : null;
+
     if (_selectedMonth == null || !availableMonths.contains(_selectedMonth)) {
-      _selectedMonth = availableMonths.isNotEmpty ? availableMonths.first : MonthYear(DateTime.now().year, DateTime.now().month);
+      _selectedMonth = latestMonth ?? MonthYear(DateTime.now().year, DateTime.now().month);
+    } else if (latestMonth != null && _lastLatestMonth != null && latestMonth.isAfter(_lastLatestMonth!)) {
+      _selectedMonth = latestMonth;
     }
+    _lastLatestMonth = latestMonth;
 
     // Filter transactions for the selected month
     final monthlyTransactions = transactions.where((tx) =>
@@ -1351,6 +1357,13 @@ class MonthYear {
   final int month;
 
   MonthYear(this.year, this.month);
+
+  bool isAfter(MonthYear other) {
+    if (year != other.year) {
+      return year > other.year;
+    }
+    return month > other.month;
+  }
 
   @override
   bool operator ==(Object other) =>

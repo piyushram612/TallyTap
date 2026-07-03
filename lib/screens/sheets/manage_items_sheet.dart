@@ -135,6 +135,19 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   bool _isReordering = false;
+  String? _errorText;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller.addListener(() {
+      if (_errorText != null) {
+        setState(() {
+          _errorText = null;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -381,6 +394,9 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
                   filled: true,
                   fillColor: TallyTapTheme.obsidianCard,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  errorText: _errorText,
+                  errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 11),
+                  errorMaxLines: 2,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
@@ -388,6 +404,14 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                     borderSide: const BorderSide(color: TallyTapTheme.primaryMint, width: 1.0),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.redAccent),
+                  ),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: const BorderSide(color: Colors.redAccent, width: 1.0),
                   ),
                 ),
               ),
@@ -397,6 +421,12 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
               onPressed: () async {
                 final text = _controller.text.trim();
                 if (text.isEmpty) return;
+                if (widget.itemLabel == 'Category' && text.toLowerCase() == 'transfer') {
+                  setState(() {
+                    _errorText = "The name 'Transfer' is reserved for system account transfers.";
+                  });
+                  return;
+                }
                 await widget.onAdd(text);
                 _controller.clear();
                 _focusNode.unfocus();
@@ -498,6 +528,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
   late TextEditingController _controller;
   late FocusNode _focusNode;
   late String _currentItemName;
+  String? _errorText;
 
   @override
   void initState() {
@@ -505,6 +536,13 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
     _currentItemName = widget.itemName;
     _controller = TextEditingController(text: widget.itemName);
     _focusNode = FocusNode();
+    _controller.addListener(() {
+      if (_errorText != null) {
+        setState(() {
+          _errorText = null;
+        });
+      }
+    });
   }
 
   @override
@@ -603,6 +641,9 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                       filled: true,
                       fillColor: TallyTapTheme.obsidianCard,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      errorText: _errorText,
+                      errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 11),
+                      errorMaxLines: 2,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
@@ -610,6 +651,14 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: const BorderSide(color: TallyTapTheme.primaryMint, width: 1.0),
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.redAccent),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(color: Colors.redAccent, width: 1.0),
                       ),
                     ),
                   ),
@@ -619,6 +668,12 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                   onPressed: () async {
                     final text = _controller.text.trim();
                     if (text.isEmpty || text == _currentItemName) return;
+                    if (widget.itemLabel == 'Category' && text.toLowerCase() == 'transfer') {
+                      setState(() {
+                        _errorText = "The name 'Transfer' is reserved for system account transfers.";
+                      });
+                      return;
+                    }
 
                     final oldName = _currentItemName;
                     await widget.onUpdate(oldName, text);
