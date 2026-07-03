@@ -91,7 +91,7 @@ class CategoriesListNotifier extends StateNotifier<List<String>> {
 
   Future<void> addCategory(String name) async {
     final trimmed = name.trim();
-    if (trimmed.isEmpty || state.contains(trimmed)) return;
+    if (trimmed.isEmpty || trimmed.toLowerCase() == 'transfer' || state.contains(trimmed)) return;
     final updated = List<String>.from(state)..add(trimmed);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('categories_json', json.encode(updated));
@@ -107,7 +107,7 @@ class CategoriesListNotifier extends StateNotifier<List<String>> {
 
   Future<void> updateCategory(String oldName, String newName) async {
     final trimmed = newName.trim();
-    if (trimmed.isEmpty || state.contains(trimmed)) return;
+    if (trimmed.isEmpty || trimmed.toLowerCase() == 'transfer' || state.contains(trimmed)) return;
     final updated = List<String>.from(state);
     final index = updated.indexOf(oldName);
     if (index != -1) {

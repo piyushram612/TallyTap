@@ -30,11 +30,14 @@ class _ManageCategoriesSheetState extends ConsumerState<ManageCategoriesSheet> {
   @override
   Widget build(BuildContext context) {
     final categories = ref.watch(categoriesListProvider);
+    final keyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
+    final currentInitialSize = keyboardOpen ? 0.90 : 0.55;
+    final currentMinSize = keyboardOpen ? 0.90 : _minSize;
 
     return DraggableScrollableSheet(
       controller: _sheetController,
-      initialChildSize: 0.55,
-      minChildSize: _minSize,
+      initialChildSize: currentInitialSize,
+      minChildSize: currentMinSize,
       maxChildSize: _maxSize,
       expand: false,
       builder: (context, scrollController) {
@@ -45,38 +48,6 @@ class _ManageCategoriesSheetState extends ConsumerState<ManageCategoriesSheet> {
           ),
           child: Column(
             children: [
-              // Drag handle pill — dedicated gesture so it always expands/collapses
-              // regardless of inner scroll position.
-              GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onVerticalDragUpdate: (details) {
-                  final screenH = MediaQuery.of(context).size.height;
-                  final delta = -details.primaryDelta! / screenH;
-                  final next = (_sheetController.size + delta).clamp(_minSize, _maxSize);
-                  _sheetController.jumpTo(next);
-                },
-                onTap: () {
-                  final target = _sheetController.size < 0.7 ? _maxSize : _minSize;
-                  _sheetController.animateTo(
-                    target,
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeInOut,
-                  );
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  child: Center(
-                    child: Container(
-                      width: 36,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: TallyTapTheme.borderGreen,
-                        borderRadius: BorderRadius.circular(2),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
               Expanded(
                 child: ManageItemsSheet(
                   title: 'Manage Categories',

@@ -130,12 +130,12 @@ final insightsPeriodFilterProvider = StateNotifierProvider<InsightsPeriodFilterN
 
 final availableMonthsProvider = Provider<List<DateTime>>((ref) {
   final transactions = ref.watch(transactionListProvider);
-  final Set<String> uniqueKeys = {};
+  final Set<int> uniqueKeys = {};
   final List<DateTime> months = [];
   
   for (var tx in transactions) {
     final date = tx.date;
-    final key = "${date.year}-${date.month}";
+    final key = date.year * 100 + date.month;
     if (!uniqueKeys.contains(key)) {
       uniqueKeys.add(key);
       months.add(DateTime(date.year, date.month));
@@ -162,6 +162,7 @@ final insightsProvider = Provider<InsightsState>((ref) {
 
   for (var tx in transactions) {
     if (tx.isIncome) continue;
+    if (tx.category.toLowerCase() == 'transfer') continue;
     final clean = tx.category.trim();
 
     // Filter by date!

@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'category_provider.dart';
 
 final budgetLimitsProvider = StateNotifierProvider<BudgetLimitsNotifier, Map<String, double>>((ref) {
-  return BudgetLimitsNotifier();
+  return BudgetLimitsNotifier(ref);
 });
 
 final excludedCategoriesProvider = StateNotifierProvider<ExcludedCategoriesNotifier, List<String>>((ref) {
@@ -36,8 +36,19 @@ class ExcludedCategoriesNotifier extends StateNotifier<List<String>> {
 }
 
 class BudgetLimitsNotifier extends StateNotifier<Map<String, double>> {
-  BudgetLimitsNotifier() : super({}) {
+  final Ref _ref;
+  BudgetLimitsNotifier(this._ref) : super({}) {
     loadLimits();
+
+    // Dynamically update limits when categories list changes
+    _ref.listen<List<String>>(categoriesListProvider, (previous, next) {
+      loadLimits();
+    });
+
+    // Dynamically update limits when category visibilities change
+    _ref.listen<Map<String, String>>(categoryVisibilityProvider, (previous, next) {
+      loadLimits();
+    });
   }
 
   Future<void> loadLimits() async {
@@ -56,6 +67,7 @@ class BudgetLimitsNotifier extends StateNotifier<Map<String, double>> {
     }
 
     final excludedCats = prefs.getStringList('excluded_budget_categories') ?? [];
+    final visibilities = _ref.read(categoryVisibilityProvider);
 
     final defaultLimits = {
       'Dining': 800.0,
@@ -66,6 +78,10 @@ class BudgetLimitsNotifier extends StateNotifier<Map<String, double>> {
     };
 
     for (final cat in activeCategories) {
+      final visibility = visibilities[cat] ?? CategoryVisibility.expense;
+      if (visibility == CategoryVisibility.income) {
+        continue;
+      }
       if (excludedCats.contains(cat)) {
         continue;
       }

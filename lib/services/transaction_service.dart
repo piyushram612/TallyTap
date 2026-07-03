@@ -29,18 +29,28 @@ class TransactionListNotifier extends StateNotifier<List<ExpenseTransaction>> {
   }
 
   Future<void> addTransaction(ExpenseTransaction tx) async {
-    await _service.saveTransaction(tx);
-    await loadTransactions();
+    final updatedList = [tx, ...state]..sort((a, b) => b.date.compareTo(a.date));
+    state = updatedList;
+    await _service.saveTransactions(updatedList, overwrite: true);
   }
 
   Future<void> addTransactions(List<ExpenseTransaction> txs) async {
-    await _service.saveTransactions(txs);
-    await loadTransactions();
+    final Map<String, ExpenseTransaction> merged = {
+      for (var tx in state) tx.id: tx,
+    };
+    for (var tx in txs) {
+      merged[tx.id] = tx;
+    }
+    final updatedList = merged.values.toList()..sort((a, b) => b.date.compareTo(a.date));
+    state = updatedList;
+    await _service.saveTransactions(updatedList, overwrite: true);
   }
 
   Future<void> updateTransaction(ExpenseTransaction tx) async {
-    await _service.updateTransaction(tx);
-    await loadTransactions();
+    final updatedList = state.map((item) => item.id == tx.id ? tx : item).toList()
+      ..sort((a, b) => b.date.compareTo(a.date));
+    state = updatedList;
+    await _service.saveTransactions(updatedList, overwrite: true);
   }
 
   Future<void> updateTransfer({
@@ -51,7 +61,7 @@ class TransactionListNotifier extends StateNotifier<List<ExpenseTransaction>> {
     required DateTime date,
     required String notes,
   }) async {
-    final list = await _service.getTransactions();
+    final list = List<ExpenseTransaction>.from(state);
     final sourceLegIndex = list.indexWhere((tx) => tx.groupId == groupId && !tx.isIncome);
     final destLegIndex = list.indexWhere((tx) => tx.groupId == groupId && tx.isIncome);
 
@@ -75,24 +85,48 @@ class TransactionListNotifier extends StateNotifier<List<ExpenseTransaction>> {
         merchant: 'Transfer from $fromAccount',
       );
 
+      list.sort((a, b) => b.date.compareTo(a.date));
+      state = list;
       await _service.saveTransactions(list, overwrite: true);
-      await loadTransactions();
     }
   }
 
   Future<void> deleteTransaction(String id) async {
-    await _service.deleteTransaction(id);
-    await loadTransactions();
+    final toDeleteIndex = state.indexWhere((tx) => tx.id == id);
+    if (toDeleteIndex == -1) return;
+
+    final toDelete = state[toDeleteIndex];
+    final updatedList = List<ExpenseTransaction>.from(state);
+    if (toDelete.category.toLowerCase() == 'transfer' && toDelete.groupId != null) {
+      updatedList.removeWhere((tx) => tx.groupId == toDelete.groupId);
+    } else {
+      updatedList.removeAt(toDeleteIndex);
+    }
+    state = updatedList;
+    await _service.saveTransactions(updatedList, overwrite: true);
   }
 
   Future<void> clearTransactions() async {
+    state = [];
     await _service.clearAll();
-    await loadTransactions();
   }
 
   Future<void> importTransactions(List<ExpenseTransaction> txs, {bool overwrite = false}) async {
-    await _service.saveTransactions(txs, overwrite: overwrite);
-    await loadTransactions();
+    if (overwrite) {
+      final updatedList = List<ExpenseTransaction>.from(txs)..sort((a, b) => b.date.compareTo(a.date));
+      state = updatedList;
+      await _service.saveTransactions(updatedList, overwrite: true);
+    } else {
+      final Map<String, ExpenseTransaction> merged = {
+        for (var tx in state) tx.id: tx,
+      };
+      for (var tx in txs) {
+        merged[tx.id] = tx;
+      }
+      final updatedList = merged.values.toList()..sort((a, b) => b.date.compareTo(a.date));
+      state = updatedList;
+      await _service.saveTransactions(updatedList, overwrite: true);
+    }
   }
 }
 
