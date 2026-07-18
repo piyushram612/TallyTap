@@ -90,6 +90,7 @@ class MainActivity : FlutterFragmentActivity() {
                 "setCalibrationMode" -> {
                     val enabled = call.argument<Boolean>("enabled") ?: false
                     calibrationMode = enabled
+                    BackTapService.instance?.detector?.resetState()
                     if (enabled) {
                         // Always start the sensor service during calibration so the
                         // accelerometer is guaranteed to be listening, even if the

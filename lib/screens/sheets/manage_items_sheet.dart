@@ -387,6 +387,7 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
               child: TextField(
                 controller: _controller,
                 focusNode: _focusNode,
+                textCapitalization: TextCapitalization.sentences,
                 style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13),
                 decoration: InputDecoration(
                   hintText: widget.hintText,
@@ -634,6 +635,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                   child: TextField(
                     controller: _controller,
                     focusNode: _focusNode,
+                    textCapitalization: TextCapitalization.sentences,
                     style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13),
                     decoration: InputDecoration(
                       hintText: 'Enter new name',

@@ -386,7 +386,7 @@ class _CreateRecurringTransactionScreenState extends ConsumerState<CreateRecurri
                           color: TallyTapTheme.textLight,
                           fontWeight: FontWeight.w600,
                         ),
-                        textCapitalization: TextCapitalization.words,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           hintText: isIncome
                               ? 'e.g. Salary, Dividend, Gift...'

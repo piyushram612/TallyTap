@@ -132,6 +132,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
         content: TextField(
           controller: groupNameController,
           autofocus: true,
+          textCapitalization: TextCapitalization.sentences,
           style: const TextStyle(color: TallyTapTheme.textLight),
           decoration: InputDecoration(
             hintText: 'e.g. Restaurant split, Weekend trip...',

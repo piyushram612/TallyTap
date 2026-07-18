@@ -16,7 +16,7 @@ class TipCalculatorScreen extends ConsumerStatefulWidget {
 }
 
 class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
-  final TextEditingController _billController = TextEditingController(text: "0.00");
+  final TextEditingController _billController = TextEditingController();
   double _tipPercentage = 15.0;
   int _peopleCount = 1;
   TutorialCoachMark? tutorialCoachMark;
@@ -207,9 +207,11 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                                 fontWeight: FontWeight.w900,
                                 color: TallyTapTheme.primaryMint,
                               ),
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
+                                hintText: '0.00',
+                                hintStyle: TextStyle(color: TallyTapTheme.primaryMint.withOpacity(0.5)),
                                 prefixText: '₹ ',
-                                prefixStyle: TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+                                prefixStyle: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
                                 border: InputBorder.none,
                               ),
                               onChanged: (val) {

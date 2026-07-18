@@ -465,7 +465,7 @@ class _TransactionDetailsScreenState
                             color: TallyTapTheme.textLight,
                             fontWeight: FontWeight.w600,
                           ),
-                          textCapitalization: TextCapitalization.words,
+                          textCapitalization: TextCapitalization.sentences,
                           decoration: InputDecoration(
                             hintText: 'e.g. Starbucks, Salary, Rent...',
                             hintStyle: const TextStyle(
@@ -509,7 +509,7 @@ class _TransactionDetailsScreenState
                               color: TallyTapTheme.textLight,
                               fontWeight: FontWeight.w600,
                             ),
-                            textCapitalization: TextCapitalization.words,
+                            textCapitalization: TextCapitalization.sentences,
                             decoration: InputDecoration(
                               hintText: isIncome
                                   ? 'e.g. Employer, Client...'
