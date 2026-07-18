@@ -136,6 +136,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
     final globalBudget = ref.watch(globalBudgetProvider);
     final budgetLimits = ref.watch(budgetLimitsProvider);
     final currency = ref.watch(currencyProvider);
+    final excludedCategories = ref.watch(excludedCategoriesProvider);
     final transactions = ref.watch(transactionListProvider);
     final dashboard = ref.watch(dashboardProvider);
     final spentPerCategory = dashboard.spentPerCategory;
@@ -168,6 +169,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
 
     for (var tx in transactions) {
       if (tx.category.toLowerCase() == 'transfer') continue;
+      if (excludedCategories.contains(tx.category)) continue;
       if (!tx.isIncome) {
         if (isDateInCurrentWeek(tx.date)) {
           weeklySpent += tx.amount;

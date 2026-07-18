@@ -123,6 +123,7 @@ class HomeScreen extends ConsumerWidget {
     final globalBudget = ref.watch(globalBudgetProvider);
     final currency = ref.watch(currencyProvider);
     final username = ref.watch(usernameProvider);
+    final excludedCategories = ref.watch(excludedCategoriesProvider);
     final summaryPeriod = ref.watch(homeSummaryPeriodProvider);
     final summaryMetric = ref.watch(homeSummaryMetricProvider);
     final summaryStyle = ref.watch(homeSummaryStyleProvider);
@@ -176,6 +177,7 @@ class HomeScreen extends ConsumerWidget {
     double totalSpent = 0.0;
     for (var tx in transactions) {
       if (tx.category.toLowerCase() == 'transfer') continue;
+      if (excludedCategories.contains(tx.category)) continue;
       if (!tx.isIncome) {
         if (globalBudget.period == 'weekly') {
           if (_isDateInCurrentWeek(tx.date)) {
@@ -1243,9 +1245,28 @@ class HomeScreen extends ConsumerWidget {
                           text: '$currency${totalSpent.toStringAsFixed(0)}',
                           style: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
                         ),
-                        TextSpan(
-                          text: ' recently.\nYou\'re on track to stay within your $currency${globalBudget.amount.toStringAsFixed(0)} ${globalBudget.period} budget.',
-                        ),
+                        if (totalSpent > globalBudget.amount) ...[
+                          const TextSpan(text: ' recently.\nYou\'ve exceeded your '),
+                          TextSpan(
+                            text: '${globalBudget.period} budget',
+                            style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(text: ' of '),
+                          TextSpan(
+                            text: '$currency${globalBudget.amount.toStringAsFixed(0)}',
+                            style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(text: ' by '),
+                          TextSpan(
+                            text: '$currency${(totalSpent - globalBudget.amount).toStringAsFixed(0)}',
+                            style: const TextStyle(color: Color(0xFFFFB5B5), fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(text: '.'),
+                        ] else ...[
+                          TextSpan(
+                            text: ' recently.\nYou\'re on track to stay within your $currency${globalBudget.amount.toStringAsFixed(0)} ${globalBudget.period} budget.',
+                          ),
+                        ],
                       ],
                     ),
                   ),

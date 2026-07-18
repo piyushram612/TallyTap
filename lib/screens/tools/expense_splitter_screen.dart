@@ -41,7 +41,7 @@ class ExpenseSplitterScreen extends ConsumerStatefulWidget {
 
 class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
   final TextEditingController _amountController = TextEditingController();
-  final TextEditingController _descController = TextEditingController(text: "Restaurant Outing");
+  final TextEditingController _descController = TextEditingController();
   int _peopleCount = 4;
   final List<TextEditingController> _friendControllers = [];
   final List<bool> _friendVerificationFlags = [];
@@ -455,6 +455,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                           child: TextField(
                             controller: _descController,
                             textAlign: TextAlign.end,
+                            textCapitalization: TextCapitalization.sentences,
                             style: const TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
@@ -668,6 +669,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                   Expanded(
                                     child: TextField(
                                       controller: _friendControllers[friendIdx],
+                                      textCapitalization: TextCapitalization.sentences,
                                       style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
                                       decoration: const InputDecoration(
                                         border: InputBorder.none,
@@ -1070,6 +1072,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                          children: [
                             Expanded(child: TextField(
                                controller: item.nameController,
+                               textCapitalization: TextCapitalization.sentences,
                                style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
                                decoration: const InputDecoration(
                                    hintText: 'Item Name (e.g. Pizza)',

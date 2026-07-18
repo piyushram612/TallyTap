@@ -76,7 +76,7 @@ class _ManageProfileSheetState extends ConsumerState<ManageProfileSheet> {
           const SizedBox(height: 12),
           TextField(
             controller: _nameController,
-            textCapitalization: TextCapitalization.words,
+            textCapitalization: TextCapitalization.sentences,
             style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
             decoration: InputDecoration(
               hintText: 'Enter your name (e.g. Alex)',

@@ -1129,6 +1129,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                     return TextField(
                       controller: controller,
                       focusNode: focusNode,
+                      textCapitalization: TextCapitalization.sentences,
                       style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
                         hintText: 'Who is this with?',
@@ -1200,6 +1201,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                           const SizedBox(height: 8),
                           TextField(
                             controller: notesController,
+                            textCapitalization: TextCapitalization.sentences,
                             style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
                             decoration: InputDecoration(
                               hintText: 'e.g. Dinner, Rent split...',

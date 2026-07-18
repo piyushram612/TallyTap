@@ -364,7 +364,7 @@ class _CreateTransactionScreenState
                           color: TallyTapTheme.textLight,
                           fontWeight: FontWeight.w600,
                         ),
-                        textCapitalization: TextCapitalization.words,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           hintText: _isIncome
                               ? 'e.g. Salary, Dividend, Gift...'
@@ -398,7 +398,7 @@ class _CreateTransactionScreenState
                           color: TallyTapTheme.textLight,
                           fontWeight: FontWeight.w600,
                         ),
-                        textCapitalization: TextCapitalization.words,
+                        textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           hintText: _isIncome
                               ? 'e.g. Employer, Client...'

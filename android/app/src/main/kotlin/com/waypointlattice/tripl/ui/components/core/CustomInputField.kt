@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import com.waypointlattice.tripl.ui.components.outerGlow
 
 val GreenPrimary = Color(0xFF10B981)
@@ -94,6 +96,9 @@ fun CustomInputField(
                             fontSize = 14.sp,
                             fontWeight = FontWeight.W600,
                             color = Color.White
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            capitalization = KeyboardCapitalization.Sentences
                         ),
                         singleLine = true,
                         modifier = Modifier
