@@ -101,6 +101,14 @@ graph TD
        flutter build appbundle --flavor prod
        ```
 
+> [!NOTE]  
+> **Signing Configuration**: Building the release version requires a keystore. The project looks for `android/app/upload-keystore.jks` using the credentials defined in `android/key.properties`.
+> 
+> To generate a compatible upload keystore for local testing, run:
+> ```bash
+> keytool -genkey -v -keystore android/app/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload -storepass wayp0intL@ttice206 -keypass wayp0intL@ttice206
+> ```
+
 ---
 
 ## 🧪 How to Test Capture Triggers
