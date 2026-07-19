@@ -220,14 +220,18 @@ class HomeScreen extends ConsumerWidget {
               summaryTotalSpent += tx.amount.abs();
             }
             if (_isDateInWeek(tx.date, priorReferenceDate)) {
-              summaryPrevSpent += tx.amount.abs();
+              if (summaryOffset != 0 || tx.date.weekday <= now.weekday) {
+                summaryPrevSpent += tx.amount.abs();
+              }
             }
           } else {
             if (_isDateInMonth(tx.date, adjustedNow)) {
               summaryTotalSpent += tx.amount.abs();
             }
             if (_isDateInMonth(tx.date, priorReferenceDate)) {
-              summaryPrevSpent += tx.amount.abs();
+              if (summaryOffset != 0 || tx.date.day <= now.day) {
+                summaryPrevSpent += tx.amount.abs();
+              }
             }
           }
         }
@@ -242,14 +246,18 @@ class HomeScreen extends ConsumerWidget {
               summaryTotalSpent += tx.amount.abs();
             }
             if (_isDateInWeek(tx.date, priorReferenceDate)) {
-              summaryPrevSpent += tx.amount.abs();
+              if (summaryOffset != 0 || tx.date.weekday <= now.weekday) {
+                summaryPrevSpent += tx.amount.abs();
+              }
             }
           } else {
             if (_isDateInMonth(tx.date, adjustedNow)) {
               summaryTotalSpent += tx.amount.abs();
             }
             if (_isDateInMonth(tx.date, priorReferenceDate)) {
-              summaryPrevSpent += tx.amount.abs();
+              if (summaryOffset != 0 || tx.date.day <= now.day) {
+                summaryPrevSpent += tx.amount.abs();
+              }
             }
           }
         }
@@ -265,14 +273,18 @@ class HomeScreen extends ConsumerWidget {
             summaryTotalSpent += amt;
           }
           if (_isDateInWeek(tx.date, priorReferenceDate)) {
-            summaryPrevSpent += amt;
+            if (summaryOffset != 0 || tx.date.weekday <= now.weekday) {
+              summaryPrevSpent += amt;
+            }
           }
         } else {
           if (_isDateInMonth(tx.date, adjustedNow)) {
             summaryTotalSpent += amt;
           }
           if (_isDateInMonth(tx.date, priorReferenceDate)) {
-            summaryPrevSpent += amt;
+            if (summaryOffset != 0 || tx.date.day <= now.day) {
+              summaryPrevSpent += amt;
+            }
           }
         }
       }
@@ -284,6 +296,7 @@ class HomeScreen extends ConsumerWidget {
     } else {
       isOverspending = summaryTotalSpent < summaryPrevSpent;
     }
+    final bool isTrendingUp = summaryTotalSpent >= summaryPrevSpent;
 
     double percentChange = 0.0;
     final double denom = summaryPrevSpent.abs();
@@ -789,7 +802,7 @@ class HomeScreen extends ConsumerWidget {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(
-                                      isOverspending ? Icons.trending_up : Icons.trending_down, 
+                                      isTrendingUp ? Icons.trending_up : Icons.trending_down, 
                                       color: isOverspending ? const Color(0xFFEF4444) : TallyTapTheme.primaryMint, 
                                       size: 14,
                                     ),
