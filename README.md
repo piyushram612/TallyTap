@@ -66,15 +66,48 @@ graph TD
 - **Java JDK (17+)**: Configured on terminal paths (`JAVA_HOME`).
 
 ### Build & Deploy
+
 1. Connect your Android device or spin up an emulator.
 2. Resolve dependencies:
    ```bash
    flutter pub get
    ```
-3. Run the development build:
-   ```bash
-   flutter run
-   ```
+3. Run the application:
+   - **Development Flavor**:
+     ```bash
+     flutter run --flavor dev
+     ```
+   - **Production Flavor**:
+     ```bash
+     flutter run --flavor prod
+     ```
+4. Build release binaries:
+   - **Development Build**:
+     - **APK**:
+       ```bash
+       flutter build apk --flavor dev
+       ```
+     - **App Bundle**:
+       ```bash
+       flutter build appbundle --flavor dev
+       ```
+   - **Production Build**:
+     - **APK**:
+       ```bash
+       flutter build apk --flavor prod
+       ```
+     - **App Bundle**:
+       ```bash
+       flutter build appbundle --flavor prod
+       ```
+
+> [!NOTE]  
+> **Signing Configuration**: Building the release version requires a keystore. The project looks for `android/app/upload-keystore.jks` using the credentials defined in `android/key.properties`.
+> 
+> To generate a compatible upload keystore for local testing, run:
+> ```bash
+> keytool -genkey -v -keystore android/app/upload-keystore.jks -keyalg RSA -keysize 2048 -validity 10000 -alias upload -storepass wayp0intL@ttice206 -keypass wayp0intL@ttice206
+> ```
 
 ---
 
