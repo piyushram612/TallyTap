@@ -158,8 +158,15 @@ class _CreateTransactionScreenState
       ));
       return;
     }
-    final category = _selectedCategory ?? 'Other';
-    final source = _selectedPaymentMethod ?? 'Cash';
+    if (_selectedCategory == null || _selectedPaymentMethod == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Please select a category and payment source'),
+        backgroundColor: Color(0xFFEF4444),
+      ));
+      return;
+    }
+    final category = _selectedCategory!;
+    final source = _selectedPaymentMethod!;
     final merchant = _merchantController.text.trim().isNotEmpty
         ? _merchantController.text.trim()
         : (_isIncome ? 'Quick Income' : 'Quick Expense');
@@ -286,12 +293,9 @@ class _CreateTransactionScreenState
     final allTx = ref.watch(transactionListProvider);
     final startingBalances = ref.watch(sourceStartingBalancesProvider);
 
-    // auto-select defaults
-    if (!categories.contains(_selectedCategory) && categories.isNotEmpty) {
-      _selectedCategory = categories.first;
-    }
-    if (_selectedPaymentMethod == null && sources.isNotEmpty) {
-      _selectedPaymentMethod = sources.first;
+    // If selected category is no longer valid for the selected type, reset to null
+    if (_selectedCategory != null && !categories.contains(_selectedCategory)) {
+      _selectedCategory = null;
     }
 
     final activeColor =
