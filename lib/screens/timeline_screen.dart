@@ -182,19 +182,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
 
     for (final txId in _selectedTransactionIds) {
       final originalTx = transactions.firstWhere((tx) => tx.id == txId);
-      final updatedTx = ExpenseTransaction(
-        id: originalTx.id,
-        amount: originalTx.amount,
-        merchant: originalTx.merchant,
-        date: originalTx.date,
-        paymentMethod: originalTx.paymentMethod,
-        category: originalTx.category,
-        notes: originalTx.notes,
-        paidTo: originalTx.paidTo,
-        needsVerification: originalTx.needsVerification,
-        reminderDate: originalTx.reminderDate,
-        groupId: generatedGroupId,
-      );
+      final updatedTx = originalTx.copyWith(groupId: generatedGroupId);
       await listNotifier.updateTransaction(updatedTx);
     }
 
@@ -325,19 +313,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
 
     final groupedTxs = transactions.where((tx) => tx.groupId == groupId).toList();
     for (final tx in groupedTxs) {
-      final updatedTx = ExpenseTransaction(
-        id: tx.id,
-        amount: tx.amount,
-        merchant: tx.merchant,
-        date: tx.date,
-        paymentMethod: tx.paymentMethod,
-        category: tx.category,
-        notes: tx.notes,
-        paidTo: tx.paidTo,
-        needsVerification: tx.needsVerification,
-        reminderDate: tx.reminderDate,
-        groupId: null,
-      );
+      final updatedTx = tx.copyWith(groupId: null);
       await listNotifier.updateTransaction(updatedTx);
     }
 
@@ -407,19 +383,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
 
     for (final txId in _selectedTransactionIds) {
       final originalTx = transactions.firstWhere((tx) => tx.id == txId);
-      final updatedTx = ExpenseTransaction(
-        id: originalTx.id,
-        amount: originalTx.amount,
-        merchant: originalTx.merchant,
-        date: originalTx.date,
-        paymentMethod: originalTx.paymentMethod,
-        category: originalTx.category,
-        notes: originalTx.notes,
-        paidTo: originalTx.paidTo,
-        needsVerification: originalTx.needsVerification,
-        reminderDate: originalTx.reminderDate,
-        groupId: groupId,
-      );
+      final updatedTx = originalTx.copyWith(groupId: groupId);
       await listNotifier.updateTransaction(updatedTx);
     }
 
@@ -551,23 +515,6 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
     final monthlyTransactions = transactions.where((tx) =>
         tx.date.year == _selectedMonth!.year && tx.date.month == _selectedMonth!.month).toList();
 
-    // Calculate monthly summary
-    double monthlyIncome = 0.0;
-    double monthlyExpense = 0.0;
-
-    for (final tx in monthlyTransactions) {
-      if (tx.category.toLowerCase() == 'transfer') continue;
-      final isIncome = tx.isIncome;
-      final absAmount = tx.amount.abs();
-      if (isIncome) {
-        monthlyIncome += absAmount;
-      } else {
-        monthlyExpense += absAmount;
-      }
-    }
-
-    final double monthlyNet = monthlyIncome - monthlyExpense;
-
     double maxAmount = 100.0;
     if (transactions.isNotEmpty) {
       double rawMax = transactions.map((t) => t.amount).reduce((a, b) => a > b ? a : b);
@@ -683,6 +630,33 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
     
     sortedDayKeys.sort((a, b) => b.compareTo(a));
 
+    // Calculate summary for the filtered transactions
+    double filteredIncome = 0.0;
+    double filteredExpense = 0.0;
+
+    for (final item in filteredItems) {
+      if (item.isGroup) {
+        for (final tx in item.groupTransactions!) {
+          if (tx.category.toLowerCase() == 'transfer') continue;
+          if (tx.isIncome) {
+            filteredIncome += tx.amount.abs();
+          } else {
+            filteredExpense += tx.amount.abs();
+          }
+        }
+      } else {
+        final tx = item.singleTransaction!;
+        if (tx.category.toLowerCase() == 'transfer') continue;
+        if (tx.isIncome) {
+          filteredIncome += tx.amount.abs();
+        } else {
+          filteredExpense += tx.amount.abs();
+        }
+      }
+    }
+
+    final double filteredNet = filteredIncome - filteredExpense;
+
     return Stack(
       children: [
         Padding(
@@ -779,13 +753,13 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
               ),
               const SizedBox(height: 12),
 
-              // Monthly Summary pills (Expenses, Income, Net)
+              // Filtered Summary pills (Expenses, Income, Net)
               Row(
                 children: [
                   Expanded(
                     child: _buildSummaryPill(
                       label: 'Expenses',
-                      value: '$currency${monthlyExpense.toStringAsFixed(2)}',
+                      value: '$currency${filteredExpense.toStringAsFixed(2)}',
                       color: const Color(0xFFF87171),
                       icon: Icons.arrow_upward_rounded,
                     ),
@@ -794,7 +768,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
                   Expanded(
                     child: _buildSummaryPill(
                       label: 'Income',
-                      value: '$currency${monthlyIncome.toStringAsFixed(2)}',
+                      value: '$currency${filteredIncome.toStringAsFixed(2)}',
                       color: const Color(0xFF34D399),
                       icon: Icons.arrow_downward_rounded,
                     ),
@@ -803,11 +777,11 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
                   Expanded(
                     child: _buildSummaryPill(
                       label: 'Net Balance',
-                      value: '${monthlyNet >= 0 ? '+' : '-'}$currency${monthlyNet.abs().toStringAsFixed(2)}',
-                      color: monthlyNet >= 0 ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+                      value: '${filteredNet >= 0 ? '+' : '-'}$currency${filteredNet.abs().toStringAsFixed(2)}',
+                      color: filteredNet >= 0 ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
                       icon: Icons.account_balance_wallet_outlined,
                       isNet: true,
-                      isPositive: monthlyNet >= 0,
+                      isPositive: filteredNet >= 0,
                     ),
                   ),
                 ],
@@ -1248,102 +1222,111 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
           if (_expanded) ...[
             const Divider(color: TallyTapTheme.borderGreen, height: 1),
             Container(
-              color: TallyTapTheme.obsidianBg.withOpacity(0.5),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: widget.transactions.length,
-                separatorBuilder: (context, index) => const Divider(
-                  color: TallyTapTheme.borderGreen,
-                  height: 1,
-                  thickness: 0.5,
+              decoration: BoxDecoration(
+                color: TallyTapTheme.obsidianBg.withOpacity(0.5),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(16),
+                  bottomRight: Radius.circular(16),
                 ),
-                itemBuilder: (context, index) {
-                  final tx = widget.transactions[index];
-                  final isInc = tx.isIncome;
-                  final color = isInc ? const Color(0xFF10B981) : TallyTapTheme.textLight;
-                  int hour = tx.date.hour;
-                  final period = hour >= 12 ? 'PM' : 'AM';
-                  if (hour > 12) hour -= 12;
-                  if (hour == 0) hour = 12;
-                  final formattedTime = "${hour.toString().padLeft(2, '0')}:${tx.date.minute.toString().padLeft(2, '0')} $period";
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      children: [
-                        Icon(
-                          isInc ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
-                          color: isInc ? const Color(0xFF10B981) : TallyTapTheme.textGray,
-                          size: 14,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                tx.merchant,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: TallyTapTheme.textLight,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                '$formattedTime • ${tx.category}',
-                                style: const TextStyle(
-                                  fontSize: 10,
-                                  color: TallyTapTheme.textGray,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          '${isInc ? '+' : '-'} ${widget.currency}${tx.amount.abs().toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 13,
-                            fontWeight: FontWeight.w700,
-                            color: color,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                },
               ),
-            ),
-            Container(
-              color: TallyTapTheme.obsidianBg.withOpacity(0.5),
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: SizedBox(
-                width: double.infinity,
-                child: OutlinedButton.icon(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => GroupTransactionDetailsScreen(groupId: widget.groupId),
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListView.separated(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.zero,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: widget.transactions.length,
+                    separatorBuilder: (context, index) => const Divider(
+                      color: TallyTapTheme.borderGreen,
+                      height: 1,
+                      thickness: 0.5,
+                    ),
+                    itemBuilder: (context, index) {
+                      final tx = widget.transactions[index];
+                      final isInc = tx.isIncome;
+                      final color = isInc ? const Color(0xFF10B981) : TallyTapTheme.textLight;
+                      int hour = tx.date.hour;
+                      final period = hour >= 12 ? 'PM' : 'AM';
+                      if (hour > 12) hour -= 12;
+                      if (hour == 0) hour = 12;
+                      final formattedTime = "${hour.toString().padLeft(2, '0')}:${tx.date.minute.toString().padLeft(2, '0')} $period";
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              isInc ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
+                              color: isInc ? const Color(0xFF10B981) : TallyTapTheme.textGray,
+                              size: 14,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    tx.merchant,
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: TallyTapTheme.textLight,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 2),
+                                  Text(
+                                    '$formattedTime • ${tx.category}',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: TallyTapTheme.textGray,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Text(
+                              '${isInc ? '+' : '-'} ${widget.currency}${tx.amount.abs().toStringAsFixed(2)}',
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: color,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => GroupTransactionDetailsScreen(groupId: widget.groupId),
+                          ),
+                        );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: TallyTapTheme.primaryMint,
+                        side: const BorderSide(color: TallyTapTheme.borderGreen),
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    );
-                  },
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: TallyTapTheme.primaryMint,
-                    side: const BorderSide(color: TallyTapTheme.borderGreen),
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      icon: const Icon(Icons.receipt_long_rounded, size: 16),
+                      label: const Text(
+                        'View Details & Verify',
+                        style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
+                      ),
                     ),
                   ),
-                  icon: const Icon(Icons.receipt_long_rounded, size: 18),
-                  label: const Text(
-                    'View Details & Verify',
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13),
-                  ),
-                ),
+                ],
               ),
             ),
           ],
