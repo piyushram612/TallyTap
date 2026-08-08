@@ -14,6 +14,7 @@ import '../services/transaction_service.dart';
 import 'widgets/donut_chart_painter.dart';
 import 'widgets/weekly_trend_painter.dart';
 import 'widgets/transaction_item.dart';
+import 'widgets/calendar_spending_card.dart';
 import 'payment_source_details_screen.dart';
 import '../services/tutorial_service.dart';
 import 'sheets/recent_transactions_settings_sheet.dart';
@@ -1206,9 +1207,18 @@ class HomeScreen extends ConsumerWidget {
       ],
     );
 
+    final widgetCalendar = Column(
+      key: const ValueKey('calendar'),
+      children: const [
+        CalendarSpendingCard(),
+        SizedBox(height: 24),
+      ],
+    );
+
     final widgetsMap = {
       'accounts': widgetAccounts,
       'summary': widgetSummary,
+      'calendar': widgetCalendar,
       'breakdown': widgetBreakdown,
       'recent': widgetRecent,
     };

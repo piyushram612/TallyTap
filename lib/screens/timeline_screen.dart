@@ -7,6 +7,7 @@ import '../providers/currency_provider.dart';
 import '../services/transaction_service.dart';
 import 'widgets/transaction_item.dart';
 import 'widgets/timeline_filter_sheet.dart';
+import 'widgets/calendar_spending_card.dart';
 import 'group_transaction_details_screen.dart';
 import '../services/tutorial_service.dart';
 
@@ -17,7 +18,7 @@ class TimelineScreen extends ConsumerStatefulWidget {
   ConsumerState<TimelineScreen> createState() => _TimelineScreenState();
 }
 
-class _TimelineScreenState extends ConsumerState<TimelineScreen> {
+class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTickerProviderStateMixin {
   String _searchQuery = '';
   String _activeFilter = 'All Activity';
   final TextEditingController _searchController = TextEditingController();
@@ -27,6 +28,34 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
   final Set<String> _selectedTransactionIds = {};
   MonthYear? _selectedMonth;
   MonthYear? _lastLatestMonth;
+
+  late final AnimationController _calendarExpandController;
+  late final Animation<double> _calendarExpandAnimation;
+  bool _isCalendarExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _calendarExpandController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+    _calendarExpandAnimation = CurvedAnimation(
+      parent: _calendarExpandController,
+      curve: Curves.fastOutSlowIn,
+    );
+  }
+
+  void _toggleCalendarExpand() {
+    setState(() {
+      _isCalendarExpanded = !_isCalendarExpanded;
+      if (_isCalendarExpanded) {
+        _calendarExpandController.forward();
+      } else {
+        _calendarExpandController.reverse();
+      }
+    });
+  }
 
   List<MonthYear> _getAvailableMonths(List<ExpenseTransaction> transactions) {
     if (transactions.isEmpty) {
@@ -57,6 +86,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
 
   @override
   void dispose() {
+    _calendarExpandController.dispose();
     _searchController.dispose();
     super.dispose();
   }
@@ -659,190 +689,266 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> {
 
     return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 16),
-              const Text(
-                'Timeline',
-                style: TextStyle(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w900,
-                  color: TallyTapTheme.textLight,
-                  letterSpacing: -0.8,
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                key: TutorialService.timelineSearchKey,
-                controller: _searchController,
-                onChanged: (val) {
-                  setState(() {
-                    _searchQuery = val;
-                  });
-                },
-                style: const TextStyle(fontSize: 14, color: TallyTapTheme.textLight),
-                decoration: InputDecoration(
-                  hintText: 'Search transactions...',
-                  hintStyle: const TextStyle(fontSize: 14, color: TallyTapTheme.textGray),
-                  prefixIcon: const Icon(Icons.search, color: TallyTapTheme.textGray, size: 20),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      Icons.tune,
-                      color: _filterCriteria.isActive ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+        NotificationListener<ScrollNotification>(
+          onNotification: (notification) {
+            if (notification is ScrollUpdateNotification) {
+              if (notification.scrollDelta != null) {
+                if (!_isCalendarExpanded && notification.metrics.pixels <= 0 && notification.scrollDelta! < -10) {
+                  _toggleCalendarExpand();
+                } else if (_isCalendarExpanded && notification.scrollDelta! > 12) {
+                  _toggleCalendarExpand();
+                }
+              }
+            } else if (notification is OverscrollNotification) {
+              if (!_isCalendarExpanded && notification.overscroll < -5) {
+                _toggleCalendarExpand();
+              } else if (_isCalendarExpanded && notification.overscroll > 5) {
+                _toggleCalendarExpand();
+              }
+            }
+            return false;
+          },
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Timeline',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.w900,
+                        color: TallyTapTheme.textLight,
+                        letterSpacing: -0.8,
+                      ),
                     ),
-                    onPressed: () => _showFilterMenu(context, maxAmount),
-                  ),
-                  filled: true,
-                  fillColor: TallyTapTheme.obsidianCard,
-                  contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    borderSide: const BorderSide(color: TallyTapTheme.primaryMint),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-
-              // Month Selection Row
-              SizedBox(
-                height: 38,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: availableMonths.length,
-                  itemBuilder: (context, index) {
-                    final m = availableMonths[index];
-                    final isSelected = m == _selectedMonth;
-                    return GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _selectedMonth = m;
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 10),
-                        padding: const EdgeInsets.symmetric(horizontal: 18),
+                    GestureDetector(
+                      onTap: _toggleCalendarExpand,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+                          color: _isCalendarExpanded
+                              ? TallyTapTheme.primaryMint
+                              : TallyTapTheme.primaryMint.withOpacity(0.12),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.5) : TallyTapTheme.borderGreen,
-                            width: isSelected ? 1.5 : 1.0,
+                            color: TallyTapTheme.primaryMint.withOpacity(0.4),
+                            width: 1.0,
                           ),
                         ),
-                        alignment: Alignment.center,
-                        child: Text(
-                          m.shortName,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
-                          ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.calendar_month_rounded,
+                              size: 15,
+                              color: _isCalendarExpanded ? TallyTapTheme.obsidianBg : TallyTapTheme.primaryMint,
+                            ),
+                            const SizedBox(width: 4),
+                            Icon(
+                              _isCalendarExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                              size: 16,
+                              color: _isCalendarExpanded ? TallyTapTheme.obsidianBg : TallyTapTheme.primaryMint,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              _isCalendarExpanded ? 'HIDE CALENDAR' : 'CALENDAR',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: 0.5,
+                                color: _isCalendarExpanded ? TallyTapTheme.obsidianBg : TallyTapTheme.primaryMint,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                ),
-              ),
-              const SizedBox(height: 12),
-
-              // Filtered Summary pills (Expenses, Income, Net)
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildSummaryPill(
-                      label: 'Expenses',
-                      value: '$currency${filteredExpense.toStringAsFixed(2)}',
-                      color: const Color(0xFFF87171),
-                      icon: Icons.arrow_upward_rounded,
                     ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: _buildSummaryPill(
-                      label: 'Income',
-                      value: '$currency${filteredIncome.toStringAsFixed(2)}',
-                      color: const Color(0xFF34D399),
-                      icon: Icons.arrow_downward_rounded,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: _buildSummaryPill(
-                      label: 'Net Balance',
-                      value: '${filteredNet >= 0 ? '+' : '-'}$currency${filteredNet.abs().toStringAsFixed(2)}',
-                      color: filteredNet >= 0 ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
-                      icon: Icons.account_balance_wallet_outlined,
-                      isNet: true,
-                      isPositive: filteredNet >= 0,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              SizedBox(
-                height: 36,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  physics: const BouncingScrollPhysics(),
-                  children: [
-                    _buildFilterCapsule('All Activity'),
-                    _buildFilterCapsule('Income'),
-                    _buildFilterCapsule('Expenses'),
-                    _buildFilterCapsule('Transfers'),
                   ],
                 ),
-              ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      for (final dayKey in sortedDayKeys) ...[
-                        _buildSectionHeaderForDay(dayKey),
-                        const SizedBox(height: 8),
-                        Card(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Column(
-                              children: [
-                                for (int i = 0; i < dayGroups[dayKey]!.length; i++) ...[
-                                  _buildTimelineItem(dayGroups[dayKey]![i], currency, showDate: false),
-                                  if (i < dayGroups[dayKey]!.length - 1)
-                                    const Divider(color: TallyTapTheme.borderGreen, height: 1, thickness: 0.5),
-                                ],
-                              ],
+                SizeTransition(
+                  sizeFactor: _calendarExpandAnimation,
+                  axisAlignment: -1.0,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12.0, bottom: 4.0),
+                    child: GestureDetector(
+                      onVerticalDragUpdate: (details) {
+                        if (_isCalendarExpanded && details.primaryDelta != null && details.primaryDelta! < -8) {
+                          _toggleCalendarExpand();
+                        }
+                      },
+                      child: const CalendarSpendingCard(),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  key: TutorialService.timelineSearchKey,
+                  controller: _searchController,
+                  onChanged: (val) {
+                    setState(() {
+                      _searchQuery = val;
+                    });
+                  },
+                  style: const TextStyle(fontSize: 14, color: TallyTapTheme.textLight),
+                  decoration: InputDecoration(
+                    hintText: 'Search transactions...',
+                    hintStyle: const TextStyle(fontSize: 14, color: TallyTapTheme.textGray),
+                    prefixIcon: const Icon(Icons.search, color: TallyTapTheme.textGray, size: 20),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        Icons.tune,
+                        color: _filterCriteria.isActive ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+                      ),
+                      onPressed: () => _showFilterMenu(context, maxAmount),
+                    ),
+                    filled: true,
+                    fillColor: TallyTapTheme.obsidianCard,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(color: TallyTapTheme.primaryMint),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+
+                // Month Selection Row
+                SizedBox(
+                  height: 38,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: availableMonths.length,
+                    itemBuilder: (context, index) {
+                      final m = availableMonths[index];
+                      final isSelected = m == _selectedMonth;
+                      return GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _selectedMonth = m;
+                          });
+                        },
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 18),
+                          decoration: BoxDecoration(
+                            color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.5) : TallyTapTheme.borderGreen,
+                              width: isSelected ? 1.5 : 1.0,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            m.shortName,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w800,
+                              color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 24),
-                      ],
-                      if (filteredItems.isEmpty) ...[
-                        const SizedBox(height: 60),
-                        const Center(
-                          child: Text(
-                            'No matching transactions found.',
-                            style: TextStyle(color: TallyTapTheme.textGray, fontSize: 14),
-                          ),
-                        ),
-                        const SizedBox(height: 60),
-                      ],
-                      SizedBox(height: bottomPadding),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Filtered Summary pills (Expenses, Income, Net)
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildSummaryPill(
+                        label: 'Expenses',
+                        value: '$currency${filteredExpense.toStringAsFixed(2)}',
+                        color: const Color(0xFFF87171),
+                        icon: Icons.arrow_upward_rounded,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _buildSummaryPill(
+                        label: 'Income',
+                        value: '$currency${filteredIncome.toStringAsFixed(2)}',
+                        color: const Color(0xFF34D399),
+                        icon: Icons.arrow_downward_rounded,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _buildSummaryPill(
+                        label: 'Net Balance',
+                        value: '${filteredNet >= 0 ? '+' : '-'}$currency${filteredNet.abs().toStringAsFixed(2)}',
+                        color: filteredNet >= 0 ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+                        icon: Icons.account_balance_wallet_outlined,
+                        isNet: true,
+                        isPositive: filteredNet >= 0,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                SizedBox(
+                  height: 36,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      _buildFilterCapsule('All Activity'),
+                      _buildFilterCapsule('Income'),
+                      _buildFilterCapsule('Expenses'),
+                      _buildFilterCapsule('Transfers'),
                     ],
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+
+                // Grouped transaction list
+                for (final dayKey in sortedDayKeys) ...[
+                  _buildSectionHeaderForDay(dayKey),
+                  const SizedBox(height: 8),
+                  Card(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Column(
+                        children: [
+                          for (int i = 0; i < dayGroups[dayKey]!.length; i++) ...[
+                            _buildTimelineItem(dayGroups[dayKey]![i], currency, showDate: false),
+                            if (i < dayGroups[dayKey]!.length - 1)
+                              const Divider(color: TallyTapTheme.borderGreen, height: 1, thickness: 0.5),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+                if (filteredItems.isEmpty) ...[
+                  const SizedBox(height: 60),
+                  const Center(
+                    child: Text(
+                      'No matching transactions found.',
+                      style: TextStyle(color: TallyTapTheme.textGray, fontSize: 14),
+                    ),
+                  ),
+                  const SizedBox(height: 60),
+                ],
+                SizedBox(height: bottomPadding),
+              ],
+            ),
           ),
         ),
         _buildSelectionPanel(),
