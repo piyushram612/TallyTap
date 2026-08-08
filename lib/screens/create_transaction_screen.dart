@@ -21,7 +21,8 @@ import '../providers/tutorial_provider.dart';
 import 'sheets/manage_categories_sheet.dart';
 
 class CreateTransactionScreen extends ConsumerStatefulWidget {
-  const CreateTransactionScreen({super.key});
+  final DateTime? initialDate;
+  const CreateTransactionScreen({super.key, this.initialDate});
 
   @override
   ConsumerState<CreateTransactionScreen> createState() =>
@@ -37,7 +38,7 @@ class _CreateTransactionScreenState
   final TextEditingController _notesController = TextEditingController();
   final TextEditingController _paidToController = TextEditingController();
 
-  DateTime _selectedDate = DateTime.now();
+  late DateTime _selectedDate;
   bool _isIncome = false;
   String? _selectedCategory;
   String? _selectedPaymentMethod;
@@ -53,6 +54,7 @@ class _CreateTransactionScreenState
   @override
   void initState() {
     super.initState();
+    _selectedDate = widget.initialDate ?? DateTime.now();
     _amountPulse = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 150),

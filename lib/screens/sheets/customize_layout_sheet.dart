@@ -14,6 +14,7 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
   static const Map<String, String> _cardNames = {
     'accounts': 'Accounts & Balances',
     'summary': 'Weekly & Monthly Summary',
+    'calendar': 'Spending Calendar',
     'breakdown': 'Spending Breakdown',
     'recent': 'Recent Reflections',
   };
@@ -21,6 +22,7 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
   static const Map<String, IconData> _cardIcons = {
     'accounts': Icons.account_balance_wallet_rounded,
     'summary': Icons.bar_chart_rounded,
+    'calendar': Icons.calendar_month_rounded,
     'breakdown': Icons.pie_chart_rounded,
     'recent': Icons.history_rounded,
   };

@@ -134,7 +134,7 @@ final homeLayoutProvider = StateNotifierProvider<HomeLayoutNotifier, List<String
 
 class HomeLayoutNotifier extends StateNotifier<List<String>> {
   static const _key = 'home_widget_layout';
-  static const defaultLayout = ['accounts', 'summary', 'breakdown', 'recent'];
+  static const defaultLayout = ['accounts', 'summary', 'calendar', 'breakdown', 'recent'];
 
   HomeLayoutNotifier() : super(defaultLayout) {
     _init();
@@ -180,6 +180,7 @@ class HomeCardVisibilityNotifier extends StateNotifier<Map<String, bool>> {
   HomeCardVisibilityNotifier() : super({
     'accounts': true,
     'summary': true,
+    'calendar': true,
     'breakdown': true,
     'recent': true,
   }) {
@@ -214,6 +215,7 @@ class HomeCardVisibilityNotifier extends StateNotifier<Map<String, bool>> {
     final defaults = {
       'accounts': true,
       'summary': true,
+      'calendar': true,
       'breakdown': true,
       'recent': true,
     };
