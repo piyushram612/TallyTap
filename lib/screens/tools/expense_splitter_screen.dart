@@ -33,7 +33,12 @@ class SplitItem {
 }
 
 class ExpenseSplitterScreen extends ConsumerStatefulWidget {
-  const ExpenseSplitterScreen({super.key});
+  final String? initialGroupId;
+
+  const ExpenseSplitterScreen({
+    super.key,
+    this.initialGroupId,
+  });
 
   @override
   ConsumerState<ExpenseSplitterScreen> createState() => _ExpenseSplitterScreenState();
@@ -60,12 +65,22 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
   String? _globalReceiptSource;
   final List<String?> _friendReceiptSources = [];
 
+  bool _isEditingGroup = false;
+  DateTime? _existingGroupDate;
+
   @override
   void initState() {
     super.initState();
-    _updateFriendControllers();
+    if (widget.initialGroupId != null) {
+      _isEditingGroup = true;
+      _loadExistingGroupData();
+    } else {
+      _updateFriendControllers();
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _checkTutorialStatus();
+      if (!_isEditingGroup) {
+        _checkTutorialStatus();
+      }
     });
   }
 
@@ -140,6 +155,131 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
     for (var item in _items) {
       item.assignedParticipants.removeWhere((idx) => idx >= _peopleCount);
     }
+  }
+
+  void _loadExistingGroupData() {
+    if (widget.initialGroupId == null) return;
+
+    final allTxs = ref.read(transactionListProvider);
+    final groupTxs = allTxs.where((t) => t.groupId == widget.initialGroupId).toList();
+    if (groupTxs.isEmpty) {
+      _updateFriendControllers();
+      return;
+    }
+
+    ExpenseTransaction? mainTx;
+    for (final t in groupTxs) {
+      if (t.id.endsWith('_main') || !t.isIncome) {
+        mainTx = t;
+        break;
+      }
+    }
+    mainTx ??= groupTxs.first;
+
+    final friendTxs = groupTxs.where((t) => t.id != mainTx!.id).toList()
+      ..sort((a, b) => a.id.compareTo(b.id));
+
+    _existingGroupDate = mainTx.date;
+    _descController.text = _getGroupNameFromId(widget.initialGroupId!, mainTx.merchant);
+    _amountController.text = mainTx.amount > 0 ? mainTx.amount.toStringAsFixed(2) : "";
+    _selectedPaymentSource = mainTx.paymentMethod;
+
+    _peopleCount = 1 + friendTxs.length;
+    if (_peopleCount < 2) _peopleCount = 2;
+
+    _friendControllers.clear();
+    _friendVerificationFlags.clear();
+    _friendReceiptSources.clear();
+
+    for (int i = 0; i < friendTxs.length; i++) {
+      final fTx = friendTxs[i];
+      String friendName = fTx.merchant;
+      if (friendName.startsWith('Split repayment from ')) {
+        friendName = friendName.replaceFirst('Split repayment from ', '');
+      }
+      _friendControllers.add(TextEditingController(text: friendName.isEmpty ? "Friend ${i + 1}" : friendName));
+      _friendVerificationFlags.add(fTx.needsVerification);
+      _friendReceiptSources.add(fTx.paymentMethod);
+    }
+
+    final notes = mainTx.notes;
+    if (notes.contains('Itemized Receipt:\n')) {
+      _currentSplitMode = SplitMode.itemized;
+      _items.clear();
+      final receiptData = notes.split('Itemized Receipt:\n').last.trim();
+      final lines = receiptData.split('\n');
+      for (final line in lines) {
+        final parts = line.split(':::');
+        if (parts.length == 3) {
+          final itemName = parts[0];
+          final itemPrice = double.tryParse(parts[1]) ?? 0.0;
+          final namesStr = parts[2];
+          final namesList = namesStr.split(', ').map((s) => s.trim()).toList();
+
+          List<int> assigned = [];
+          for (final n in namesList) {
+            if (n == "You") {
+              assigned.add(0);
+            } else {
+              int matchedIdx = -1;
+              for (int f = 0; f < _friendControllers.length; f++) {
+                if (_friendControllers[f].text.trim() == n) {
+                  matchedIdx = f + 1;
+                  break;
+                }
+              }
+              if (matchedIdx != -1) {
+                assigned.add(matchedIdx);
+              } else if (n.startsWith("Friend ")) {
+                final idxNum = int.tryParse(n.replaceFirst("Friend ", ""));
+                if (idxNum != null && idxNum < _peopleCount) {
+                  assigned.add(idxNum);
+                }
+              }
+            }
+          }
+          _items.add(SplitItem(name: itemName, price: itemPrice, assignedParticipants: assigned));
+        }
+      }
+    } else if (notes.contains('[SplitMode: custom]') || _hasCustomFriendAmounts(mainTx.amount, friendTxs)) {
+      _currentSplitMode = SplitMode.custom;
+      _customValues = List.filled(_peopleCount, 0.0);
+      _customLocks = List.filled(_peopleCount, false);
+
+      double friendsSum = 0.0;
+      for (int i = 0; i < friendTxs.length; i++) {
+        double amt = friendTxs[i].amount;
+        friendsSum += amt;
+        _customValues[i + 1] = mainTx.amount > 0 ? (amt / mainTx.amount * 100.0) : 0.0;
+      }
+      _customValues[0] = mainTx.amount > 0 ? ((mainTx.amount - friendsSum) / mainTx.amount * 100.0) : (100.0 / _peopleCount);
+
+      for (final c in _customValueControllers) {
+        c.dispose();
+      }
+      _customValueControllers = List.generate(_peopleCount, (_) => TextEditingController());
+      _syncCustomValueControllers();
+    } else {
+      _currentSplitMode = SplitMode.equal;
+      _resetCustomValues();
+    }
+  }
+
+  bool _hasCustomFriendAmounts(double totalAmount, List<ExpenseTransaction> friendTxs) {
+    if (totalAmount <= 0 || friendTxs.isEmpty) return false;
+    double expectedShare = totalAmount / (1 + friendTxs.length);
+    for (final tx in friendTxs) {
+      if ((tx.amount - expectedShare).abs() > 0.01) return true;
+    }
+    return false;
+  }
+
+  String _getGroupNameFromId(String groupId, String merchantTitle) {
+    final parts = groupId.split('_');
+    if (parts.length >= 3) {
+      return parts.sublist(2).join('_');
+    }
+    return merchantTitle.replaceAll(' (Paid by You)', '');
   }
 
   double get _totalAmount {
@@ -251,12 +391,13 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
     final groupDesc = _descController.text.trim();
     final groupName = groupDesc.isEmpty ? "Group Outing" : groupDesc;
     final timestamp = DateTime.now().millisecondsSinceEpoch;
-    final generatedGroupId = "group_${timestamp}_$groupName";
+    final generatedGroupId = widget.initialGroupId ?? "group_${timestamp}_$groupName";
+    final groupDate = _existingGroupDate ?? DateTime.now();
 
     final listNotifier = ref.read(transactionListProvider.notifier);
     final amounts = _finalAmounts;
 
-    String mainNotes = "Group Split total paid";
+    String mainNotes = "[SplitMode: ${_currentSplitMode.name}]\nGroup Split total paid";
     if (_currentSplitMode == SplitMode.itemized && _items.isNotEmpty) {
       mainNotes += "\n\nItemized Receipt:\n";
       for (var item in _items) {
@@ -271,12 +412,20 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
       }
     }
 
+    if (widget.initialGroupId != null) {
+      final allTxs = ref.read(transactionListProvider);
+      final existingGroupTxs = allTxs.where((t) => t.groupId == widget.initialGroupId).toList();
+      for (final tx in existingGroupTxs) {
+        await listNotifier.deleteTransaction(tx.id);
+      }
+    }
+
     // 1. Create main expense paid by "You"
     final mainTx = ExpenseTransaction(
       id: "tx_${timestamp}_main",
       amount: _totalAmount,
       merchant: "$groupName (Paid by You)",
-      date: DateTime.now(),
+      date: groupDate,
       paymentMethod: _selectedPaymentSource ?? "Card",
       category: "Dining",
       notes: mainNotes,
@@ -295,7 +444,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
         id: "tx_${timestamp}_friend_$i",
         amount: amounts[i+1],
         merchant: "Split repayment from $name",
-        date: DateTime.now(),
+        date: groupDate,
         paymentMethod: _friendReceiptSources[i] ?? _globalReceiptSource ?? "UPI",
         category: "Income",
         notes: "Group Split share",
@@ -310,7 +459,9 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Logged "$groupName" split directly into timeline group!'),
+          content: Text(widget.initialGroupId != null
+              ? 'Updated "$groupName" split successfully!'
+              : 'Logged "$groupName" split directly into timeline!'),
           backgroundColor: TallyTapTheme.borderGreen,
           behavior: SnackBarBehavior.floating,
         ),
@@ -345,9 +496,9 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
           icon: const Icon(Icons.arrow_back_ios_new_rounded, color: TallyTapTheme.textLight),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Expense Splitter',
-          style: TextStyle(
+        title: Text(
+          _isEditingGroup ? 'Edit Expense Split' : 'Expense Splitter',
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w900,
             color: TallyTapTheme.textLight,
@@ -793,9 +944,9 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
                   icon: const Icon(Icons.cloud_upload_rounded),
-                  label: const Text(
-                    'Log Split in Timeline Group',
-                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w900),
+                  label: Text(
+                    _isEditingGroup ? 'Update Group Split' : 'Log Split in Timeline',
+                    style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w900),
                   ),
                 ),
                 const SizedBox(height: 48),

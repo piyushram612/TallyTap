@@ -8,6 +8,7 @@ import '../providers/currency_provider.dart';
 import '../services/transaction_service.dart';
 import '../services/notification_service.dart';
 import 'transaction_details_screen.dart';
+import 'tools/expense_splitter_screen.dart';
 
 class GroupTransactionDetailsScreen extends ConsumerStatefulWidget {
   final String groupId;
@@ -63,12 +64,64 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
     return "Group Transaction";
   }
 
+  Widget _buildHeaderMetricColumn(String label, String value, Color valueColor) {
+    return Column(
+      children: [
+        Text(
+          label.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 9,
+            fontWeight: FontWeight.w800,
+            color: TallyTapTheme.textGray,
+            letterSpacing: 1.0,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w900,
+            color: valueColor,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final currency = ref.watch(currencyProvider);
     final allTransactions = ref.watch(transactionListProvider);
     final groupTransactions = allTransactions.where((t) => t.groupId == widget.groupId).toList()
       ..sort((a, b) => b.date.compareTo(a.date));
+
+    ExpenseTransaction? mainTx;
+    for (final t in groupTransactions) {
+      if (t.id.endsWith('_main') || !t.isIncome) {
+        mainTx = t;
+        break;
+      }
+    }
+    mainTx ??= groupTransactions.isNotEmpty ? groupTransactions.first : null;
+
+    final isItemizedSplit = mainTx != null && mainTx.notes.contains('Itemized Receipt:');
+
+    List<String> rawReceiptItems = [];
+    if (isItemizedSplit && mainTx != null) {
+      final receiptData = mainTx.notes.split('Itemized Receipt:\n').last.trim();
+      rawReceiptItems = receiptData.split('\n').where((s) => s.trim().isNotEmpty).toList();
+    }
+
+    double totalBillAmount = mainTx?.amount ?? 0.0;
+    double friendsOweAmount = 0.0;
+    for (final tx in groupTransactions) {
+      if (tx.isIncome) {
+        friendsOweAmount += tx.amount;
+      }
+    }
+    double yourShareAmount = (totalBillAmount - friendsOweAmount);
+    if (yourShareAmount < 0) yourShareAmount = 0.0;
 
     double netAmount = 0.0;
     for (final tx in groupTransactions) {
@@ -97,6 +150,22 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
             fontFamily: 'Outfit',
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.edit_note_rounded, color: TallyTapTheme.primaryMint, size: 28),
+            tooltip: 'Edit Group Split',
+            onPressed: () {
+              HapticFeedback.mediumImpact();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ExpenseSplitterScreen(initialGroupId: widget.groupId),
+                ),
+              );
+            },
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: SafeArea(
         child: groupTransactions.isEmpty
@@ -205,83 +274,202 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                           ),
                           const SizedBox(height: 16),
                           Text(
-                            '${groupTransactions.length} Total Items',
+                            isItemizedSplit
+                                ? '${rawReceiptItems.length} Receipt Items • ${groupTransactions.length} Participants'
+                                : '${groupTransactions.length} Participants',
                             style: const TextStyle(fontSize: 12, color: TallyTapTheme.textGray, fontWeight: FontWeight.bold),
                           ),
+                          if (isItemizedSplit) ...[
+                            const SizedBox(height: 16),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                              decoration: BoxDecoration(
+                                color: TallyTapTheme.obsidianBg.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.2)),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  _buildHeaderMetricColumn('Total Bill', '$currency${totalBillAmount.toStringAsFixed(2)}', TallyTapTheme.textLight),
+                                  Container(width: 1, height: 24, color: TallyTapTheme.borderGreen),
+                                  _buildHeaderMetricColumn('Your Share', '$currency${yourShareAmount.toStringAsFixed(2)}', TallyTapTheme.primaryMint),
+                                  Container(width: 1, height: 24, color: TallyTapTheme.borderGreen),
+                                  _buildHeaderMetricColumn('Friends Owe', '$currency${friendsOweAmount.toStringAsFixed(2)}', const Color(0xFF10B981)),
+                                ],
+                              ),
+                            ),
+                          ],
                         ],
                       ),
                     ),
                     
-                    if (groupTransactions.any((t) => t.id.endsWith('_main') && t.notes.contains('Itemized Receipt:'))) ...[
+                    if (isItemizedSplit) ...[
                       const SizedBox(height: 32),
-                      const Text(
-                        'RECEIPT DETAILS',
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w800,
-                          color: TallyTapTheme.textGray,
-                          letterSpacing: 1.5,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'RECEIPT DETAILS',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              color: TallyTapTheme.textGray,
+                              letterSpacing: 1.5,
+                            ),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: TallyTapTheme.primaryMint.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.3)),
+                            ),
+                            child: Text(
+                              '${rawReceiptItems.length} ITEMS',
+                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: TallyTapTheme.primaryMint),
+                            ),
+                          ),
+                        ],
                       ),
                       const SizedBox(height: 12),
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
                           color: TallyTapTheme.obsidianCard,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: TallyTapTheme.borderGreen),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: TallyTapTheme.borderGreen, width: 1.2),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
-                        child: Builder(
-                          builder: (context) {
-                            final receiptData = groupTransactions.firstWhere((t) => t.id.endsWith('_main')).notes.split('Itemized Receipt:\n').last.trim();
-                            final items = receiptData.split('\n');
-                            
-                            return Column(
-                              children: items.asMap().entries.map((entry) {
-                                final index = entry.key;
-                                final line = entry.value;
-                                final parts = line.split(':::');
-                                
-                                Widget childWidget;
-                                if (parts.length != 3) {
-                                   childWidget = Text(line, style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 13));
-                                } else {
-                                   childWidget = Row(
-                                     children: [
-                                       Container(
-                                         width: 36, height: 36,
-                                         decoration: BoxDecoration(color: TallyTapTheme.primaryMint.withOpacity(0.1), shape: BoxShape.circle),
-                                         child: const Icon(Icons.receipt_long, size: 16, color: TallyTapTheme.primaryMint),
-                                       ),
-                                       const SizedBox(width: 16),
-                                       Expanded(
-                                         child: Column(
-                                           crossAxisAlignment: CrossAxisAlignment.start,
-                                           children: [
-                                              Text(parts[0], style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 14)),
-                                              const SizedBox(height: 4),
-                                              Text("Shared by: ${parts[2]}", style: const TextStyle(color: TallyTapTheme.textGray, fontSize: 11)),
-                                           ]
-                                         )
-                                       ),
-                                       const SizedBox(width: 8),
-                                       Text("₹${parts[1]}", style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.w900, fontSize: 14)),
-                                     ]
-                                   );
-                                }
+                        child: Column(
+                          children: rawReceiptItems.asMap().entries.map((entry) {
+                            final index = entry.key;
+                            final line = entry.value;
+                            final parts = line.split(':::');
 
-                                return Column(
-                                   children: [
-                                      if (index > 0) const Divider(color: TallyTapTheme.borderGreen, height: 1),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                                        child: childWidget,
+                            Widget childWidget;
+                            if (parts.length != 3) {
+                              childWidget = Text(line, style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 13));
+                            } else {
+                              final itemName = parts[0];
+                              final itemPrice = parts[1];
+                              final sharedByStr = parts[2];
+                              final namesList = sharedByStr.split(', ').map((s) => s.trim()).toList();
+
+                              childWidget = Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          itemName,
+                                          style: const TextStyle(
+                                            color: TallyTapTheme.textLight,
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 14,
+                                          ),
+                                        ),
                                       ),
-                                   ]
-                                );
-                              }).toList(),
+                                      Text(
+                                        "$currency$itemPrice",
+                                        style: const TextStyle(
+                                          color: TallyTapTheme.textLight,
+                                          fontWeight: FontWeight.w900,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Wrap(
+                                    spacing: 6,
+                                    runSpacing: 4,
+                                    crossAxisAlignment: WrapCrossAlignment.center,
+                                    children: [
+                                      const Text(
+                                        "Shared by:",
+                                        style: TextStyle(color: TallyTapTheme.textGray, fontSize: 11, fontWeight: FontWeight.w600),
+                                      ),
+                                      ...namesList.map((name) {
+                                        final isYou = name == "You";
+                                        final isUnassigned = name.toLowerCase() == "unassigned";
+
+                                        if (isUnassigned) {
+                                          return Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFF59E0B).withOpacity(0.15),
+                                              borderRadius: BorderRadius.circular(12),
+                                              border: Border.all(color: const Color(0xFFF59E0B).withOpacity(0.5)),
+                                            ),
+                                            child: const Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(Icons.warning_amber_rounded, size: 12, color: Color(0xFFF59E0B)),
+                                                SizedBox(width: 4),
+                                                Text(
+                                                  "Unassigned",
+                                                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xFFF59E0B)),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }
+
+                                        return Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: isYou
+                                                ? TallyTapTheme.primaryMint.withOpacity(0.18)
+                                                : TallyTapTheme.primaryMint.withOpacity(0.08),
+                                            borderRadius: BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: isYou
+                                                  ? TallyTapTheme.primaryMint.withOpacity(0.5)
+                                                  : TallyTapTheme.primaryMint.withOpacity(0.25),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            name,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                              color: isYou ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+                                            ),
+                                          ),
+                                        );
+                                      }),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            }
+
+                            return Column(
+                              children: [
+                                if (index > 0)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    child: Divider(
+                                      color: TallyTapTheme.borderGreen.withOpacity(0.6),
+                                      height: 1,
+                                    ),
+                                  ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: childWidget,
+                                ),
+                              ],
                             );
-                          }
+                          }).toList(),
                         ),
                       ),
                     ],
@@ -289,7 +477,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                     const SizedBox(height: 32),
                     
                     const Text(
-                      'PARTICIPANTS & ITEMS',
+                      'PARTICIPANTS',
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
