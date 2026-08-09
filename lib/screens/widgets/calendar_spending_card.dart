@@ -26,7 +26,7 @@ class CalendarSpendingCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: TallyTapTheme.borderGreen, width: 1.0),
       ),
-      padding: const EdgeInsets.all(20.0),
+      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -181,7 +181,7 @@ class CalendarSpendingCard extends ConsumerWidget {
                 : _buildWeekGrid(context, ref, focusedMonth, spendMap, avgDailySpend, todayStr, currency),
           ),
 
-          const SizedBox(height: 6),
+          const SizedBox(height: 8),
 
           // Legend Row
           Row(
@@ -247,12 +247,13 @@ class CalendarSpendingCard extends ConsumerWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
       itemCount: totalCells,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 7,
-        childAspectRatio: 0.95,
-        crossAxisSpacing: 3.5,
-        mainAxisSpacing: 3.5,
+        childAspectRatio: 1.04,
+        crossAxisSpacing: 3.0,
+        mainAxisSpacing: 3.0,
       ),
       itemBuilder: (context, index) {
         final dayOffset = index - leadingDays;
@@ -289,12 +290,13 @@ class CalendarSpendingCard extends ConsumerWidget {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
+      padding: EdgeInsets.zero,
       itemCount: 7,
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 7,
-        childAspectRatio: 0.95,
-        crossAxisSpacing: 3.5,
-        mainAxisSpacing: 3.5,
+        childAspectRatio: 1.04,
+        crossAxisSpacing: 3.0,
+        mainAxisSpacing: 3.0,
       ),
       itemBuilder: (context, index) {
         final cellDate = startOfWeek.add(Duration(days: index));
@@ -377,7 +379,7 @@ class CalendarSpendingCard extends ConsumerWidget {
           color: isCurrentMonth
               ? (totalExpense > 0 ? badgeBg.withOpacity(0.4) : const Color(0xFF0F1B17))
               : Colors.transparent,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(8),
           border: Border.fromBorderSide(
             isCurrentMonth ? cellBorder : const BorderSide(color: Colors.transparent),
           ),
@@ -385,13 +387,13 @@ class CalendarSpendingCard extends ConsumerWidget {
               ? [
                   BoxShadow(
                     color: TallyTapTheme.primaryMint.withOpacity(0.2),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                    offset: const Offset(0, 1),
                   )
                 ]
               : null,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 2.5),
+        padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 1.5),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -402,7 +404,8 @@ class CalendarSpendingCard extends ConsumerWidget {
                 Text(
                   '${date.day}',
                   style: TextStyle(
-                    fontSize: 10.5,
+                    fontSize: 9.5,
+                    height: 1.0,
                     fontWeight: isToday || totalExpense > 0 ? FontWeight.w900 : FontWeight.w600,
                     color: !isCurrentMonth
                         ? TallyTapTheme.textGray.withOpacity(0.3)
@@ -411,8 +414,8 @@ class CalendarSpendingCard extends ConsumerWidget {
                 ),
                 if (scheduledCount > 0 && isCurrentMonth)
                   Container(
-                    width: 4,
-                    height: 4,
+                    width: 3.5,
+                    height: 3.5,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                       color: TallyTapTheme.primarySlate,
@@ -423,37 +426,43 @@ class CalendarSpendingCard extends ConsumerWidget {
 
             // Category Micro Dots
             if (categories.isNotEmpty && isCurrentMonth)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: categories.take(3).map((cat) {
-                  return Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 0.5),
-                    width: 3.5,
-                    height: 3.5,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: TallyTapTheme.getColorForCategory(cat),
-                    ),
-                  );
-                }).toList(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 0.5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: categories.take(3).map((cat) {
+                    return Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 0.5),
+                      width: 3.0,
+                      height: 3.0,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: TallyTapTheme.getColorForCategory(cat),
+                      ),
+                    );
+                  }).toList(),
+                ),
               ),
 
             // Daily Spend Amount Pill
             if (totalExpense > 0 && isCurrentMonth)
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 2.5, vertical: 0.5),
-                  decoration: BoxDecoration(
-                    color: badgeBg,
-                    borderRadius: BorderRadius.circular(3.5),
-                  ),
-                  child: Text(
-                    '$currency${totalExpense.toStringAsFixed(0)}',
-                    style: TextStyle(
-                      fontSize: 8.0,
-                      fontWeight: FontWeight.w900,
-                      color: badgeText,
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 0.5),
+                    decoration: BoxDecoration(
+                      color: badgeBg,
+                      borderRadius: BorderRadius.circular(3.0),
+                    ),
+                    child: Text(
+                      '$currency${totalExpense.toStringAsFixed(0)}',
+                      style: TextStyle(
+                        fontSize: 7.5,
+                        height: 1.0,
+                        fontWeight: FontWeight.w900,
+                        color: badgeText,
+                      ),
                     ),
                   ),
                 ),
