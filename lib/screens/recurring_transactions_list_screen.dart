@@ -316,9 +316,11 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
         tutorialCoachMark?.next();
       },
       onFinish: () {
+        if (!mounted) return;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialRecurringTx);
       },
       onSkip: () {
+        if (!mounted) return true;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialRecurringTx);
         return true;
       },

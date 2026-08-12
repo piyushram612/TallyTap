@@ -3,12 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../core/theme.dart';
+import '../core/math_evaluator.dart';
 import '../models/transaction_model.dart';
 import '../providers/category_provider.dart';
 import '../providers/currency_provider.dart';
 import '../providers/source_provider.dart';
 import '../services/transaction_service.dart';
 import '../services/notification_service.dart';
+import 'widgets/transaction_form_components.dart';
 
 class TransactionDetailsScreen extends ConsumerStatefulWidget {
   final ExpenseTransaction transaction;
@@ -104,7 +106,7 @@ class _TransactionDetailsScreenState
 
   void _saveChanges() {
     if (!_formKey.currentState!.validate()) return;
-    final amount = double.tryParse(_amountController.text);
+    final amount = MathEvaluator.tryParseAmount(_amountController.text);
     if (amount == null || amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Please enter a valid amount'),
@@ -1477,56 +1479,11 @@ class _AmountCard extends StatelessWidget {
 
           // Amount row
           if (isEditing)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  currency,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.w900,
-                    color: activeColor,
-                    fontFamily: 'Outfit',
-                  ),
-                ),
-                const SizedBox(width: 6),
-                Flexible(
-                  child: IntrinsicWidth(
-                    child: TextFormField(
-                      controller: amountController,
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontWeight: FontWeight.w900,
-                        color: TriplTheme.textLight,
-                        fontFamily: 'Outfit',
-                        letterSpacing: -2,
-                      ),
-                      textAlign: TextAlign.left,
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      decoration: InputDecoration(
-                        hintText: '0.00',
-                        hintStyle: TextStyle(
-                          fontSize: 48,
-                          fontWeight: FontWeight.w900,
-                          color: TriplTheme.textGray.withOpacity(0.25),
-                          fontFamily: 'Outfit',
-                          letterSpacing: -2,
-                        ),
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.zero,
-                        isDense: true,
-                      ),
-                      validator: (val) {
-                        if (val == null || val.trim().isEmpty) return 'Required';
-                        if (double.tryParse(val) == null) return 'Invalid';
-                        return null;
-                      },
-                    ),
-                  ),
-                ),
-              ],
+            AmountCard(
+              currency: currency,
+              controller: amountController,
+              activeColor: activeColor,
+              catColor: accentColor,
             )
           else
             Text(

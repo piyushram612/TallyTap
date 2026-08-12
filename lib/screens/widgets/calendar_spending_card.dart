@@ -62,7 +62,16 @@ class CalendarSpendingCard extends ConsumerWidget {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        DateFormat('MMMM yyyy').format(focusedMonth),
+                        viewMode == 'week'
+                            ? (() {
+                                final startOfWeek = focusedMonth.subtract(Duration(days: focusedMonth.weekday - 1));
+                                final endOfWeek = startOfWeek.add(const Duration(days: 6));
+                                if (startOfWeek.month == endOfWeek.month) {
+                                  return "${DateFormat('MMM d').format(startOfWeek)} - ${endOfWeek.day}, ${endOfWeek.year}";
+                                }
+                                return "${DateFormat('MMM d').format(startOfWeek)} - ${DateFormat('MMM d, yyyy').format(endOfWeek)}";
+                              })()
+                            : DateFormat('MMMM yyyy').format(focusedMonth),
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
@@ -124,13 +133,23 @@ class CalendarSpendingCard extends ConsumerWidget {
             onHorizontalDragEnd: (details) {
               if (details.primaryVelocity != null) {
                 if (details.primaryVelocity! < 0) {
-                  // Swipe Left -> Next Month
-                  ref.read(calendarFocusedMonthProvider.notifier).state =
-                      DateTime(focusedMonth.year, focusedMonth.month + 1, 1);
+                  // Swipe Left -> Next Month or Next Week
+                  if (viewMode == 'month') {
+                    ref.read(calendarFocusedMonthProvider.notifier).state =
+                        DateTime(focusedMonth.year, focusedMonth.month + 1, 1);
+                  } else {
+                    ref.read(calendarFocusedMonthProvider.notifier).state =
+                        focusedMonth.add(const Duration(days: 7));
+                  }
                 } else if (details.primaryVelocity! > 0) {
-                  // Swipe Right -> Previous Month
-                  ref.read(calendarFocusedMonthProvider.notifier).state =
-                      DateTime(focusedMonth.year, focusedMonth.month - 1, 1);
+                  // Swipe Right -> Previous Month or Previous Week
+                  if (viewMode == 'month') {
+                    ref.read(calendarFocusedMonthProvider.notifier).state =
+                        DateTime(focusedMonth.year, focusedMonth.month - 1, 1);
+                  } else {
+                    ref.read(calendarFocusedMonthProvider.notifier).state =
+                        focusedMonth.subtract(const Duration(days: 7));
+                  }
                 }
               }
             },
@@ -154,34 +173,20 @@ class CalendarSpendingCard extends ConsumerWidget {
               _buildLegendDot(TriplTheme.primarySlate, 'Scheduled', isDotted: true),
             ],
           ),
-        ],
-      ),
-    );
-  }
+          const SizedBox(height: 10),
 
-  Widget _buildPillTab({
-    required String label,
-    required bool isSelected,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: isSelected ? TriplTheme.primaryMint : Colors.transparent,
-          borderRadius: BorderRadius.circular(9),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 10,
-            fontWeight: FontWeight.w900,
-            letterSpacing: 0.5,
-            color: isSelected ? TriplTheme.obsidianBg : TriplTheme.textGray,
+          // Drag Handle Visual Indicator
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: TriplTheme.textGray.withOpacity(0.35),
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -241,9 +246,8 @@ class CalendarSpendingCard extends ConsumerWidget {
     String todayStr,
     String currency,
   ) {
-    // Show 7 days starting from Monday of the focused week
-    final now = DateTime.now();
-    final startOfWeek = now.subtract(Duration(days: now.weekday - 1));
+    // Show 7 days starting from Monday of the focused date
+    final startOfWeek = focusedMonth.subtract(Duration(days: focusedMonth.weekday - 1));
 
     return GridView.builder(
       shrinkWrap: true,

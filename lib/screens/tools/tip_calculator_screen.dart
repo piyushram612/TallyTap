@@ -430,9 +430,11 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
         tutorialCoachMark?.next();
       },
       onFinish: () {
+        if (!mounted) return;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialTipCalc);
       },
       onSkip: () {
+        if (!mounted) return true;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialTipCalc);
         return true;
       },

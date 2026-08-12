@@ -163,27 +163,318 @@ class TriplTheme {
       return customCategoryIcons[trimmed]!;
     }
     final clean = trimmed.toLowerCase();
+
+    // Special System Types
     if (clean == 'transfer') {
       return Icons.swap_horiz_rounded;
     }
-    if (clean.contains('dining') || clean.contains('food') || clean.contains('dinner') || clean.contains('restaurant')) {
-      return Icons.local_cafe_outlined;
-    } else if (clean.contains('commute') || clean.contains('transport') || clean.contains('car') || clean.contains('cab')) {
+
+    // Food, Dining & Beverage
+    if (clean.contains('dining') ||
+        clean.contains('food') ||
+        clean.contains('dinner') ||
+        clean.contains('restaurant') ||
+        clean.contains('cafe') ||
+        clean.contains('coffee') ||
+        clean.contains('lunch') ||
+        clean.contains('breakfast') ||
+        clean.contains('snack') ||
+        clean.contains('bakery') ||
+        clean.contains('eat') ||
+        clean.contains('drink') ||
+        clean.contains('bar') ||
+        clean.contains('baking')) {
+      return Icons.restaurant_outlined;
+    }
+
+    // Groceries & Supermarket
+    if (clean.contains('groc') ||
+        clean.contains('supermarket') ||
+        clean.contains('market') ||
+        clean.contains('vegetable') ||
+        clean.contains('fruit') ||
+        clean.contains('provision') ||
+        clean.contains('mart')) {
+      return Icons.local_grocery_store_outlined;
+    }
+
+    // Commute, Transit & Vehicles
+    if (clean.contains('commute') ||
+        clean.contains('transport') ||
+        clean.contains('transit') ||
+        clean.contains('car') ||
+        clean.contains('cab') ||
+        clean.contains('taxi') ||
+        clean.contains('auto') ||
+        clean.contains('uber') ||
+        clean.contains('ola') ||
+        clean.contains('bus') ||
+        clean.contains('train') ||
+        clean.contains('metro') ||
+        clean.contains('fuel') ||
+        clean.contains('gas') ||
+        clean.contains('petrol') ||
+        clean.contains('diesel') ||
+        clean.contains('parking') ||
+        clean.contains('toll') ||
+        clean.contains('vehicle') ||
+        clean.contains('bike')) {
       return Icons.directions_transit_filled_outlined;
-    } else if (clean.contains('sub') || clean.contains('subscriptions') || clean.contains('entertainment')) {
+    }
+
+    // Housing & Living
+    if (clean.contains('hous') ||
+        clean.contains('home') ||
+        clean.contains('rent') ||
+        clean.contains('mortgage') ||
+        clean.contains('lease') ||
+        clean.contains('property') ||
+        clean.contains('maintenance') ||
+        clean.contains('furniture') ||
+        clean.contains('appliance') ||
+        clean.contains('decor')) {
+      return Icons.home_outlined;
+    }
+
+    // Health, Medical & Fitness
+    if (clean.contains('health') ||
+        clean.contains('medical') ||
+        clean.contains('doctor') ||
+        clean.contains('hospital') ||
+        clean.contains('pharmacy') ||
+        clean.contains('medicine') ||
+        clean.contains('drug') ||
+        clean.contains('clinic') ||
+        clean.contains('fitness') ||
+        clean.contains('gym') ||
+        clean.contains('workout') ||
+        clean.contains('wellness') ||
+        clean.contains('dental')) {
+      return Icons.medical_services_outlined;
+    }
+
+    // Travel, Tourism & Lodging
+    if (clean.contains('travel') ||
+        clean.contains('trip') ||
+        clean.contains('flight') ||
+        clean.contains('plane') ||
+        clean.contains('hotel') ||
+        clean.contains('resort') ||
+        clean.contains('stay') ||
+        clean.contains('vacation') ||
+        clean.contains('holiday') ||
+        clean.contains('luggage') ||
+        clean.contains('tour')) {
+      return Icons.flight_takeoff_outlined;
+    }
+
+    // Shopping, Fashion & Apparel
+    if (clean.contains('shop') ||
+        clean.contains('clothing') ||
+        clean.contains('clothes') ||
+        clean.contains('apparel') ||
+        clean.contains('fashion') ||
+        clean.contains('footwear') ||
+        clean.contains('shoes') ||
+        clean.contains('wear') ||
+        clean.contains('boutique') ||
+        clean.contains('store')) {
+      return Icons.shopping_bag_outlined;
+    }
+
+    // Subscriptions, Streaming & Media
+    if (clean.contains('sub') ||
+        clean.contains('subscription') ||
+        clean.contains('netflix') ||
+        clean.contains('spotify') ||
+        clean.contains('prime') ||
+        clean.contains('youtube') ||
+        clean.contains('streaming') ||
+        clean.contains('software') ||
+        clean.contains('app') ||
+        clean.contains('saas')) {
       return Icons.subscriptions_outlined;
-    } else if (clean.contains('utility') || clean.contains('bill') || clean.contains('electricity')) {
+    }
+
+    // Utilities & Power
+    if (clean.contains('util') ||
+        clean.contains('electricity') ||
+        clean.contains('water') ||
+        clean.contains('power') ||
+        clean.contains('trash') ||
+        clean.contains('waste') ||
+        clean.contains('sewer')) {
       return Icons.bolt_outlined;
-    } else if (clean.contains('salary') || clean.contains('income')) {
-      return Icons.payments_outlined;
-    } else if (clean.contains('bonus') || clean.contains('dividend') || clean.contains('invest')) {
+    }
+
+    // Telecom, Phone, Internet & Bills
+    if (clean.contains('bill') ||
+        clean.contains('recharge') ||
+        clean.contains('phone') ||
+        clean.contains('mobile') ||
+        clean.contains('internet') ||
+        clean.contains('wifi') ||
+        clean.contains('broadband') ||
+        clean.contains('cable') ||
+        clean.contains('dth') ||
+        clean.contains('postpaid') ||
+        clean.contains('prepaid')) {
+      return Icons.wifi_outlined;
+    }
+
+    // Education, Learning & Books
+    if (clean.contains('edu') ||
+        clean.contains('school') ||
+        clean.contains('college') ||
+        clean.contains('university') ||
+        clean.contains('tuition') ||
+        clean.contains('course') ||
+        clean.contains('class') ||
+        clean.contains('learning') ||
+        clean.contains('book') ||
+        clean.contains('fee') ||
+        clean.contains('exam')) {
+      return Icons.school_outlined;
+    }
+
+    // Entertainment, Gaming & Hobbies
+    if (clean.contains('entertainment') ||
+        clean.contains('movie') ||
+        clean.contains('cinema') ||
+        clean.contains('game') ||
+        clean.contains('gaming') ||
+        clean.contains('esport') ||
+        clean.contains('music') ||
+        clean.contains('concert') ||
+        clean.contains('show') ||
+        clean.contains('event') ||
+        clean.contains('party') ||
+        clean.contains('hobby') ||
+        clean.contains('play')) {
+      return Icons.sports_esports_outlined;
+    }
+
+    // Investments, Wealth & Crypto
+    if (clean.contains('invest') ||
+        clean.contains('stock') ||
+        clean.contains('share') ||
+        clean.contains('crypto') ||
+        clean.contains('trading') ||
+        clean.contains('fund') ||
+        clean.contains('mutual') ||
+        clean.contains('equity') ||
+        clean.contains('asset') ||
+        clean.contains('sip') ||
+        clean.contains('wealth')) {
       return Icons.trending_up_outlined;
-    } else if (clean.contains('savings')) {
+    }
+
+    // Savings & Piggy Bank
+    if (clean.contains('saving') ||
+        clean.contains('deposit') ||
+        clean.contains('reserve') ||
+        clean.contains('piggy')) {
       return Icons.savings_outlined;
-    } else if (clean.contains('gift')) {
+    }
+
+    // Income, Salary & Wages
+    if (clean.contains('salary') ||
+        clean.contains('income') ||
+        clean.contains('paycheck') ||
+        clean.contains('wage') ||
+        clean.contains('stipend') ||
+        clean.contains('earn')) {
+      return Icons.payments_outlined;
+    }
+
+    // Bonus, Dividends, Cashback & Rewards
+    if (clean.contains('bonus') ||
+        clean.contains('dividend') ||
+        clean.contains('reward') ||
+        clean.contains('cashback') ||
+        clean.contains('interest') ||
+        clean.contains('profit') ||
+        clean.contains('commission')) {
+      return Icons.auto_awesome_outlined;
+    }
+
+    // Gifts, Charity & Donations
+    if (clean.contains('gift') ||
+        clean.contains('present') ||
+        clean.contains('donation') ||
+        clean.contains('charity') ||
+        clean.contains('tip') ||
+        clean.contains('offering')) {
       return Icons.card_giftcard_outlined;
+    }
+
+    // Pets & Veterinary
+    if (clean.contains('pet') ||
+        clean.contains('dog') ||
+        clean.contains('cat') ||
+        clean.contains('vet') ||
+        clean.contains('animal')) {
+      return Icons.pets_outlined;
+    }
+
+    // Personal Care & Salon
+    if (clean.contains('personal') ||
+        clean.contains('care') ||
+        clean.contains('beauty') ||
+        clean.contains('salon') ||
+        clean.contains('barber') ||
+        clean.contains('spa') ||
+        clean.contains('grooming') ||
+        clean.contains('hair') ||
+        clean.contains('cosmetic')) {
+      return Icons.spa_outlined;
+    }
+
+    // Insurance & Protection
+    if (clean.contains('insurance') ||
+        clean.contains('policy') ||
+        clean.contains('claim') ||
+        clean.contains('protection') ||
+        clean.contains('safety') ||
+        clean.contains('assurance')) {
+      return Icons.shield_outlined;
+    }
+
+    // Taxes & Government Fees
+    if (clean.contains('tax') ||
+        clean.contains('duty') ||
+        clean.contains('gst') ||
+        clean.contains('vat') ||
+        clean.contains('fine') ||
+        clean.contains('penalty')) {
+      return Icons.account_balance_outlined;
+    }
+
+    // Electronics & Tech Gadgets
+    if (clean.contains('electronic') ||
+        clean.contains('tech') ||
+        clean.contains('gadget') ||
+        clean.contains('computer') ||
+        clean.contains('laptop') ||
+        clean.contains('hardware') ||
+        clean.contains('camera')) {
+      return Icons.devices_outlined;
+    }
+
+    // Family & Children
+    if (clean.contains('family') ||
+        clean.contains('kid') ||
+        clean.contains('child') ||
+        clean.contains('baby') ||
+        clean.contains('daycare')) {
+      return Icons.family_restroom_outlined;
+    }
+
+    // Fallbacks
+    if (isIncome || clean == 'income') {
+      return Icons.arrow_downward_rounded;
     } else {
-      return isIncome || clean == 'income' ? Icons.arrow_downward_rounded : Icons.local_mall_outlined;
+      return Icons.category_outlined;
     }
   }
 

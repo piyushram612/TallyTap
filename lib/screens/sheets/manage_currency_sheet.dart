@@ -12,11 +12,28 @@ class ManageCurrencySheet extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentCurrency = ref.watch(currencyProvider);
     final currencies = [
-      {'symbol': '₹', 'name': 'Indian Rupee'},
-      {'symbol': '\$', 'name': 'US Dollar'},
-      {'symbol': '€', 'name': 'Euro'},
-      {'symbol': '£', 'name': 'British Pound'},
-      {'symbol': '¥', 'name': 'Japanese Yen'},
+      {'symbol': '₹', 'name': 'Indian Rupee (INR)'},
+      {'symbol': '\$', 'name': 'US Dollar (USD)'},
+      {'symbol': '€', 'name': 'Euro (EUR)'},
+      {'symbol': '£', 'name': 'British Pound (GBP)'},
+      {'symbol': '¥', 'name': 'Japanese Yen (JPY)'},
+      {'symbol': 'CN¥', 'name': 'Chinese Yuan (CNY)'},
+      {'symbol': 'A\$', 'name': 'Australian Dollar (AUD)'},
+      {'symbol': 'C\$', 'name': 'Canadian Dollar (CAD)'},
+      {'symbol': 'CHF', 'name': 'Swiss Franc (CHF)'},
+      {'symbol': 'AED', 'name': 'UAE Dirham (AED)'},
+      {'symbol': 'S\$', 'name': 'Singapore Dollar (SGD)'},
+      {'symbol': 'NZ\$', 'name': 'New Zealand Dollar (NZD)'},
+      {'symbol': 'R\$', 'name': 'Brazilian Real (BRL)'},
+      {'symbol': '₩', 'name': 'South Korean Won (KRW)'},
+      {'symbol': 'SAR', 'name': 'Saudi Riyal (SAR)'},
+      {'symbol': 'HK\$', 'name': 'Hong Kong Dollar (HKD)'},
+      {'symbol': 'R', 'name': 'South African Rand (ZAR)'},
+      {'symbol': '₽', 'name': 'Russian Ruble (RUB)'},
+      {'symbol': '₺', 'name': 'Turkish Lira (TRY)'},
+      {'symbol': 'kr', 'name': 'Swedish Krona (SEK)'},
+      {'symbol': 'RM', 'name': 'Malaysian Ringgit (MYR)'},
+      {'symbol': '฿', 'name': 'Thai Baht (THB)'},
     ];
 
     return Padding(
@@ -60,7 +77,7 @@ class ManageCurrencySheet extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           ConstrainedBox(
-            constraints: const BoxConstraints(maxHeight: 300),
+            constraints: const BoxConstraints(maxHeight: 380),
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(

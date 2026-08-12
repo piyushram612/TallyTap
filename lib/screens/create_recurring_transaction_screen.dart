@@ -3,11 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../core/theme.dart';
+import '../core/math_evaluator.dart';
 import '../models/recurring_transaction_model.dart';
 import '../providers/recurring_transaction_provider.dart';
 import '../providers/category_provider.dart';
 import '../providers/currency_provider.dart';
 import '../providers/source_provider.dart';
+import '../services/transaction_service.dart';
 import 'widgets/transaction_form_components.dart';
 import 'dart:ui';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -196,7 +198,7 @@ class _CreateRecurringTransactionScreenState extends ConsumerState<CreateRecurri
 
   void _saveTransaction() {
     if (_formKey.currentState!.validate()) {
-      final amount = double.tryParse(_amountController.text) ?? 0.0;
+      final amount = MathEvaluator.tryParseAmount(_amountController.text) ?? 0.0;
       if (amount <= 0) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please enter a valid amount'), backgroundColor: Colors.red),
@@ -285,6 +287,7 @@ class _CreateRecurringTransactionScreenState extends ConsumerState<CreateRecurri
       }
     }).toList();
     final sourcesList = ref.watch(sourcesListProvider);
+    final allTx = ref.watch(transactionListProvider);
 
     // Ensure selected category is in the list to avoid chips not showing it
     final List<String> categoriesToRender = List.from(categoriesList);
@@ -380,31 +383,23 @@ class _CreateRecurringTransactionScreenState extends ConsumerState<CreateRecurri
                       // TITLE FIELD
                       const SectionLabel(label: 'Merchant / Title'),
                       const SizedBox(height: 10),
-                      TextFormField(
+                      MerchantAutofillField(
                         controller: _titleController,
-                        style: TextStyle(
-                          color: TriplTheme.textLight,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textCapitalization: TextCapitalization.sentences,
-                        decoration: InputDecoration(
-                          hintText: isIncome
-                              ? 'e.g. Salary, Dividend, Gift...'
-                              : 'e.g. Netflix, Rent, Electricity...',
-                          hintStyle: TextStyle(color: TriplTheme.textGray, fontSize: 14),
-                          filled: true,
-                          fillColor: TriplTheme.obsidianCard,
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(color: TriplTheme.borderGreen),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(color: activeColor, width: 1.5),
-                          ),
-                        ),
-                        validator: (val) => (val == null || val.trim().isEmpty) ? 'Required' : null,
+                        transactions: allTx,
+                        activeColor: activeColor,
+                        isIncome: isIncome,
+                        hintText: isIncome
+                            ? 'e.g. Salary, Dividend, Gift...'
+                            : 'e.g. Netflix, Rent, Electricity...',
+                        onSuggestionSelected: (suggestion) {
+                          setState(() {
+                            _titleController.text = suggestion.merchant;
+                            _type = suggestion.isIncome
+                                ? TransactionType.income
+                                : TransactionType.expense;
+                            _selectedCategory = suggestion.category;
+                          });
+                        },
                       ),
                       const SizedBox(height: 24),
 
@@ -1016,9 +1011,11 @@ class _CreateRecurringTransactionScreenState extends ConsumerState<CreateRecurri
         tutorialCoachMark?.next();
       },
       onFinish: () {
+        if (!mounted) return;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialCreateRecurringTx);
       },
       onSkip: () {
+        if (!mounted) return true;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialCreateRecurringTx);
         return true;
       },

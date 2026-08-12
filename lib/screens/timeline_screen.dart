@@ -4,6 +4,7 @@ import '../core/theme.dart';
 import '../models/transaction_model.dart';
 import '../models/filter_criteria.dart';
 import '../providers/currency_provider.dart';
+import '../providers/calendar_provider.dart';
 import '../services/transaction_service.dart';
 import 'widgets/transaction_item.dart';
 import 'widgets/timeline_filter_sheet.dart';
@@ -47,6 +48,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
   }
 
   void _toggleCalendarExpand() {
+    if (_calendarExpandController.isAnimating) return;
     setState(() {
       _isCalendarExpanded = !_isCalendarExpanded;
       if (_isCalendarExpanded) {
@@ -530,6 +532,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
 
     final transactions = ref.watch(transactionListProvider);
     final currency = ref.watch(currencyProvider);
+    final calendarFocusedMonth = ref.watch(calendarFocusedMonthProvider);
 
     final availableMonths = _getAvailableMonths(transactions);
     final latestMonth = availableMonths.isNotEmpty ? availableMonths.first : null;
@@ -540,6 +543,14 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
       _selectedMonth = latestMonth;
     }
     _lastLatestMonth = latestMonth;
+
+    // Synchronize month selection with calendarFocusedMonthProvider
+    final focusedMonthYear = MonthYear(calendarFocusedMonth.year, calendarFocusedMonth.month);
+    if (_selectedMonth != null && (calendarFocusedMonth.year != _selectedMonth!.year || calendarFocusedMonth.month != _selectedMonth!.month)) {
+      if (availableMonths.contains(focusedMonthYear)) {
+        _selectedMonth = focusedMonthYear;
+      }
+    }
 
     // Filter transactions for the selected month
     final monthlyTransactions = transactions.where((tx) =>
@@ -691,264 +702,296 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
       children: [
         NotificationListener<ScrollNotification>(
           onNotification: (notification) {
-            if (notification is ScrollUpdateNotification) {
+            if (_calendarExpandController.isAnimating) return false;
+
+            if (notification is OverscrollNotification) {
+              if (!_isCalendarExpanded && notification.overscroll < -20 && notification.metrics.pixels <= 0) {
+                _toggleCalendarExpand();
+              }
+            } else if (notification is ScrollUpdateNotification) {
               if (notification.scrollDelta != null) {
-                if (!_isCalendarExpanded && notification.metrics.pixels <= 0 && notification.scrollDelta! < -10) {
-                  _toggleCalendarExpand();
-                } else if (_isCalendarExpanded && notification.scrollDelta! > 12) {
+                if (!_isCalendarExpanded && notification.metrics.pixels <= 0 && notification.scrollDelta! < -20) {
                   _toggleCalendarExpand();
                 }
-              }
-            } else if (notification is OverscrollNotification) {
-              if (!_isCalendarExpanded && notification.overscroll < -5) {
-                _toggleCalendarExpand();
-              } else if (_isCalendarExpanded && notification.overscroll > 5) {
-                _toggleCalendarExpand();
               }
             }
             return false;
           },
-          child: SingleChildScrollView(
+          child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Timeline',
-                      style: TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.w900,
-                        color: TriplTheme.textLight,
-                        letterSpacing: -0.8,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: _toggleCalendarExpand,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: _isCalendarExpanded
-                              ? TriplTheme.primaryMint
-                              : TriplTheme.primaryMint.withOpacity(0.12),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(
-                            color: TriplTheme.primaryMint.withOpacity(0.4),
-                            width: 1.0,
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                sliver: SliverToBoxAdapter(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Timeline',
+                            style: TextStyle(
+                              fontSize: 26,
+                              fontWeight: FontWeight.w900,
+                              color: TriplTheme.textLight,
+                              letterSpacing: -0.8,
+                            ),
                           ),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Icons.calendar_month_rounded,
-                              size: 15,
-                              color: _isCalendarExpanded ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
-                            ),
-                            const SizedBox(width: 4),
-                            Icon(
-                              _isCalendarExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
-                              size: 16,
-                              color: _isCalendarExpanded ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              _isCalendarExpanded ? 'HIDE CALENDAR' : 'CALENDAR',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 0.5,
-                                color: _isCalendarExpanded ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
+                          GestureDetector(
+                            onTap: _toggleCalendarExpand,
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                              decoration: BoxDecoration(
+                                color: _isCalendarExpanded
+                                    ? TriplTheme.primaryMint
+                                    : TriplTheme.primaryMint.withOpacity(0.12),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: TriplTheme.primaryMint.withOpacity(0.4),
+                                  width: 1.0,
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Icon(
+                                    Icons.calendar_month_rounded,
+                                    size: 15,
+                                    color: _isCalendarExpanded ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Icon(
+                                    _isCalendarExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
+                                    size: 16,
+                                    color: _isCalendarExpanded ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
+                                  ),
+                                  const SizedBox(width: 4),
+                                  Text(
+                                    _isCalendarExpanded ? 'HIDE CALENDAR' : 'CALENDAR',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: 0.5,
+                                      color: _isCalendarExpanded ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
+                          ),
+                        ],
+                      ),
+                      SizeTransition(
+                        sizeFactor: _calendarExpandAnimation,
+                        axisAlignment: -1.0,
+                        child: FadeTransition(
+                          opacity: _calendarExpandAnimation,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 12.0, bottom: 4.0),
+                              child: GestureDetector(
+                                onVerticalDragUpdate: (details) {
+                                  if (_isCalendarExpanded && details.primaryDelta != null && details.primaryDelta! < -6) {
+                                    _toggleCalendarExpand();
+                                  }
+                                },
+                                child: const CalendarSpendingCard(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        key: TutorialService.timelineSearchKey,
+                        controller: _searchController,
+                        onChanged: (val) {
+                          setState(() {
+                            _searchQuery = val;
+                          });
+                        },
+                        style: TextStyle(fontSize: 14, color: TriplTheme.textLight),
+                        decoration: InputDecoration(
+                          hintText: 'Search transactions...',
+                          hintStyle: TextStyle(fontSize: 14, color: TriplTheme.textGray),
+                          prefixIcon: Icon(Icons.search, color: TriplTheme.textGray, size: 20),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              Icons.tune,
+                              color: _filterCriteria.isActive ? TriplTheme.primaryMint : TriplTheme.textGray,
+                            ),
+                            onPressed: () => _showFilterMenu(context, maxAmount),
+                          ),
+                          filled: true,
+                          fillColor: TriplTheme.obsidianCard,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 14),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(color: TriplTheme.borderGreen),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(16),
+                            borderSide: BorderSide(color: TriplTheme.primaryMint),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Month Selection Row
+                      SizedBox(
+                        height: 38,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: availableMonths.length,
+                          itemBuilder: (context, index) {
+                            final m = availableMonths[index];
+                            final isSelected = m == _selectedMonth;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedMonth = m;
+                                  ref.read(calendarFocusedMonthProvider.notifier).state = DateTime(m.year, m.month, 1);
+                                });
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 18),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : TriplTheme.obsidianCard,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: isSelected ? TriplTheme.primaryMint.withOpacity(0.5) : TriplTheme.borderGreen,
+                                    width: isSelected ? 1.5 : 1.0,
+                                  ),
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  m.shortName,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w800,
+                                    color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Filtered Summary pills (Expenses, Income, Net)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _buildSummaryPill(
+                              label: 'Expenses',
+                              value: '$currency${filteredExpense.toStringAsFixed(2)}',
+                              color: const Color(0xFFF87171),
+                              icon: Icons.arrow_upward_rounded,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: _buildSummaryPill(
+                              label: 'Income',
+                              value: '$currency${filteredIncome.toStringAsFixed(2)}',
+                              color: const Color(0xFF34D399),
+                              icon: Icons.arrow_downward_rounded,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: _buildSummaryPill(
+                              label: 'Net Balance',
+                              value: '${filteredNet >= 0 ? '+' : '-'}$currency${filteredNet.abs().toStringAsFixed(2)}',
+                              color: filteredNet >= 0 ? TriplTheme.primaryMint : TriplTheme.textLight,
+                              icon: Icons.account_balance_wallet_outlined,
+                              isNet: true,
+                              isPositive: filteredNet >= 0,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+
+                      SizedBox(
+                        height: 36,
+                        child: ListView(
+                          scrollDirection: Axis.horizontal,
+                          physics: const BouncingScrollPhysics(),
+                          children: [
+                            _buildFilterCapsule('All Activity'),
+                            _buildFilterCapsule('Income'),
+                            _buildFilterCapsule('Expenses'),
+                            _buildFilterCapsule('Transfers'),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizeTransition(
-                  sizeFactor: _calendarExpandAnimation,
-                  axisAlignment: -1.0,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 12.0, bottom: 4.0),
-                    child: GestureDetector(
-                      onVerticalDragUpdate: (details) {
-                        if (_isCalendarExpanded && details.primaryDelta != null && details.primaryDelta! < -8) {
-                          _toggleCalendarExpand();
-                        }
-                      },
-                      child: const CalendarSpendingCard(),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                TextField(
-                  key: TutorialService.timelineSearchKey,
-                  controller: _searchController,
-                  onChanged: (val) {
-                    setState(() {
-                      _searchQuery = val;
-                    });
-                  },
-                  style: TextStyle(fontSize: 14, color: TriplTheme.textLight),
-                  decoration: InputDecoration(
-                    hintText: 'Search transactions...',
-                    hintStyle: TextStyle(fontSize: 14, color: TriplTheme.textGray),
-                    prefixIcon: Icon(Icons.search, color: TriplTheme.textGray, size: 20),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        Icons.tune,
-                        color: _filterCriteria.isActive ? TriplTheme.primaryMint : TriplTheme.textGray,
-                      ),
-                      onPressed: () => _showFilterMenu(context, maxAmount),
-                    ),
-                    filled: true,
-                    fillColor: TriplTheme.obsidianCard,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 14),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: TriplTheme.borderGreen),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(16),
-                      borderSide: BorderSide(color: TriplTheme.primaryMint),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Month Selection Row
-                SizedBox(
-                  height: 38,
-                  child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: availableMonths.length,
-                    itemBuilder: (context, index) {
-                      final m = availableMonths[index];
-                      final isSelected = m == _selectedMonth;
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedMonth = m;
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          padding: const EdgeInsets.symmetric(horizontal: 18),
-                          decoration: BoxDecoration(
-                            color: isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : TriplTheme.obsidianCard,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: isSelected ? TriplTheme.primaryMint.withOpacity(0.5) : TriplTheme.borderGreen,
-                              width: isSelected ? 1.5 : 1.0,
-                            ),
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            m.shortName,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
-                              color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight,
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                const SizedBox(height: 12),
-
-                // Filtered Summary pills (Expenses, Income, Net)
-                Row(
-                  children: [
-                    Expanded(
-                      child: _buildSummaryPill(
-                        label: 'Expenses',
-                        value: '$currency${filteredExpense.toStringAsFixed(2)}',
-                        color: const Color(0xFFF87171),
-                        icon: Icons.arrow_upward_rounded,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _buildSummaryPill(
-                        label: 'Income',
-                        value: '$currency${filteredIncome.toStringAsFixed(2)}',
-                        color: const Color(0xFF34D399),
-                        icon: Icons.arrow_downward_rounded,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _buildSummaryPill(
-                        label: 'Net Balance',
-                        value: '${filteredNet >= 0 ? '+' : '-'}$currency${filteredNet.abs().toStringAsFixed(2)}',
-                        color: filteredNet >= 0 ? TriplTheme.primaryMint : TriplTheme.textLight,
-                        icon: Icons.account_balance_wallet_outlined,
-                        isNet: true,
-                        isPositive: filteredNet >= 0,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-
-                SizedBox(
-                  height: 36,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      _buildFilterCapsule('All Activity'),
-                      _buildFilterCapsule('Income'),
-                      _buildFilterCapsule('Expenses'),
-                      _buildFilterCapsule('Transfers'),
+                      const SizedBox(height: 16),
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+              ),
 
-                // Grouped transaction list
-                for (final dayKey in sortedDayKeys) ...[
-                  _buildSectionHeaderForDay(dayKey),
-                  const SizedBox(height: 8),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Column(
-                        children: [
-                          for (int i = 0; i < dayGroups[dayKey]!.length; i++) ...[
-                            _buildTimelineItem(dayGroups[dayKey]![i], currency, showDate: false),
-                            if (i < dayGroups[dayKey]!.length - 1)
-                              Divider(color: TriplTheme.borderGreen, height: 1, thickness: 0.5),
+              // Grouped transaction list (Virtualized Lazy Rendering)
+              if (filteredItems.isNotEmpty)
+                SliverPadding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) {
+                        final dayKey = sortedDayKeys[index];
+                        final dayItems = dayGroups[dayKey]!;
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildSectionHeaderForDay(dayKey),
+                            const SizedBox(height: 8),
+                            Card(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                                child: Column(
+                                  children: [
+                                    for (int i = 0; i < dayItems.length; i++) ...[
+                                      _buildTimelineItem(dayItems[i], currency, showDate: false),
+                                      if (i < dayItems.length - 1)
+                                        Divider(color: TriplTheme.borderGreen, height: 1, thickness: 0.5),
+                                    ],
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
                           ],
-                        ],
+                        );
+                      },
+                      childCount: sortedDayKeys.length,
+                    ),
+                  ),
+                )
+              else
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 60.0),
+                    child: Center(
+                      child: Text(
+                        'No matching transactions found.',
+                        style: TextStyle(color: TriplTheme.textGray, fontSize: 14),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
-                ],
-                if (filteredItems.isEmpty) ...[
-                  const SizedBox(height: 60),
-                  Center(
-                    child: Text(
-                      'No matching transactions found.',
-                      style: TextStyle(color: TriplTheme.textGray, fontSize: 14),
-                    ),
-                  ),
-                  const SizedBox(height: 60),
-                ],
-                SizedBox(height: bottomPadding),
-              ],
-            ),
+                ),
+
+              SliverToBoxAdapter(
+                child: SizedBox(height: bottomPadding),
+              ),
+            ],
           ),
         ),
         _buildSelectionPanel(),
