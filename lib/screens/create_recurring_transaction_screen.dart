@@ -1016,9 +1016,11 @@ class _CreateRecurringTransactionScreenState extends ConsumerState<CreateRecurri
         tutorialCoachMark?.next();
       },
       onFinish: () {
+        if (!mounted) return;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialCreateRecurringTx);
       },
       onSkip: () {
+        if (!mounted) return true;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialCreateRecurringTx);
         return true;
       },

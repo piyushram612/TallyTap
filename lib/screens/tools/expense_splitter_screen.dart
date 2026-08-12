@@ -1334,9 +1334,11 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
         tutorialCoachMark?.next();
       },
       onFinish: () {
+        if (!mounted) return;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialExpenseSplitter);
       },
       onSkip: () {
+        if (!mounted) return true;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialExpenseSplitter);
         return true;
       },

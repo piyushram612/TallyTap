@@ -694,9 +694,11 @@ class _ManageBudgetsSheetState extends ConsumerState<ManageBudgetsSheet> {
         tutorialCoachMark?.next();
       },
       onFinish: () {
+        if (!mounted) return;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialAdjustBudget);
       },
       onSkip: () {
+        if (!mounted) return true;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialAdjustBudget);
         return true;
       },

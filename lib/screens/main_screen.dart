@@ -608,9 +608,11 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
         }
       },
       onFinish: () {
+        if (!mounted) return;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialPrimary);
       },
       onClickTarget: (target) {
+        if (!mounted) return;
         if (target.identify == "TargetBudgetsTab") {
           ref.read(activeTabProvider.notifier).state = 1;
         } else if (target.identify == "TargetInsightsTab") {
@@ -622,6 +624,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
         }
       },
       onSkip: () {
+        if (!mounted) return true;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialPrimary);
         return true;
       },

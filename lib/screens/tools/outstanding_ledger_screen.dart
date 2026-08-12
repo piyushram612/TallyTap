@@ -1374,9 +1374,11 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
         tutorialCoachMark?.next();
       },
       onFinish: () {
+        if (!mounted) return;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialLedger);
       },
       onSkip: () {
+        if (!mounted) return true;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialLedger);
         return true;
       },

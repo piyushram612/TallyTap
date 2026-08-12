@@ -1028,9 +1028,11 @@ class _CreateTransactionScreenState
         tutorialCoachMark?.next();
       },
       onFinish: () {
+        if (!mounted) return;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialCreateTx);
       },
       onSkip: () {
+        if (!mounted) return true;
         ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialCreateTx);
         return true;
       },
