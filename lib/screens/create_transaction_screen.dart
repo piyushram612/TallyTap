@@ -97,11 +97,11 @@ class _CreateTransactionScreenState
 
   Color _categoryColor(String cat) {
     if (_isIncome) return const Color(0xFF10B981);
-    return TallyTapTheme.getColorForCategory(cat);
+    return TriplTheme.getColorForCategory(cat);
   }
 
   IconData _categoryIcon(String cat) =>
-      TallyTapTheme.getIconForCategory(cat, _isIncome);
+      TriplTheme.getIconForCategory(cat, _isIncome);
 
   double _balanceForSource(List<ExpenseTransaction> txs, String src, double startingBalance) {
     double b = startingBalance;
@@ -122,11 +122,11 @@ class _CreateTransactionScreenState
   }
 
   Future<void> _pickDate(BuildContext context) async {
-    final darkScheme = const ColorScheme.dark(
-      primary: TallyTapTheme.primaryMint,
-      onPrimary: TallyTapTheme.obsidianBg,
-      surface: TallyTapTheme.obsidianCard,
-      onSurface: TallyTapTheme.textLight,
+    final darkScheme = ColorScheme.dark(
+      primary: TriplTheme.primaryMint,
+      onPrimary: TriplTheme.obsidianBg,
+      surface: TriplTheme.obsidianCard,
+      onSurface: TriplTheme.textLight,
     );
     final picked = await showDatePicker(
       context: context,
@@ -270,7 +270,7 @@ class _CreateTransactionScreenState
 
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('${_isIncome ? 'Income' : 'Expense'} logged!'),
-      backgroundColor: TallyTapTheme.primaryMint,
+      backgroundColor: TriplTheme.primaryMint,
     ));
   }
 
@@ -301,7 +301,7 @@ class _CreateTransactionScreenState
     }
 
     final activeColor =
-        _isIncome ? const Color(0xFF10B981) : TallyTapTheme.primaryMint;
+        _isIncome ? const Color(0xFF10B981) : TriplTheme.primaryMint;
     final catColor = _categoryColor(_selectedCategory ?? 'Other');
 
     final dateLabel = _isToday(_selectedDate)
@@ -309,19 +309,19 @@ class _CreateTransactionScreenState
         : DateFormat('EEE, MMM d, y').format(_selectedDate);
 
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: TallyTapTheme.textLight, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: TriplTheme.textLight, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Log Transaction',
           style: TextStyle(
-            color: TallyTapTheme.textLight,
+            color: TriplTheme.textLight,
             fontSize: 18,
             fontWeight: FontWeight.w900,
             fontFamily: 'Outfit',
@@ -366,8 +366,8 @@ class _CreateTransactionScreenState
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: _merchantController,
-                        style: const TextStyle(
-                          color: TallyTapTheme.textLight,
+                        style: TextStyle(
+                          color: TriplTheme.textLight,
                           fontWeight: FontWeight.w600,
                         ),
                         textCapitalization: TextCapitalization.sentences,
@@ -375,16 +375,16 @@ class _CreateTransactionScreenState
                           hintText: _isIncome
                               ? 'e.g. Salary, Dividend, Gift...'
                               : 'e.g. Starbucks, Amazon, Rent...',
-                          hintStyle: const TextStyle(
-                              color: TallyTapTheme.textGray, fontSize: 14),
+                          hintStyle: TextStyle(
+                              color: TriplTheme.textGray, fontSize: 14),
                           filled: true,
-                          fillColor: TallyTapTheme.obsidianCard,
+                          fillColor: TriplTheme.obsidianCard,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 16),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(
-                                color: TallyTapTheme.borderGreen),
+                            borderSide: BorderSide(
+                                color: TriplTheme.borderGreen),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -400,8 +400,8 @@ class _CreateTransactionScreenState
                       const SizedBox(height: 10),
                       TextFormField(
                         controller: _paidToController,
-                        style: const TextStyle(
-                          color: TallyTapTheme.textLight,
+                        style: TextStyle(
+                          color: TriplTheme.textLight,
                           fontWeight: FontWeight.w600,
                         ),
                         textCapitalization: TextCapitalization.sentences,
@@ -409,16 +409,16 @@ class _CreateTransactionScreenState
                           hintText: _isIncome
                               ? 'e.g. Employer, Client...'
                               : 'e.g. Landlord, Store Name...',
-                          hintStyle: const TextStyle(
-                              color: TallyTapTheme.textGray, fontSize: 14),
+                          hintStyle: TextStyle(
+                              color: TriplTheme.textGray, fontSize: 14),
                           filled: true,
-                          fillColor: TallyTapTheme.obsidianCard,
+                          fillColor: TriplTheme.obsidianCard,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 16),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(
-                                color: TallyTapTheme.borderGreen),
+                            borderSide: BorderSide(
+                                color: TriplTheme.borderGreen),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -480,12 +480,12 @@ class _CreateTransactionScreenState
                                   decoration: BoxDecoration(
                                     color: selected
                                         ? color.withOpacity(0.15)
-                                        : TallyTapTheme.obsidianCard,
+                                        : TriplTheme.obsidianCard,
                                     borderRadius: BorderRadius.circular(18),
                                     border: Border.all(
                                       color: selected
                                           ? color
-                                          : TallyTapTheme.borderGreen,
+                                          : TriplTheme.borderGreen,
                                       width: selected ? 1.8 : 1.0,
                                     ),
                                     boxShadow: selected
@@ -508,14 +508,14 @@ class _CreateTransactionScreenState
                                           shape: BoxShape.circle,
                                           color: selected
                                               ? color.withOpacity(0.2)
-                                              : TallyTapTheme.obsidianBg
+                                              : TriplTheme.obsidianBg
                                                   .withOpacity(0.5),
                                         ),
                                         child: Icon(
                                           _categoryIcon(cat),
                                           color: selected
                                               ? color
-                                              : TallyTapTheme.textGray,
+                                              : TriplTheme.textGray,
                                           size: 20,
                                         ),
                                       ),
@@ -529,8 +529,8 @@ class _CreateTransactionScreenState
                                           fontSize: 10,
                                           fontWeight: FontWeight.w700,
                                           color: selected
-                                              ? color
-                                              : TallyTapTheme.textGray,
+                                              ? TriplTheme.ensureLegibleTextColor(color)
+                                              : TriplTheme.textGray,
                                         ),
                                       ),
                                     ],
@@ -556,7 +556,7 @@ class _CreateTransactionScreenState
                             final src = sources[i];
                             final selected = src == _selectedPaymentMethod;
                             final srcColor =
-                                TallyTapTheme.getColorForSource(src);
+                                TriplTheme.getColorForSource(src);
                             final startBal = startingBalances[src] ?? 0.0;
                             final balance = _balanceForSource(allTx, src, startBal);
                             return GestureDetector(
@@ -573,12 +573,12 @@ class _CreateTransactionScreenState
                                 decoration: BoxDecoration(
                                   color: selected
                                       ? srcColor.withOpacity(0.12)
-                                      : TallyTapTheme.obsidianCard,
+                                      : TriplTheme.obsidianCard,
                                   borderRadius: BorderRadius.circular(18),
                                   border: Border.all(
                                     color: selected
                                         ? srcColor
-                                        : TallyTapTheme.borderGreen,
+                                        : TriplTheme.borderGreen,
                                     width: selected ? 1.8 : 1.0,
                                   ),
                                   boxShadow: selected
@@ -606,7 +606,7 @@ class _CreateTransactionScreenState
                                             BorderRadius.circular(10),
                                       ),
                                       child: Icon(
-                                        TallyTapTheme.getIconForSource(src),
+                                        TriplTheme.getIconForSource(src),
                                         color: srcColor,
                                         size: 18,
                                       ),
@@ -624,8 +624,8 @@ class _CreateTransactionScreenState
                                             fontSize: 13,
                                             fontWeight: FontWeight.w700,
                                             color: selected
-                                                ? TallyTapTheme.textLight
-                                                : TallyTapTheme.textGray,
+                                                ? TriplTheme.textLight
+                                                : TriplTheme.textGray,
                                           ),
                                         ),
                                         Text.rich(
@@ -644,7 +644,7 @@ class _CreateTransactionScreenState
                                                 style: TextStyle(
                                                   color: selected
                                                       ? srcColor
-                                                      : TallyTapTheme.textGray
+                                                      : TriplTheme.textGray
                                                           .withOpacity(0.6),
                                                 ),
                                               ),
@@ -673,10 +673,10 @@ class _CreateTransactionScreenState
                           padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 14),
                           decoration: BoxDecoration(
-                            color: TallyTapTheme.obsidianCard,
+                            color: TriplTheme.obsidianCard,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: TallyTapTheme.borderGreen,
+                              color: TriplTheme.borderGreen,
                             ),
                           ),
                           child: Row(
@@ -687,8 +687,8 @@ class _CreateTransactionScreenState
                               Expanded(
                                 child: Text(
                                   dateLabel,
-                                  style: const TextStyle(
-                                    color: TallyTapTheme.textLight,
+                                  style: TextStyle(
+                                    color: TriplTheme.textLight,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 14,
                                   ),
@@ -698,16 +698,16 @@ class _CreateTransactionScreenState
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 14, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: TallyTapTheme.borderGreen
+                                  color: TriplTheme.borderGreen
                                       .withOpacity(0.4),
                                   borderRadius: BorderRadius.circular(20),
                                 ),
-                                child: const Text(
+                                child: Text(
                                   'Change',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700,
-                                    color: TallyTapTheme.textLight,
+                                    color: TriplTheme.textLight,
                                   ),
                                 ),
                               ),
@@ -722,8 +722,8 @@ class _CreateTransactionScreenState
                       const SizedBox(height: 10),
                       TextField(
                         controller: _notesController,
-                        style: const TextStyle(
-                          color: TallyTapTheme.textLight,
+                        style: TextStyle(
+                          color: TriplTheme.textLight,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -732,27 +732,27 @@ class _CreateTransactionScreenState
                         textCapitalization: TextCapitalization.sentences,
                         decoration: InputDecoration(
                           hintText: 'Add a note about this transaction...',
-                          hintStyle: const TextStyle(
-                              color: TallyTapTheme.textGray, fontSize: 14),
+                          hintStyle: TextStyle(
+                              color: TriplTheme.textGray, fontSize: 14),
                           filled: true,
-                          fillColor: TallyTapTheme.obsidianCard,
+                          fillColor: TriplTheme.obsidianCard,
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 16),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
-                            borderSide: const BorderSide(
-                                color: TallyTapTheme.borderGreen),
+                            borderSide: BorderSide(
+                                color: TriplTheme.borderGreen),
                           ),
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(16),
                             borderSide:
                                 BorderSide(color: activeColor, width: 1.5),
                           ),
-                          prefixIcon: const Padding(
+                          prefixIcon: Padding(
                             padding: EdgeInsets.only(left: 16, right: 8),
                             child: Icon(
                               Icons.notes_rounded,
-                              color: TallyTapTheme.textGray,
+                              color: TriplTheme.textGray,
                               size: 18,
                             ),
                           ),
@@ -772,10 +772,10 @@ class _CreateTransactionScreenState
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                           decoration: BoxDecoration(
-                            color: TallyTapTheme.obsidianCard,
+                            color: TriplTheme.obsidianCard,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: _finishLater ? activeColor : TallyTapTheme.borderGreen,
+                              color: _finishLater ? activeColor : TriplTheme.borderGreen,
                               width: _finishLater ? 1.5 : 1.0,
                             ),
                             boxShadow: _finishLater ? [
@@ -793,23 +793,23 @@ class _CreateTransactionScreenState
                                 width: 24,
                                 height: 24,
                                 decoration: BoxDecoration(
-                                  color: _finishLater ? activeColor : TallyTapTheme.obsidianBg.withOpacity(0.5),
+                                  color: _finishLater ? activeColor : TriplTheme.obsidianBg.withOpacity(0.5),
                                   borderRadius: BorderRadius.circular(6),
                                   border: Border.all(
-                                    color: _finishLater ? activeColor : TallyTapTheme.textGray.withOpacity(0.5),
+                                    color: _finishLater ? activeColor : TriplTheme.textGray.withOpacity(0.5),
                                   ),
                                 ),
                                 child: _finishLater
-                                    ? const Icon(Icons.check_rounded, size: 16, color: TallyTapTheme.obsidianBg)
+                                    ? Icon(Icons.check_rounded, size: 16, color: TriplTheme.obsidianBg)
                                     : null,
                               ),
                               const SizedBox(width: 14),
                               Text(
                                 _isIncome ? 'Verify Receipt' : 'Finish later',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700,
-                                  color: TallyTapTheme.textLight,
+                                  color: TriplTheme.textLight,
                                 ),
                               ),
                             ],
@@ -835,11 +835,11 @@ class _CreateTransactionScreenState
                                             lastDate: DateTime(2101),
                                             builder: (ctx, child) => Theme(
                                                 data: Theme.of(ctx).copyWith(
-                                                  colorScheme: const ColorScheme.dark(
-                                                    primary: TallyTapTheme.primaryMint,
-                                                    onPrimary: TallyTapTheme.obsidianBg,
-                                                    surface: TallyTapTheme.obsidianCard,
-                                                    onSurface: TallyTapTheme.textLight,
+                                                  colorScheme: ColorScheme.dark(
+                                                    primary: TriplTheme.primaryMint,
+                                                    onPrimary: TriplTheme.obsidianBg,
+                                                    surface: TriplTheme.obsidianCard,
+                                                    onSurface: TriplTheme.textLight,
                                                   ),
                                                 ),
                                                 child: child!),
@@ -851,9 +851,9 @@ class _CreateTransactionScreenState
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                                           decoration: BoxDecoration(
-                                            color: TallyTapTheme.obsidianCard,
+                                            color: TriplTheme.obsidianCard,
                                             borderRadius: BorderRadius.circular(16),
-                                            border: Border.all(color: TallyTapTheme.borderGreen),
+                                            border: Border.all(color: TriplTheme.borderGreen),
                                           ),
                                           child: Row(
                                             children: [
@@ -862,8 +862,8 @@ class _CreateTransactionScreenState
                                               Expanded(
                                                 child: Text(
                                                   DateFormat('MMM d, y').format(_reminderDate),
-                                                  style: const TextStyle(
-                                                    color: TallyTapTheme.textLight,
+                                                  style: TextStyle(
+                                                    color: TriplTheme.textLight,
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 13,
                                                   ),
@@ -883,11 +883,11 @@ class _CreateTransactionScreenState
                                             initialTime: _reminderTime,
                                             builder: (ctx, child) => Theme(
                                                 data: Theme.of(ctx).copyWith(
-                                                  colorScheme: const ColorScheme.dark(
-                                                    primary: TallyTapTheme.primaryMint,
-                                                    onPrimary: TallyTapTheme.obsidianBg,
-                                                    surface: TallyTapTheme.obsidianCard,
-                                                    onSurface: TallyTapTheme.textLight,
+                                                  colorScheme: ColorScheme.dark(
+                                                    primary: TriplTheme.primaryMint,
+                                                    onPrimary: TriplTheme.obsidianBg,
+                                                    surface: TriplTheme.obsidianCard,
+                                                    onSurface: TriplTheme.textLight,
                                                   ),
                                                 ),
                                                 child: child!),
@@ -899,9 +899,9 @@ class _CreateTransactionScreenState
                                         child: Container(
                                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                                           decoration: BoxDecoration(
-                                            color: TallyTapTheme.obsidianCard,
+                                            color: TriplTheme.obsidianCard,
                                             borderRadius: BorderRadius.circular(16),
-                                            border: Border.all(color: TallyTapTheme.borderGreen),
+                                            border: Border.all(color: TriplTheme.borderGreen),
                                           ),
                                           child: Row(
                                             children: [
@@ -910,8 +910,8 @@ class _CreateTransactionScreenState
                                               Expanded(
                                                 child: Text(
                                                   _reminderTime.format(context),
-                                                  style: const TextStyle(
-                                                    color: TallyTapTheme.textLight,
+                                                  style: TextStyle(
+                                                    color: TriplTheme.textLight,
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 13,
                                                   ),
@@ -945,7 +945,7 @@ class _CreateTransactionScreenState
                       colors: _isIncome
                           ? [const Color(0xFF10B981), const Color(0xFF059669)]
                           : [
-                              TallyTapTheme.primaryMint,
+                              TriplTheme.primaryMint,
                               const Color(0xFF33C28A)
                             ],
                       begin: Alignment.topLeft,
@@ -962,7 +962,7 @@ class _CreateTransactionScreenState
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.transparent,
-                      foregroundColor: TallyTapTheme.obsidianBg,
+                      foregroundColor: TriplTheme.obsidianBg,
                       shadowColor: Colors.transparent,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(18)),
@@ -1052,8 +1052,8 @@ class _CreateTransactionScreenState
           child: ElevatedButton(
             onPressed: () => controller.next(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: Text(nextText),

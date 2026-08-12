@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'core/app_theme.dart';
 import 'core/theme.dart';
 import 'screens/main_screen.dart';
 import 'screens/onboarding_screen.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'providers/recurring_transaction_provider.dart';
 import 'screens/splash_screen.dart';
 import 'providers/biometric_provider.dart';
+import 'providers/theme_provider.dart';
 import 'screens/lock_screen.dart';
 
 
@@ -47,19 +49,19 @@ void main() async {
   runApp(
     UncontrolledProviderScope(
       container: appContainer,
-      child: const TallyTapApp(),
+      child: const TriplApp(),
     ),
   );
 }
 
-class TallyTapApp extends ConsumerStatefulWidget {
-  const TallyTapApp({super.key});
+class TriplApp extends ConsumerStatefulWidget {
+  const TriplApp({super.key});
 
   @override
-  ConsumerState<TallyTapApp> createState() => _TallyTapAppState();
+  ConsumerState<TriplApp> createState() => _TriplAppState();
 }
 
-class _TallyTapAppState extends ConsumerState<TallyTapApp> with WidgetsBindingObserver {
+class _TriplAppState extends ConsumerState<TriplApp> with WidgetsBindingObserver {
   // Store the future so it's not recreated on every rebuild
   late final Future<_AppStartState> _startStateFuture;
 
@@ -101,20 +103,20 @@ class _TallyTapAppState extends ConsumerState<TallyTapApp> with WidgetsBindingOb
     final catColorsStr = prefs.getString('custom_category_colors') ?? '{}';
     try {
       final Map<String, dynamic> decoded = json.decode(catColorsStr);
-      TallyTapTheme.customCategoryColors = decoded.map((k, v) => MapEntry(k, Color(v as int)));
+      TriplTheme.customCategoryColors = decoded.map((k, v) => MapEntry(k, Color(v as int)));
     } catch (_) {}
 
     final catIconsStr = prefs.getString('custom_category_icons') ?? '{}';
     try {
       final Map<String, dynamic> decoded = json.decode(catIconsStr);
       final instantiateIcon = IconData.new;
-      TallyTapTheme.customCategoryIcons = decoded.map((k, v) => MapEntry(k, instantiateIcon(v as int, fontFamily: 'MaterialIcons')));
+      TriplTheme.customCategoryIcons = decoded.map((k, v) => MapEntry(k, instantiateIcon(v as int, fontFamily: 'MaterialIcons')));
     } catch (_) {}
 
     final srcColorsStr = prefs.getString('custom_source_colors') ?? '{}';
     try {
       final Map<String, dynamic> decoded = json.decode(srcColorsStr);
-      TallyTapTheme.customSourceColors = decoded.map((k, v) => MapEntry(k, Color(v as int)));
+      TriplTheme.customSourceColors = decoded.map((k, v) => MapEntry(k, Color(v as int)));
     } catch (_) {}
 
     final onboarded = prefs.getBool('has_completed_onboarding') ?? false;
@@ -128,17 +130,20 @@ class _TallyTapAppState extends ConsumerState<TallyTapApp> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
+    final themeConfig = ref.watch(themeProvider);
+    final themeData = themeConfig.toThemeData();
+
     return MaterialApp(
       title: 'Tripl',
       debugShowCheckedModeBanner: false,
-      theme: TallyTapTheme.darkTheme,
-      darkTheme: TallyTapTheme.darkTheme,
-      themeMode: ThemeMode.dark,
+      theme: themeData,
+      darkTheme: themeData,
+      themeMode: themeConfig.brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light,
       home: FutureBuilder<_AppStartState>(
         future: _startStateFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const TallyTapSplashScreen();
+            return const TriplSplashScreen();
           }
 
           switch (snapshot.data) {
@@ -153,33 +158,85 @@ class _TallyTapAppState extends ConsumerState<TallyTapApp> with WidgetsBindingOb
         },
       ),
       builder: (context, child) {
-        return Consumer(
-          builder: (context, ref, _) {
-            final isUnlocked = ref.watch(appUnlockedProvider);
-            final mediaQueryData = MediaQuery.of(context);
-            return MediaQuery(
-              data: mediaQueryData.copyWith(
-                textScaler: mediaQueryData.textScaler.clamp(minScaleFactor: 0.8, maxScaleFactor: 1.22),
-              ),
-              child: Stack(
-                children: [
-                  if (child != null)
-                    ExcludeSemantics(
-                      excluding: !isUnlocked,
-                      child: AbsorbPointer(
-                        absorbing: !isUnlocked,
-                        child: child,
+        return ThemeAppScope(
+          child: Consumer(
+            builder: (context, ref, _) {
+              final isUnlocked = ref.watch(appUnlockedProvider);
+              final mediaQueryData = MediaQuery.of(context);
+              return MediaQuery(
+                data: mediaQueryData.copyWith(
+                  textScaler: mediaQueryData.textScaler.clamp(minScaleFactor: 0.8, maxScaleFactor: 1.22),
+                ),
+                child: Stack(
+                  children: [
+                    if (child != null)
+                      ExcludeSemantics(
+                        excluding: !isUnlocked,
+                        child: AbsorbPointer(
+                          absorbing: !isUnlocked,
+                          child: child,
+                        ),
                       ),
-                    ),
-                  if (!isUnlocked)
-                    const LockScreen(),
-                ],
-              ),
-            );
-          },
+                    if (!isUnlocked)
+                      const LockScreen(),
+                  ],
+                ),
+              );
+            },
+          ),
         );
       },
     );
+  }
+}
+
+class ThemeAppScope extends ConsumerStatefulWidget {
+  final Widget child;
+  const ThemeAppScope({super.key, required this.child});
+
+  @override
+  ConsumerState<ThemeAppScope> createState() => _ThemeAppScopeState();
+}
+
+class _ThemeAppScopeState extends ConsumerState<ThemeAppScope> {
+  @override
+  Widget build(BuildContext context) {
+    ref.listen<AppThemeConfig>(themeProvider, (previous, next) {
+      if (previous != next) {
+        TriplTheme.obsidianBg = next.bgBase;
+        TriplTheme.obsidianCard = next.cardBg;
+        TriplTheme.primaryMint = next.primaryAccent;
+        TriplTheme.borderGreen = next.cardBorder;
+        TriplTheme.textLight = next.textPrimary;
+        TriplTheme.textGray = next.textMuted;
+
+        SystemChrome.setSystemUIOverlayStyle(
+          SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+            statusBarIconBrightness: next.brightness == Brightness.dark ? Brightness.light : Brightness.dark,
+            systemNavigationBarColor: next.bgBase,
+            systemNavigationBarIconBrightness: next.brightness == Brightness.dark ? Brightness.light : Brightness.dark,
+          ),
+        );
+
+        if (mounted) {
+          _markAllDirty(context as Element);
+        }
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            _markAllDirty(context as Element);
+          }
+        });
+      }
+    });
+
+    return widget.child;
+  }
+
+  void _markAllDirty(Element element) {
+    element.markNeedsBuild();
+    element.visitChildren(_markAllDirty);
   }
 }
 

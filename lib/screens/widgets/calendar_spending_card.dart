@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import '../../core/app_theme.dart';
 import '../../core/theme.dart';
 import '../../providers/calendar_provider.dart';
 import '../../providers/currency_provider.dart';
+import '../../widgets/tripl_badge.dart';
+import '../../widgets/tripl_button.dart';
+import '../../widgets/tripl_card.dart';
 import '../sheets/day_transactions_sheet.dart';
 
 class CalendarSpendingCard extends ConsumerWidget {
@@ -20,13 +24,8 @@ class CalendarSpendingCard extends ConsumerWidget {
     final now = DateTime.now();
     final todayStr = '${now.year}-${now.month.toString().padLeft(2, '0')}-${now.day.toString().padLeft(2, '0')}';
 
-    return Container(
-      decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianCard,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: TallyTapTheme.borderGreen, width: 1.0),
-      ),
-      padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 12.0),
+    return TriplCard(
+      padding: const EdgeInsets.all(20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -37,19 +36,21 @@ class CalendarSpendingCard extends ConsumerWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Spending Calendar',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w800,
-                      color: TallyTapTheme.textLight,
+                      color: context.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 10),
                   Row(
                     children: [
-                      GestureDetector(
-                        onTap: () {
+                      TriplButton.icon(
+                        icon: Icons.chevron_left_rounded,
+                        size: 26,
+                        onPressed: () {
                           if (viewMode == 'month') {
                             ref.read(calendarFocusedMonthProvider.notifier).state =
                                 DateTime(focusedMonth.year, focusedMonth.month - 1, 1);
@@ -58,34 +59,22 @@ class CalendarSpendingCard extends ConsumerWidget {
                                 focusedMonth.subtract(const Duration(days: 7));
                           }
                         },
-                        behavior: HitTestBehavior.opaque,
-                        child: Container(
-                          padding: const EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            color: TallyTapTheme.obsidianCard,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
-                          ),
-                          child: const Icon(
-                            Icons.chevron_left_rounded,
-                            color: TallyTapTheme.primaryMint,
-                            size: 16,
-                          ),
-                        ),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         DateFormat('MMMM yyyy').format(focusedMonth),
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
-                          color: TallyTapTheme.primaryMint,
+                          color: context.primaryAccent,
                           letterSpacing: 0.5,
                         ),
                       ),
                       const SizedBox(width: 8),
-                      GestureDetector(
-                        onTap: () {
+                      TriplButton.icon(
+                        icon: Icons.chevron_right_rounded,
+                        size: 26,
+                        onPressed: () {
                           if (viewMode == 'month') {
                             ref.read(calendarFocusedMonthProvider.notifier).state =
                                 DateTime(focusedMonth.year, focusedMonth.month + 1, 1);
@@ -94,20 +83,6 @@ class CalendarSpendingCard extends ConsumerWidget {
                                 focusedMonth.add(const Duration(days: 7));
                           }
                         },
-                        behavior: HitTestBehavior.opaque,
-                        child: Container(
-                          padding: const EdgeInsets.all(3),
-                          decoration: BoxDecoration(
-                            color: TallyTapTheme.obsidianCard,
-                            borderRadius: BorderRadius.circular(6),
-                            border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
-                          ),
-                          child: const Icon(
-                            Icons.chevron_right_rounded,
-                            color: TallyTapTheme.primaryMint,
-                            size: 16,
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -115,28 +90,11 @@ class CalendarSpendingCard extends ConsumerWidget {
               ),
 
               // View Mode Toggle (MONTH | WEEK)
-              Container(
-                decoration: BoxDecoration(
-                  color: const Color(0xFF0F1B17),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
-                ),
-                padding: const EdgeInsets.all(3),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildPillTab(
-                      label: 'MONTH',
-                      isSelected: viewMode == 'month',
-                      onTap: () => ref.read(calendarViewModeProvider.notifier).state = 'month',
-                    ),
-                    _buildPillTab(
-                      label: 'WEEK',
-                      isSelected: viewMode == 'week',
-                      onTap: () => ref.read(calendarViewModeProvider.notifier).state = 'week',
-                    ),
-                  ],
-                ),
+              TriplPillToggle<String>(
+                options: const ['month', 'week'],
+                selectedValue: viewMode,
+                labelBuilder: (opt) => opt,
+                onSelected: (val) => ref.read(calendarViewModeProvider.notifier).state = val,
               ),
             ],
           ),
@@ -144,15 +102,15 @@ class CalendarSpendingCard extends ConsumerWidget {
 
           // Weekday Header Labels (Mon - Sun)
           Row(
-            children: const ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((day) {
+            children: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'].map((day) {
               return Expanded(
                 child: Center(
                   child: Text(
                     day,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
-                      color: TallyTapTheme.textGray,
+                      color: TriplTheme.textGray,
                     ),
                   ),
                 ),
@@ -193,7 +151,7 @@ class CalendarSpendingCard extends ConsumerWidget {
               const SizedBox(width: 12),
               _buildLegendDot(const Color(0xFFEF4444), 'High Spike'),
               const SizedBox(width: 12),
-              _buildLegendDot(TallyTapTheme.primarySlate, 'Scheduled', isDotted: true),
+              _buildLegendDot(TriplTheme.primarySlate, 'Scheduled', isDotted: true),
             ],
           ),
         ],
@@ -212,7 +170,7 @@ class CalendarSpendingCard extends ConsumerWidget {
         duration: const Duration(milliseconds: 180),
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          color: isSelected ? TallyTapTheme.primaryMint : Colors.transparent,
+          color: isSelected ? TriplTheme.primaryMint : Colors.transparent,
           borderRadius: BorderRadius.circular(9),
         ),
         child: Text(
@@ -221,7 +179,7 @@ class CalendarSpendingCard extends ConsumerWidget {
             fontSize: 10,
             fontWeight: FontWeight.w900,
             letterSpacing: 0.5,
-            color: isSelected ? TallyTapTheme.obsidianBg : TallyTapTheme.textGray,
+            color: isSelected ? TriplTheme.obsidianBg : TriplTheme.textGray,
           ),
         ),
       ),
@@ -334,30 +292,30 @@ class CalendarSpendingCard extends ConsumerWidget {
 
     // Intensity Heatmap Logic
     Color badgeBg = Colors.transparent;
-    Color badgeText = TallyTapTheme.textGray;
-    BorderSide cellBorder = const BorderSide(color: TallyTapTheme.borderGreen, width: 0.5);
+    Color badgeText = TriplTheme.textGray;
+    BorderSide cellBorder = BorderSide(color: TriplTheme.borderGreen, width: 0.5);
 
     if (totalExpense > 0) {
       if (totalExpense > avgDailySpend * 1.5) {
         // High spend spike
-        badgeBg = const Color(0xFF2C1616);
+        badgeBg = const Color(0xFFEF4444).withOpacity(0.15);
         badgeText = const Color(0xFFEF4444);
         cellBorder = const BorderSide(color: Color(0xFFEF4444), width: 1.0);
       } else if (totalExpense > avgDailySpend * 0.5) {
         // Moderate spend
-        badgeBg = const Color(0xFF2E2413);
+        badgeBg = const Color(0xFFF59E0B).withOpacity(0.15);
         badgeText = const Color(0xFFF59E0B);
         cellBorder = const BorderSide(color: Color(0xFFF59E0B), width: 0.8);
       } else {
         // Low spend
-        badgeBg = const Color(0xFF0F2B20);
+        badgeBg = const Color(0xFF10B981).withOpacity(0.15);
         badgeText = const Color(0xFF10B981);
         cellBorder = const BorderSide(color: Color(0xFF10B981), width: 0.8);
       }
     }
 
     if (isToday) {
-      cellBorder = const BorderSide(color: TallyTapTheme.primaryMint, width: 1.5);
+      cellBorder = BorderSide(color: TriplTheme.primaryMint, width: 1.5);
     }
 
     // Category Color Micro Dots
@@ -377,7 +335,7 @@ class CalendarSpendingCard extends ConsumerWidget {
         duration: const Duration(milliseconds: 150),
         decoration: BoxDecoration(
           color: isCurrentMonth
-              ? (totalExpense > 0 ? badgeBg.withOpacity(0.4) : const Color(0xFF0F1B17))
+              ? (totalExpense > 0 ? badgeBg : TriplTheme.obsidianBg.withOpacity(0.4))
               : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: Border.fromBorderSide(
@@ -386,7 +344,7 @@ class CalendarSpendingCard extends ConsumerWidget {
           boxShadow: isToday
               ? [
                   BoxShadow(
-                    color: TallyTapTheme.primaryMint.withOpacity(0.2),
+                    color: TriplTheme.primaryMint.withOpacity(0.2),
                     blurRadius: 4,
                     offset: const Offset(0, 1),
                   )
@@ -408,17 +366,17 @@ class CalendarSpendingCard extends ConsumerWidget {
                     height: 1.0,
                     fontWeight: isToday || totalExpense > 0 ? FontWeight.w900 : FontWeight.w600,
                     color: !isCurrentMonth
-                        ? TallyTapTheme.textGray.withOpacity(0.3)
-                        : (isToday ? TallyTapTheme.primaryMint : TallyTapTheme.textLight),
+                        ? TriplTheme.textGray.withOpacity(0.3)
+                        : (isToday ? TriplTheme.primaryMint : TriplTheme.textLight),
                   ),
                 ),
                 if (scheduledCount > 0 && isCurrentMonth)
                   Container(
                     width: 3.5,
                     height: 3.5,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: TallyTapTheme.primarySlate,
+                      color: TriplTheme.primarySlate,
                     ),
                   ),
               ],
@@ -437,7 +395,7 @@ class CalendarSpendingCard extends ConsumerWidget {
                       height: 3.0,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: TallyTapTheme.getColorForCategory(cat),
+                        color: TriplTheme.getColorForCategory(cat),
                       ),
                     );
                   }).toList(),
@@ -482,16 +440,16 @@ class CalendarSpendingCard extends ConsumerWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             color: color,
-            border: isDotted ? Border.all(color: TallyTapTheme.textLight, width: 0.8) : null,
+            border: isDotted ? Border.all(color: TriplTheme.textLight, width: 0.8) : null,
           ),
         ),
         const SizedBox(width: 4),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 9,
             fontWeight: FontWeight.w700,
-            color: TallyTapTheme.textGray,
+            color: TriplTheme.textGray,
           ),
         ),
       ],

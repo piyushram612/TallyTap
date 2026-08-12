@@ -49,22 +49,22 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
     }).toList();
 
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: TallyTapTheme.textLight, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: TriplTheme.textLight, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Recurring Payments',
-          style: TextStyle(color: TallyTapTheme.textLight, fontSize: 18, fontWeight: FontWeight.w900, fontFamily: 'Outfit'),
+          style: TextStyle(color: TriplTheme.textLight, fontSize: 18, fontWeight: FontWeight.w900, fontFamily: 'Outfit'),
         ),
         actions: [
           IconButton(
             key: TutorialService.recurringTxFabKey,
-            icon: const Icon(Icons.add_rounded, color: TallyTapTheme.primaryMint),
+            icon: Icon(Icons.add_rounded, color: TriplTheme.primaryMint),
             onPressed: () {
               Navigator.push(
                 context,
@@ -82,14 +82,14 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
               key: TutorialService.recurringTxListKey,
               padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12),
               child: TextField(
-                style: const TextStyle(color: TallyTapTheme.textLight),
+                style: TextStyle(color: TriplTheme.textLight),
                 onChanged: (val) => setState(() => _searchQuery = val),
                 decoration: InputDecoration(
                   hintText: 'Search payments...',
-                  hintStyle: const TextStyle(color: TallyTapTheme.textGray),
-                  prefixIcon: const Icon(Icons.search_rounded, color: TallyTapTheme.textGray),
+                  hintStyle: TextStyle(color: TriplTheme.textGray),
+                  prefixIcon: Icon(Icons.search_rounded, color: TriplTheme.textGray),
                   filled: true,
-                  fillColor: TallyTapTheme.obsidianCard,
+                  fillColor: TriplTheme.obsidianCard,
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide.none),
                 ),
               ),
@@ -109,17 +109,17 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         decoration: BoxDecoration(
-                          color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+                          color: isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : TriplTheme.obsidianCard,
                           borderRadius: BorderRadius.circular(100),
                           border: Border.all(
-                            color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.5) : TallyTapTheme.borderGreen,
+                            color: isSelected ? TriplTheme.primaryMint.withOpacity(0.5) : TriplTheme.borderGreen,
                             width: isSelected ? 1.5 : 1.0,
                           ),
                         ),
                         child: Text(
                           filter,
                           style: TextStyle(
-                            color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+                            color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight,
                             fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
                             fontSize: 13,
                           ),
@@ -135,7 +135,7 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
             // List
             Expanded(
               child: filtered.isEmpty
-                  ? const Center(child: Text('No recurring payments found.', style: TextStyle(color: TallyTapTheme.textGray)))
+                  ? Center(child: Text('No recurring payments found.', style: TextStyle(color: TriplTheme.textGray)))
                   : ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                       itemCount: filtered.length,
@@ -143,7 +143,7 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
                       itemBuilder: (context, index) {
                         final tx = filtered[index];
                         final isIncome = tx.type == TransactionType.income;
-                        final activeColor = isIncome ? const Color(0xFF10B981) : TallyTapTheme.primaryMint;
+                        final activeColor = isIncome ? const Color(0xFF10B981) : TriplTheme.primaryMint;
                         
                         bool isDue = tx.nextDueDate.isBefore(DateTime.now()) || tx.nextDueDate.isAtSameMomentAs(DateTime.now());
                         bool showManualActions = isDue && !tx.autoCreate && tx.status == RecurringStatus.active;
@@ -161,9 +161,9 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: TallyTapTheme.obsidianCard,
+                              color: TriplTheme.obsidianCard,
                               borderRadius: BorderRadius.circular(16),
-                              border: Border.all(color: showManualActions ? Colors.orange.withOpacity(0.5) : TallyTapTheme.borderGreen.withOpacity(0.3)),
+                              border: Border.all(color: showManualActions ? Colors.orange.withOpacity(0.5) : TriplTheme.borderGreen.withOpacity(0.3)),
                             ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -183,12 +183,12 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        Text(tx.title, style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 16, fontWeight: FontWeight.bold)),
-                                        Text('${tx.frequency.name} • ${tx.category}', style: const TextStyle(color: TallyTapTheme.textGray, fontSize: 12)),
+                                        Text(tx.title, style: TextStyle(color: TriplTheme.textLight, fontSize: 16, fontWeight: FontWeight.bold)),
+                                        Text('${tx.frequency.name} • ${tx.category}', style: TextStyle(color: TriplTheme.textGray, fontSize: 12)),
                                         const SizedBox(height: 4),
                                         Row(
                                           children: [
-                                            Text('Next Due: ${DateFormat('dd MMM yyyy').format(tx.nextDueDate)}', style: const TextStyle(color: TallyTapTheme.textGray, fontSize: 10)),
+                                            Text('Next Due: ${DateFormat('dd MMM yyyy').format(tx.nextDueDate)}', style: TextStyle(color: TriplTheme.textGray, fontSize: 10)),
                                             if (showManualActions) ...[
                                               const SizedBox(width: 8),
                                               Container(
@@ -205,7 +205,7 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
                                   Column(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
-                                      Text('$currency${tx.amount.toStringAsFixed(0)}', style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 16, fontWeight: FontWeight.bold)),
+                                      Text('$currency${tx.amount.toStringAsFixed(0)}', style: TextStyle(color: TriplTheme.textLight, fontSize: 16, fontWeight: FontWeight.bold)),
                                       const SizedBox(height: 8),
                                       Row(
                                         mainAxisAlignment: MainAxisAlignment.end,
@@ -221,11 +221,11 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
                                             child: Container(
                                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                               decoration: BoxDecoration(
-                                                color: TallyTapTheme.obsidianBg,
+                                                color: TriplTheme.obsidianBg,
                                                 borderRadius: BorderRadius.circular(8),
-                                                border: Border.all(color: TallyTapTheme.borderGreen),
+                                                border: Border.all(color: TriplTheme.borderGreen),
                                               ),
-                                              child: const Text('Edit', style: TextStyle(color: TallyTapTheme.textLight, fontSize: 10, fontWeight: FontWeight.bold)),
+                                              child: Text('Edit', style: TextStyle(color: TriplTheme.textLight, fontSize: 10, fontWeight: FontWeight.bold)),
                                             ),
                                           ),
                                           const SizedBox(width: 8),
@@ -237,11 +237,11 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
                                             child: Container(
                                               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                                               decoration: BoxDecoration(
-                                                color: tx.status == RecurringStatus.active ? TallyTapTheme.obsidianBg : Colors.orange.withOpacity(0.2),
+                                                color: tx.status == RecurringStatus.active ? TriplTheme.obsidianBg : Colors.orange.withOpacity(0.2),
                                                 borderRadius: BorderRadius.circular(8),
-                                                border: Border.all(color: tx.status == RecurringStatus.active ? TallyTapTheme.borderGreen : Colors.orange),
+                                                border: Border.all(color: tx.status == RecurringStatus.active ? TriplTheme.borderGreen : Colors.orange),
                                               ),
-                                              child: Text(tx.status == RecurringStatus.active ? 'Pause' : 'Resume', style: TextStyle(color: tx.status == RecurringStatus.active ? TallyTapTheme.textLight : Colors.orange, fontSize: 10, fontWeight: FontWeight.bold)),
+                                              child: Text(tx.status == RecurringStatus.active ? 'Pause' : 'Resume', style: TextStyle(color: tx.status == RecurringStatus.active ? TriplTheme.textLight : Colors.orange, fontSize: 10, fontWeight: FontWeight.bold)),
                                             ),
                                           ),
                                         ],
@@ -257,13 +257,13 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
                                   children: [
                                     TextButton(
                                       onPressed: () => ref.read(recurringTransactionsProvider.notifier).skip(tx.id),
-                                      child: const Text('Skip', style: TextStyle(color: TallyTapTheme.textGray, fontWeight: FontWeight.bold)),
+                                      child: Text('Skip', style: TextStyle(color: TriplTheme.textGray, fontWeight: FontWeight.bold)),
                                     ),
                                     const SizedBox(width: 8),
                                     ElevatedButton(
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: activeColor,
-                                        foregroundColor: TallyTapTheme.obsidianBg,
+                                        foregroundColor: TriplTheme.obsidianBg,
                                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                       ),
                                       onPressed: () => ref.read(recurringTransactionsProvider.notifier).markAsPaid(tx.id),
@@ -340,8 +340,8 @@ class _RecurringTransactionsListScreenState extends ConsumerState<RecurringTrans
           child: ElevatedButton(
             onPressed: () => controller.next(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: Text(nextText),

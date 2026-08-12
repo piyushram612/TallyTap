@@ -18,8 +18,8 @@ class SummaryGraphSettingsSheet extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(24.0),
-      decoration: const BoxDecoration(
-        color: TallyTapTheme.obsidianBg,
+      decoration: BoxDecoration(
+        color: TriplTheme.obsidianBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: SafeArea(
@@ -34,18 +34,18 @@ class SummaryGraphSettingsSheet extends ConsumerWidget {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: TallyTapTheme.textGray.withValues(alpha: 0.3),
+                    color: TriplTheme.textGray.withValues(alpha: 0.3),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 'Summary Graph Settings',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
-                  color: TallyTapTheme.textLight,
+                  color: TriplTheme.textLight,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -119,10 +119,10 @@ class SummaryGraphSettingsSheet extends ConsumerWidget {
       children: [
         Text(
           title.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
-            color: TallyTapTheme.textGray,
+            color: TriplTheme.textGray,
             letterSpacing: 1.2,
           ),
         ),
@@ -139,10 +139,10 @@ class SummaryGraphSettingsSheet extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? TallyTapTheme.primaryMint.withValues(alpha: 0.15) : TallyTapTheme.obsidianCard,
+          color: isSelected ? TriplTheme.primaryMint.withValues(alpha: 0.15) : TriplTheme.obsidianCard,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? TallyTapTheme.primaryMint.withValues(alpha: 0.5) : TallyTapTheme.borderGreen,
+            color: isSelected ? TriplTheme.primaryMint.withValues(alpha: 0.5) : TriplTheme.borderGreen,
             width: isSelected ? 1.5 : 1.0,
           ),
         ),
@@ -151,7 +151,7 @@ class SummaryGraphSettingsSheet extends ConsumerWidget {
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+            color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight,
           ),
         ),
       ),

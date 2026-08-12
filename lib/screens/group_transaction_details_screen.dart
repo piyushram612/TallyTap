@@ -47,9 +47,9 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text('Receipt Verified Successfully!'),
-          backgroundColor: TallyTapTheme.primaryMint,
+          backgroundColor: TriplTheme.primaryMint,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -69,10 +69,10 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
       children: [
         Text(
           label.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 9,
             fontWeight: FontWeight.w800,
-            color: TallyTapTheme.textGray,
+            color: TriplTheme.textGray,
             letterSpacing: 1.0,
           ),
         ),
@@ -133,18 +133,18 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
     final groupName = _getGroupName();
 
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: TallyTapTheme.textLight, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: TriplTheme.textLight, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Group Details',
           style: TextStyle(
-            color: TallyTapTheme.textLight,
+            color: TriplTheme.textLight,
             fontSize: 18,
             fontWeight: FontWeight.w900,
             fontFamily: 'Outfit',
@@ -152,7 +152,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_note_rounded, color: TallyTapTheme.primaryMint, size: 28),
+            icon: Icon(Icons.edit_note_rounded, color: TriplTheme.primaryMint, size: 28),
             tooltip: 'Edit Group Split',
             onPressed: () {
               HapticFeedback.mediumImpact();
@@ -169,7 +169,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
       ),
       body: SafeArea(
         child: groupTransactions.isEmpty
-            ? const Center(child: Text("No transactions found for this group", style: TextStyle(color: TallyTapTheme.textGray)))
+            ? Center(child: Text("No transactions found for this group", style: TextStyle(color: TriplTheme.textGray)))
             : SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -182,17 +182,17 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            TallyTapTheme.primaryMint.withOpacity(0.15),
-                            TallyTapTheme.primaryMint.withOpacity(0.02),
+                            TriplTheme.primaryMint.withOpacity(0.15),
+                            TriplTheme.primaryMint.withOpacity(0.02),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.4), width: 1.5),
+                        border: Border.all(color: TriplTheme.primaryMint.withOpacity(0.4), width: 1.5),
                         boxShadow: [
                           BoxShadow(
-                            color: TallyTapTheme.primaryMint.withOpacity(0.1),
+                            color: TriplTheme.primaryMint.withOpacity(0.1),
                             blurRadius: 20,
                             offset: const Offset(0, 8),
                           ),
@@ -203,22 +203,22 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                             decoration: BoxDecoration(
-                              color: TallyTapTheme.primaryMint.withOpacity(0.1),
+                              color: TriplTheme.primaryMint.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(20),
-                              border: Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.3)),
+                              border: Border.all(color: TriplTheme.primaryMint.withOpacity(0.3)),
                             ),
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                const Icon(Icons.group_work_rounded, color: TallyTapTheme.primaryMint, size: 14),
+                                Icon(Icons.group_work_rounded, color: TriplTheme.primaryMint, size: 14),
                                 const SizedBox(width: 6),
                                 Flexible(
                                   child: Text(
                                     groupName,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w800,
-                                      color: TallyTapTheme.primaryMint,
+                                      color: TriplTheme.primaryMint,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -228,12 +228,12 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                             ),
                           ),
                           const SizedBox(height: 16),
-                          const Text(
+                          Text(
                             'NET AMOUNT',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
-                              color: TallyTapTheme.textGray,
+                              color: TriplTheme.textGray,
                               letterSpacing: 1.5,
                             ),
                           ),
@@ -247,7 +247,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: isNetIncome ? const Color(0xFF10B981) : TallyTapTheme.textLight,
+                                  color: isNetIncome ? const Color(0xFF10B981) : TriplTheme.textLight,
                                   height: 1.2,
                                 ),
                               ),
@@ -256,7 +256,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                 style: TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: isNetIncome ? const Color(0xFF10B981) : TallyTapTheme.textLight,
+                                  color: isNetIncome ? const Color(0xFF10B981) : TriplTheme.textLight,
                                   height: 1.2,
                                 ),
                               ),
@@ -265,7 +265,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                 style: TextStyle(
                                   fontSize: 48,
                                   fontWeight: FontWeight.w900,
-                                  color: isNetIncome ? const Color(0xFF10B981) : TallyTapTheme.textLight,
+                                  color: isNetIncome ? const Color(0xFF10B981) : TriplTheme.textLight,
                                   height: 1.0,
                                   letterSpacing: -1.0,
                                 ),
@@ -277,24 +277,24 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                             isItemizedSplit
                                 ? '${rawReceiptItems.length} Receipt Items • ${groupTransactions.length} Participants'
                                 : '${groupTransactions.length} Participants',
-                            style: const TextStyle(fontSize: 12, color: TallyTapTheme.textGray, fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 12, color: TriplTheme.textGray, fontWeight: FontWeight.bold),
                           ),
                           if (isItemizedSplit) ...[
                             const SizedBox(height: 16),
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                               decoration: BoxDecoration(
-                                color: TallyTapTheme.obsidianBg.withOpacity(0.5),
+                                color: TriplTheme.obsidianBg.withOpacity(0.5),
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.2)),
+                                border: Border.all(color: TriplTheme.primaryMint.withOpacity(0.2)),
                               ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  _buildHeaderMetricColumn('Total Bill', '$currency${totalBillAmount.toStringAsFixed(2)}', TallyTapTheme.textLight),
-                                  Container(width: 1, height: 24, color: TallyTapTheme.borderGreen),
-                                  _buildHeaderMetricColumn('Your Share', '$currency${yourShareAmount.toStringAsFixed(2)}', TallyTapTheme.primaryMint),
-                                  Container(width: 1, height: 24, color: TallyTapTheme.borderGreen),
+                                  _buildHeaderMetricColumn('Total Bill', '$currency${totalBillAmount.toStringAsFixed(2)}', TriplTheme.textLight),
+                                  Container(width: 1, height: 24, color: TriplTheme.borderGreen),
+                                  _buildHeaderMetricColumn('Your Share', '$currency${yourShareAmount.toStringAsFixed(2)}', TriplTheme.primaryMint),
+                                  Container(width: 1, height: 24, color: TriplTheme.borderGreen),
                                   _buildHeaderMetricColumn('Friends Owe', '$currency${friendsOweAmount.toStringAsFixed(2)}', const Color(0xFF10B981)),
                                 ],
                               ),
@@ -309,25 +309,25 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'RECEIPT DETAILS',
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w800,
-                              color: TallyTapTheme.textGray,
+                              color: TriplTheme.textGray,
                               letterSpacing: 1.5,
                             ),
                           ),
                           Container(
                             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                             decoration: BoxDecoration(
-                              color: TallyTapTheme.primaryMint.withOpacity(0.1),
+                              color: TriplTheme.primaryMint.withOpacity(0.1),
                               borderRadius: BorderRadius.circular(8),
-                              border: Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.3)),
+                              border: Border.all(color: TriplTheme.primaryMint.withOpacity(0.3)),
                             ),
                             child: Text(
                               '${rawReceiptItems.length} ITEMS',
-                              style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: TallyTapTheme.primaryMint),
+                              style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: TriplTheme.primaryMint),
                             ),
                           ),
                         ],
@@ -336,9 +336,9 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                       Container(
                         width: double.infinity,
                         decoration: BoxDecoration(
-                          color: TallyTapTheme.obsidianCard,
+                          color: TriplTheme.obsidianCard,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: TallyTapTheme.borderGreen, width: 1.2),
+                          border: Border.all(color: TriplTheme.borderGreen, width: 1.2),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.black.withOpacity(0.2),
@@ -355,7 +355,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
 
                             Widget childWidget;
                             if (parts.length != 3) {
-                              childWidget = Text(line, style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 13));
+                              childWidget = Text(line, style: TextStyle(color: TriplTheme.textLight, fontSize: 13));
                             } else {
                               final itemName = parts[0];
                               final itemPrice = parts[1];
@@ -371,8 +371,8 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                       Expanded(
                                         child: Text(
                                           itemName,
-                                          style: const TextStyle(
-                                            color: TallyTapTheme.textLight,
+                                          style: TextStyle(
+                                            color: TriplTheme.textLight,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14,
                                           ),
@@ -380,8 +380,8 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                       ),
                                       Text(
                                         "$currency$itemPrice",
-                                        style: const TextStyle(
-                                          color: TallyTapTheme.textLight,
+                                        style: TextStyle(
+                                          color: TriplTheme.textLight,
                                           fontWeight: FontWeight.w900,
                                           fontSize: 14,
                                         ),
@@ -394,9 +394,9 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                     runSpacing: 4,
                                     crossAxisAlignment: WrapCrossAlignment.center,
                                     children: [
-                                      const Text(
+                                      Text(
                                         "Shared by:",
-                                        style: TextStyle(color: TallyTapTheme.textGray, fontSize: 11, fontWeight: FontWeight.w600),
+                                        style: TextStyle(color: TriplTheme.textGray, fontSize: 11, fontWeight: FontWeight.w600),
                                       ),
                                       ...namesList.map((name) {
                                         final isYou = name == "You";
@@ -428,13 +428,13 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                                           decoration: BoxDecoration(
                                             color: isYou
-                                                ? TallyTapTheme.primaryMint.withOpacity(0.18)
-                                                : TallyTapTheme.primaryMint.withOpacity(0.08),
+                                                ? TriplTheme.primaryMint.withOpacity(0.18)
+                                                : TriplTheme.primaryMint.withOpacity(0.08),
                                             borderRadius: BorderRadius.circular(12),
                                             border: Border.all(
                                               color: isYou
-                                                  ? TallyTapTheme.primaryMint.withOpacity(0.5)
-                                                  : TallyTapTheme.primaryMint.withOpacity(0.25),
+                                                  ? TriplTheme.primaryMint.withOpacity(0.5)
+                                                  : TriplTheme.primaryMint.withOpacity(0.25),
                                             ),
                                           ),
                                           child: Text(
@@ -442,7 +442,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                             style: TextStyle(
                                               fontSize: 10,
                                               fontWeight: FontWeight.bold,
-                                              color: isYou ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+                                              color: isYou ? TriplTheme.primaryMint : TriplTheme.textLight,
                                             ),
                                           ),
                                         );
@@ -459,7 +459,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal: 16),
                                     child: Divider(
-                                      color: TallyTapTheme.borderGreen.withOpacity(0.6),
+                                      color: TriplTheme.borderGreen.withOpacity(0.6),
                                       height: 1,
                                     ),
                                   ),
@@ -476,12 +476,12 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
 
                     const SizedBox(height: 32),
                     
-                    const Text(
+                    Text(
                       'PARTICIPANTS',
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w800,
-                        color: TallyTapTheme.textGray,
+                        color: TriplTheme.textGray,
                         letterSpacing: 1.5,
                       ),
                     ),
@@ -495,7 +495,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                       itemBuilder: (context, index) {
                         final tx = groupTransactions[index];
                         final isInc = tx.isIncome;
-                        final color = isInc ? const Color(0xFF10B981) : TallyTapTheme.textLight;
+                        final color = isInc ? const Color(0xFF10B981) : TriplTheme.textLight;
                         
                         final dateStr = DateFormat('MMM d, y • h:mm a').format(tx.date);
                         
@@ -510,10 +510,10 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                           },
                           child: Container(
                             decoration: BoxDecoration(
-                              color: tx.needsVerification ? const Color(0xFFF59E0B).withOpacity(0.05) : TallyTapTheme.obsidianCard,
+                              color: tx.needsVerification ? const Color(0xFFF59E0B).withOpacity(0.05) : TriplTheme.obsidianCard,
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: tx.needsVerification ? const Color(0xFFF59E0B).withOpacity(0.3) : TallyTapTheme.borderGreen,
+                                color: tx.needsVerification ? const Color(0xFFF59E0B).withOpacity(0.3) : TriplTheme.borderGreen,
                                 width: 1.0,
                               ),
                             ),
@@ -527,12 +527,12 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                       height: 40,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: TallyTapTheme.getIconBgForCategory(tx.category, isInc),
-                                        border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                                        color: TriplTheme.getIconBgForCategory(tx.category, isInc),
+                                        border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                                       ),
                                       child: Icon(
-                                        TallyTapTheme.getIconForCategory(tx.category, isInc),
-                                        color: isInc ? const Color(0xFF10B981) : TallyTapTheme.textLight,
+                                        TriplTheme.getIconForCategory(tx.category, isInc),
+                                        color: isInc ? const Color(0xFF10B981) : TriplTheme.textLight,
                                         size: 18,
                                       ),
                                     ),
@@ -543,10 +543,10 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                         children: [
                                           Text(
                                             tx.merchant,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 15,
                                               fontWeight: FontWeight.w700,
-                                              color: TallyTapTheme.textLight,
+                                              color: TriplTheme.textLight,
                                             ),
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
@@ -554,7 +554,7 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                           const SizedBox(height: 4),
                                           Text(
                                             dateStr,
-                                            style: const TextStyle(fontSize: 11, color: TallyTapTheme.textGray),
+                                            style: TextStyle(fontSize: 11, color: TriplTheme.textGray),
                                           ),
                                         ],
                                       ),
@@ -596,17 +596,17 @@ class _GroupTransactionDetailsScreenState extends ConsumerState<GroupTransaction
                                 ),
                                 if (tx.needsVerification) ...[
                                   const SizedBox(height: 16),
-                                  const Divider(color: TallyTapTheme.borderGreen, height: 1),
+                                  Divider(color: TriplTheme.borderGreen, height: 1),
                                   const SizedBox(height: 12),
                                   SizedBox(
                                     width: double.infinity,
                                     child: ElevatedButton.icon(
                                       onPressed: () => _verifyTransaction(tx),
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: TallyTapTheme.primaryMint,
-                                        foregroundColor: TallyTapTheme.obsidianBg,
+                                        backgroundColor: TriplTheme.primaryMint,
+                                        foregroundColor: TriplTheme.obsidianBg,
                                         elevation: 8,
-                                        shadowColor: TallyTapTheme.primaryMint.withOpacity(0.4),
+                                        shadowColor: TriplTheme.primaryMint.withOpacity(0.4),
                                         padding: const EdgeInsets.symmetric(vertical: 12),
                                         shape: RoundedRectangleBorder(
                                           borderRadius: BorderRadius.circular(12),

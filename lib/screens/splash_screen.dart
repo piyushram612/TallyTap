@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import '../core/theme.dart';
 
-class TallyTapSplashScreen extends StatefulWidget {
-  const TallyTapSplashScreen({super.key});
+class TriplSplashScreen extends StatefulWidget {
+  const TriplSplashScreen({super.key});
 
   @override
-  State<TallyTapSplashScreen> createState() => _TallyTapSplashScreenState();
+  State<TriplSplashScreen> createState() => _TriplSplashScreenState();
 }
 
-class _TallyTapSplashScreenState extends State<TallyTapSplashScreen>
+class _TriplSplashScreenState extends State<TriplSplashScreen>
     with TickerProviderStateMixin {
   late final AnimationController _logoController;
   late final AnimationController _fadeController;
@@ -98,7 +98,7 @@ class _TallyTapSplashScreenState extends State<TallyTapSplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -113,7 +113,7 @@ class _TallyTapSplashScreenState extends State<TallyTapSplashScreen>
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    TallyTapTheme.primaryMint.withOpacity(0.08),
+                    TriplTheme.primaryMint.withOpacity(0.08),
                     Colors.transparent,
                   ],
                 ),
@@ -142,7 +142,7 @@ class _TallyTapSplashScreenState extends State<TallyTapSplashScreen>
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: TallyTapTheme.primaryMint.withOpacity(0.25 * _pulseGlow.value),
+                                color: TriplTheme.primaryMint.withOpacity(0.25 * _pulseGlow.value),
                                 blurRadius: 32 * _pulseGlow.value,
                                 spreadRadius: 2 * _pulseGlow.value,
                               ),
@@ -167,13 +167,13 @@ class _TallyTapSplashScreenState extends State<TallyTapSplashScreen>
                   opacity: _textFade,
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'TRIPL',
                         style: TextStyle(
                           fontSize: 34,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 2.0,
-                          color: TallyTapTheme.textLight,
+                          color: TriplTheme.textLight,
                           fontFamily: 'Outfit',
                         ),
                       ),
@@ -184,7 +184,7 @@ class _TallyTapSplashScreenState extends State<TallyTapSplashScreen>
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.8,
-                          color: TallyTapTheme.textGray.withOpacity(0.8),
+                          color: TriplTheme.textGray.withOpacity(0.8),
                         ),
                       ),
                     ],
@@ -208,7 +208,7 @@ class _TallyTapSplashScreenState extends State<TallyTapSplashScreen>
                     height: 3,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      color: TallyTapTheme.borderGreen.withOpacity(0.5),
+                      color: TriplTheme.borderGreen.withOpacity(0.5),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: AnimatedBuilder(
@@ -222,13 +222,13 @@ class _TallyTapSplashScreenState extends State<TallyTapSplashScreen>
                               borderRadius: BorderRadius.circular(10),
                               gradient: LinearGradient(
                                 colors: [
-                                  TallyTapTheme.primaryMint.withOpacity(0.5),
-                                  TallyTapTheme.primaryMint,
+                                  TriplTheme.primaryMint.withOpacity(0.5),
+                                  TriplTheme.primaryMint,
                                 ],
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: TallyTapTheme.primaryMint.withOpacity(0.4),
+                                  color: TriplTheme.primaryMint.withOpacity(0.4),
                                   blurRadius: 4,
                                   spreadRadius: 1,
                                 ),

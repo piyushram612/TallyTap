@@ -19,12 +19,12 @@ class CustomizationNotifier extends StateNotifier<int> {
   /// Picks the palette color least-used by existing categories, so a new
   /// category always gets a visually distinct color from its neighbours.
   Color _pickUnusedColor(Iterable<String> existingCategories) {
-    final palette = TallyTapTheme.categoryPalette;
+    final palette = TriplTheme.categoryPalette;
     // Count how many existing categories use each palette slot
     final usageCount = List<int>.filled(palette.length, 0);
     for (final cat in existingCategories) {
-      if (TallyTapTheme.customCategoryColors.containsKey(cat)) {
-        final color = TallyTapTheme.customCategoryColors[cat]!;
+      if (TriplTheme.customCategoryColors.containsKey(cat)) {
+        final color = TriplTheme.customCategoryColors[cat]!;
         final idx = palette.indexWhere((c) => c.value == color.value);
         if (idx >= 0) usageCount[idx]++;
       } else {
@@ -46,7 +46,7 @@ class CustomizationNotifier extends StateNotifier<int> {
     final catColorsStr = prefs.getString('custom_category_colors') ?? '{}';
     try {
       final Map<String, dynamic> decoded = json.decode(catColorsStr);
-      TallyTapTheme.customCategoryColors =
+      TriplTheme.customCategoryColors =
           decoded.map((k, v) => MapEntry(k, Color(v as int)));
     } catch (_) {}
 
@@ -54,10 +54,10 @@ class CustomizationNotifier extends StateNotifier<int> {
     final catIconsStr = prefs.getString('custom_category_icons') ?? '{}';
     try {
       final Map<String, dynamic> decoded = json.decode(catIconsStr);
-      TallyTapTheme.customCategoryIcons = decoded.map(
+      TriplTheme.customCategoryIcons = decoded.map(
           (k, v) {
             final codePoint = v as int;
-            final icon = TallyTapTheme.availableIcons.firstWhere(
+            final icon = TriplTheme.availableIcons.firstWhere(
               (i) => i.codePoint == codePoint,
               orElse: () => Icons.local_mall_outlined,
             );
@@ -69,7 +69,7 @@ class CustomizationNotifier extends StateNotifier<int> {
     final srcColorsStr = prefs.getString('custom_source_colors') ?? '{}';
     try {
       final Map<String, dynamic> decoded = json.decode(srcColorsStr);
-      TallyTapTheme.customSourceColors =
+      TriplTheme.customSourceColors =
           decoded.map((k, v) => MapEntry(k, Color(v as int)));
     } catch (_) {}
 
@@ -89,21 +89,21 @@ class CustomizationNotifier extends StateNotifier<int> {
       'Dining', 'Commute', 'Subscriptions', 'Utilities', 'Groceries',
       'Shopping', 'Housing', 'Health', 'Travel', 'Investments', 'Savings', 'Other',
     ];
-    final palette = TallyTapTheme.categoryPalette;
+    final palette = TriplTheme.categoryPalette;
     bool changed = false;
     for (int i = 0; i < defaultCategories.length; i++) {
       final cat = defaultCategories[i];
-      if (!TallyTapTheme.customCategoryColors.containsKey(cat)) {
+      if (!TriplTheme.customCategoryColors.containsKey(cat)) {
         // Spread defaults evenly across the palette, cycling if more than palette.length
         final color = palette[i % palette.length];
-        TallyTapTheme.customCategoryColors =
-            Map.from(TallyTapTheme.customCategoryColors)..[cat] = color;
+        TriplTheme.customCategoryColors =
+            Map.from(TriplTheme.customCategoryColors)..[cat] = color;
         changed = true;
       }
     }
     if (changed) {
       final encoded = json.encode(
-          TallyTapTheme.customCategoryColors.map((k, v) => MapEntry(k, v.toARGB32())));
+          TriplTheme.customCategoryColors.map((k, v) => MapEntry(k, v.toARGB32())));
       await prefs.setString('custom_category_colors', encoded);
     }
   }
@@ -112,7 +112,7 @@ class CustomizationNotifier extends StateNotifier<int> {
   /// avoids clashing with existing categories.
   Future<void> autoAssignCategoryColor(
       String newCategory, Iterable<String> allCategories) async {
-    if (TallyTapTheme.customCategoryColors.containsKey(newCategory)) return;
+    if (TriplTheme.customCategoryColors.containsKey(newCategory)) return;
     final color = _pickUnusedColor(
         allCategories.where((c) => c != newCategory));
     await updateCategoryColor(newCategory, color);
@@ -120,34 +120,34 @@ class CustomizationNotifier extends StateNotifier<int> {
 
   Future<void> updateCategoryColor(String category, Color color) async {
     // 1. Update in-memory map immediately
-    TallyTapTheme.customCategoryColors =
-        Map.from(TallyTapTheme.customCategoryColors)..[category] = color;
+    TriplTheme.customCategoryColors =
+        Map.from(TriplTheme.customCategoryColors)..[category] = color;
     // 2. Notify all watchers right away (revision bumps → guaranteed rebuild)
     _notify();
     // 3. Persist in background
     final prefs = await SharedPreferences.getInstance();
     final encoded = json.encode(
-        TallyTapTheme.customCategoryColors.map((k, v) => MapEntry(k, v.value)));
+        TriplTheme.customCategoryColors.map((k, v) => MapEntry(k, v.value)));
     await prefs.setString('custom_category_colors', encoded);
   }
 
   Future<void> updateCategoryIcon(String category, IconData icon) async {
-    TallyTapTheme.customCategoryIcons =
-        Map.from(TallyTapTheme.customCategoryIcons)..[category] = icon;
+    TriplTheme.customCategoryIcons =
+        Map.from(TriplTheme.customCategoryIcons)..[category] = icon;
     _notify();
     final prefs = await SharedPreferences.getInstance();
-    final encoded = json.encode(TallyTapTheme.customCategoryIcons
+    final encoded = json.encode(TriplTheme.customCategoryIcons
         .map((k, v) => MapEntry(k, v.codePoint)));
     await prefs.setString('custom_category_icons', encoded);
   }
 
   Future<void> updateSourceColor(String source, Color color) async {
-    TallyTapTheme.customSourceColors =
-        Map.from(TallyTapTheme.customSourceColors)..[source] = color;
+    TriplTheme.customSourceColors =
+        Map.from(TriplTheme.customSourceColors)..[source] = color;
     _notify();
     final prefs = await SharedPreferences.getInstance();
     final encoded = json.encode(
-        TallyTapTheme.customSourceColors.map((k, v) => MapEntry(k, v.value)));
+        TriplTheme.customSourceColors.map((k, v) => MapEntry(k, v.value)));
     await prefs.setString('custom_source_colors', encoded);
   }
 
@@ -155,18 +155,18 @@ class CustomizationNotifier extends StateNotifier<int> {
       String oldName, String newName) async {
     final prefs = await SharedPreferences.getInstance();
 
-    final colors = Map<String, Color>.from(TallyTapTheme.customCategoryColors);
+    final colors = Map<String, Color>.from(TriplTheme.customCategoryColors);
     if (colors.containsKey(oldName)) {
       colors[newName] = colors.remove(oldName)!;
-      TallyTapTheme.customCategoryColors = colors;
+      TriplTheme.customCategoryColors = colors;
       await prefs.setString('custom_category_colors',
           json.encode(colors.map((k, v) => MapEntry(k, v.value))));
     }
 
-    final icons = Map<String, IconData>.from(TallyTapTheme.customCategoryIcons);
+    final icons = Map<String, IconData>.from(TriplTheme.customCategoryIcons);
     if (icons.containsKey(oldName)) {
       icons[newName] = icons.remove(oldName)!;
-      TallyTapTheme.customCategoryIcons = icons;
+      TriplTheme.customCategoryIcons = icons;
       await prefs.setString('custom_category_icons',
           json.encode(icons.map((k, v) => MapEntry(k, v.codePoint))));
     }
@@ -178,10 +178,10 @@ class CustomizationNotifier extends StateNotifier<int> {
       String oldName, String newName) async {
     final prefs = await SharedPreferences.getInstance();
 
-    final colors = Map<String, Color>.from(TallyTapTheme.customSourceColors);
+    final colors = Map<String, Color>.from(TriplTheme.customSourceColors);
     if (colors.containsKey(oldName)) {
       colors[newName] = colors.remove(oldName)!;
-      TallyTapTheme.customSourceColors = colors;
+      TriplTheme.customSourceColors = colors;
       await prefs.setString('custom_source_colors',
           json.encode(colors.map((k, v) => MapEntry(k, v.value))));
     }
@@ -209,12 +209,12 @@ class SnoozeDurationNotifier extends StateNotifier<int> {
 
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
-    state = prefs.getInt('tallytap_snooze_duration_mins') ?? 240;
+    state = prefs.getInt('tripl_snooze_duration_mins') ?? 240;
   }
 
   Future<void> setDuration(int minutes) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('tallytap_snooze_duration_mins', minutes);
+    await prefs.setInt('tripl_snooze_duration_mins', minutes);
     state = minutes;
   }
 }

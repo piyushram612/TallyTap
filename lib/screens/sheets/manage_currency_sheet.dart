@@ -33,29 +33,29 @@ class ManageCurrencySheet extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Select Currency',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
-                  color: TallyTapTheme.primaryMint,
+                  color: TriplTheme.primaryMint,
                   letterSpacing: -0.5,
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close_rounded, color: TallyTapTheme.textGray),
+                icon: Icon(Icons.close_rounded, color: TriplTheme.textGray),
                 onPressed: () => Navigator.pop(context),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'GLOBAL CURRENCY (CHANGING THIS WILL CONVERT ALL EXISTING VALUES)',
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               letterSpacing: 1.5,
-              color: TallyTapTheme.textGray,
+              color: TriplTheme.textGray,
             ),
           ),
           const SizedBox(height: 12),
@@ -69,11 +69,11 @@ class ManageCurrencySheet extends ConsumerWidget {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 2.0),
                     child: Material(
-                      color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.1) : Colors.transparent,
+                      color: isSelected ? TriplTheme.primaryMint.withOpacity(0.1) : Colors.transparent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: BorderSide(
-                          color: isSelected ? TallyTapTheme.primaryMint : Colors.transparent,
+                          color: isSelected ? TriplTheme.primaryMint : Colors.transparent,
                           width: 1.0,
                         ),
                       ),
@@ -84,10 +84,10 @@ class ManageCurrencySheet extends ConsumerWidget {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.obsidianCard,
+                        color: isSelected ? TriplTheme.primaryMint : TriplTheme.obsidianCard,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen,
+                          color: isSelected ? TriplTheme.primaryMint : TriplTheme.borderGreen,
                         ),
                       ),
                       alignment: Alignment.center,
@@ -96,7 +96,7 @@ class ManageCurrencySheet extends ConsumerWidget {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: isSelected ? TallyTapTheme.obsidianBg : TallyTapTheme.primaryMint,
+                          color: isSelected ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
                         ),
                       ),
                     ),
@@ -105,11 +105,11 @@ class ManageCurrencySheet extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.bold,
-                        color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+                        color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight,
                       ),
                     ),
                     trailing: isSelected
-                        ? const Icon(Icons.check_circle_rounded, color: TallyTapTheme.primaryMint)
+                        ? Icon(Icons.check_circle_rounded, color: TriplTheme.primaryMint)
                         : null,
                     onTap: () async {
                       if (!isSelected) {
@@ -130,8 +130,8 @@ class ManageCurrencySheet extends ConsumerWidget {
                           showDialog(
                             context: context,
                             barrierDismissible: false,
-                            builder: (context) => const Center(
-                              child: CircularProgressIndicator(color: TallyTapTheme.primaryMint),
+                            builder: (context) => Center(
+                              child: CircularProgressIndicator(color: TriplTheme.primaryMint),
                             ),
                           );
                         }
@@ -210,10 +210,10 @@ class _CurrencySettingsDialogState extends State<CurrencySettingsDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      backgroundColor: TallyTapTheme.obsidianCard,
+      backgroundColor: TriplTheme.obsidianCard,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
-        side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+        side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
       ),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -225,10 +225,10 @@ class _CurrencySettingsDialogState extends State<CurrencySettingsDialog> {
             children: [
             Text(
               'Change Currency to ${widget.currency['symbol']}',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: TallyTapTheme.primaryMint,
+                color: TriplTheme.primaryMint,
                 fontFamily: 'Outfit',
               ),
               textAlign: TextAlign.center,
@@ -236,12 +236,12 @@ class _CurrencySettingsDialogState extends State<CurrencySettingsDialog> {
             const SizedBox(height: 20),
             
             // Question 1: Convert or Symbol Only
-            const Text(
+            Text(
               'CONVERSION OPTION',
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
-                color: TallyTapTheme.textGray,
+                color: TriplTheme.textGray,
                 letterSpacing: 1.5,
               ),
             ),
@@ -262,12 +262,12 @@ class _CurrencySettingsDialogState extends State<CurrencySettingsDialog> {
             const SizedBox(height: 20),
 
             // Question 2: All or From Now Onwards
-            const Text(
+            Text(
               'APPLY TO WHICH TRANSACTIONS?',
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
-                color: TallyTapTheme.textGray,
+                color: TriplTheme.textGray,
                 letterSpacing: 1.5,
               ),
             ),
@@ -293,9 +293,9 @@ class _CurrencySettingsDialogState extends State<CurrencySettingsDialog> {
                 Expanded(
                   child: TextButton(
                     onPressed: () => Navigator.pop(context),
-                    child: const Text(
+                    child: Text(
                       'Cancel',
-                      style: TextStyle(color: TallyTapTheme.textGray, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: TriplTheme.textGray, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -303,8 +303,8 @@ class _CurrencySettingsDialogState extends State<CurrencySettingsDialog> {
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: TallyTapTheme.primaryMint,
-                      foregroundColor: TallyTapTheme.obsidianBg,
+                      backgroundColor: TriplTheme.primaryMint,
+                      foregroundColor: TriplTheme.obsidianBg,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -342,10 +342,10 @@ class _CurrencySettingsDialogState extends State<CurrencySettingsDialog> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: selected ? TallyTapTheme.primaryMint.withOpacity(0.08) : Colors.transparent,
+          color: selected ? TriplTheme.primaryMint.withOpacity(0.08) : Colors.transparent,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: selected ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen,
+            color: selected ? TriplTheme.primaryMint : TriplTheme.borderGreen,
             width: selected ? 1.5 : 1.0,
           ),
         ),
@@ -357,16 +357,16 @@ class _CurrencySettingsDialogState extends State<CurrencySettingsDialog> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: selected ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+                  color: selected ? TriplTheme.primaryMint : TriplTheme.textGray,
                   width: 2,
                 ),
               ),
               child: selected
-                  ? const Center(
+                  ? Center(
                       child: Icon(
                         Icons.circle,
                         size: 10,
-                        color: TallyTapTheme.primaryMint,
+                        color: TriplTheme.primaryMint,
                       ),
                     )
                   : null,
@@ -381,15 +381,15 @@ class _CurrencySettingsDialogState extends State<CurrencySettingsDialog> {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: selected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+                      color: selected ? TriplTheme.primaryMint : TriplTheme.textLight,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: TallyTapTheme.textGray,
+                      color: TriplTheme.textGray,
                     ),
                   ),
                 ],

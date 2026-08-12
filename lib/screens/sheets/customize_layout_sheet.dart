@@ -43,8 +43,8 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
     }
 
     return Container(
-      decoration: const BoxDecoration(
-        color: TallyTapTheme.obsidianBg,
+      decoration: BoxDecoration(
+        color: TriplTheme.obsidianBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: EdgeInsets.only(
@@ -65,7 +65,7 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
                 width: 36,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: TallyTapTheme.borderGreen,
+                  color: TriplTheme.borderGreen,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -73,31 +73,31 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Customize Home Layout',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
-                      color: TallyTapTheme.primaryMint,
+                      color: TriplTheme.primaryMint,
                       letterSpacing: -0.5,
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close_rounded, color: TallyTapTheme.textGray),
+                  icon: Icon(Icons.close_rounded, color: TriplTheme.textGray),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            const Text(
+            Text(
               'DRAG AND REORDER CARDS OR TOGGLE VISIBILITY FOR YOUR DASHBOARD',
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.2,
-                color: TallyTapTheme.textGray,
+                color: TriplTheme.textGray,
               ),
             ),
             const SizedBox(height: 20),
@@ -123,17 +123,17 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
                       child: ListTile(
                         dense: true,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                        tileColor: TallyTapTheme.obsidianCard,
+                        tileColor: TriplTheme.obsidianCard,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
-                          side: const BorderSide(color: TallyTapTheme.borderGreen, width: 0.5),
+                          side: BorderSide(color: TriplTheme.borderGreen, width: 0.5),
                         ),
                         leading: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Icon(Icons.drag_handle_rounded, color: TallyTapTheme.primaryMint, size: 20),
+                            Icon(Icons.drag_handle_rounded, color: TriplTheme.primaryMint, size: 20),
                             const SizedBox(width: 12),
-                            Icon(_cardIcons[homeLayout[i]], color: TallyTapTheme.textLight, size: 18),
+                            Icon(_cardIcons[homeLayout[i]], color: TriplTheme.textLight, size: 18),
                           ],
                         ),
                         title: FittedBox(
@@ -141,8 +141,8 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
                           alignment: Alignment.centerLeft,
                           child: Text(
                             _cardNames[homeLayout[i]]!,
-                            style: const TextStyle(
-                              color: TallyTapTheme.textLight,
+                            style: TextStyle(
+                              color: TriplTheme.textLight,
                               fontWeight: FontWeight.bold,
                               fontSize: 13,
                             ),
@@ -159,8 +159,8 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
                                       ? Icons.visibility_rounded
                                       : Icons.visibility_off_rounded,
                                   color: (cardVisibilities[homeLayout[i]] ?? true)
-                                      ? TallyTapTheme.primaryMint
-                                      : TallyTapTheme.textGray,
+                                      ? TriplTheme.primaryMint
+                                      : TriplTheme.textGray,
                                   size: 20,
                                 ),
                                 onPressed: () {
@@ -172,9 +172,9 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF0F1B17),
+                                  color: TriplTheme.obsidianBg,
                                   borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                                  border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                                 ),
                                 child: Text(
                                   positionMapping.containsKey(homeLayout[i])
@@ -182,8 +182,8 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
                                       : 'Hidden',
                                   style: TextStyle(
                                     color: positionMapping.containsKey(homeLayout[i])
-                                        ? TallyTapTheme.primaryMint
-                                        : TallyTapTheme.textGray,
+                                        ? TriplTheme.primaryMint
+                                        : TriplTheme.textGray,
                                     fontSize: 10,
                                     fontWeight: FontWeight.w900,
                                   ),
@@ -205,22 +205,22 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
                       ref.read(homeLayoutProvider.notifier).resetLayout();
                       ref.read(homeCardVisibilityProvider.notifier).resetVisibility();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
+                        SnackBar(
                           content: Text('Layout and visibility reset to default'),
                           behavior: SnackBarBehavior.floating,
-                          backgroundColor: TallyTapTheme.primaryMint,
+                          backgroundColor: TriplTheme.primaryMint,
                         ),
                       );
                     },
                     style: OutlinedButton.styleFrom(
-                      side: const BorderSide(color: TallyTapTheme.borderGreen),
+                      side: BorderSide(color: TriplTheme.borderGreen),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),
-                    child: const Text(
+                    child: Text(
                       'RESET DEFAULT',
                       style: TextStyle(
-                        color: TallyTapTheme.textGray,
+                        color: TriplTheme.textGray,
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0.5,
@@ -233,8 +233,8 @@ class _CustomizeLayoutSheetState extends ConsumerState<CustomizeLayoutSheet> {
                   child: ElevatedButton(
                     onPressed: () => Navigator.pop(context),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: TallyTapTheme.primaryMint,
-                      foregroundColor: TallyTapTheme.obsidianBg,
+                      backgroundColor: TriplTheme.primaryMint,
+                      foregroundColor: TriplTheme.obsidianBg,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       padding: const EdgeInsets.symmetric(vertical: 14),
                     ),

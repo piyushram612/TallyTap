@@ -48,48 +48,48 @@ class _ManageProfileSheetState extends ConsumerState<ManageProfileSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Customize Profile',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
-                  color: TallyTapTheme.primaryMint,
+                  color: TriplTheme.primaryMint,
                   letterSpacing: -0.5,
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close_rounded, color: TallyTapTheme.textGray),
+                icon: Icon(Icons.close_rounded, color: TriplTheme.textGray),
                 onPressed: () => Navigator.pop(context),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          const Text(
+          Text(
             'USERNAME',
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               letterSpacing: 1.5,
-              color: TallyTapTheme.textGray,
+              color: TriplTheme.textGray,
             ),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _nameController,
             textCapitalization: TextCapitalization.sentences,
-            style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+            style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
             decoration: InputDecoration(
               hintText: 'Enter your name (e.g. Alex)',
-              hintStyle: const TextStyle(color: TallyTapTheme.textGray),
+              hintStyle: TextStyle(color: TriplTheme.textGray),
               filled: true,
-              fillColor: TallyTapTheme.obsidianCard,
+              fillColor: TriplTheme.obsidianCard,
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                borderSide: BorderSide(color: TriplTheme.borderGreen),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: const BorderSide(color: TallyTapTheme.primaryMint, width: 1.5),
+                borderSide: BorderSide(color: TriplTheme.primaryMint, width: 1.5),
               ),
             ),
           ),
@@ -104,17 +104,17 @@ class _ManageProfileSheetState extends ConsumerState<ManageProfileSheet> {
                   SnackBar(
                     content: Text(
                       'Username updated to "${newName.trim()}"!',
-                      style: const TextStyle(fontWeight: FontWeight.bold, color: TallyTapTheme.obsidianBg),
+                      style: TextStyle(fontWeight: FontWeight.bold, color: TriplTheme.obsidianBg),
                     ),
-                    backgroundColor: TallyTapTheme.primaryMint,
+                    backgroundColor: TriplTheme.primaryMint,
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               padding: const EdgeInsets.symmetric(vertical: 16),
               elevation: 0,

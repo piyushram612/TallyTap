@@ -16,6 +16,7 @@ import 'sheets/manage_sources_sheet.dart';
 import 'sheets/manage_currency_sheet.dart';
 import 'sheets/manage_profile_sheet.dart';
 import 'sheets/customize_layout_sheet.dart';
+import 'sheets/manage_theme_sheet.dart';
 import 'recurring_transactions_list_screen.dart';
 import 'tools/expense_splitter_screen.dart';
 import 'tools/tip_calculator_screen.dart';
@@ -41,6 +42,15 @@ class ToolkitScreen extends ConsumerWidget {
     );
   }
 
+  void _showManageThemeSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => const ManageThemeSheet(),
+    );
+  }
+
   void _showManageCategoriesSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -55,7 +65,7 @@ class ToolkitScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -67,7 +77,7 @@ class ToolkitScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -79,7 +89,7 @@ class ToolkitScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -98,7 +108,7 @@ class ToolkitScreen extends ConsumerWidget {
   void _showFeedbackSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -120,14 +130,14 @@ class ToolkitScreen extends ConsumerWidget {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF0F1B17),
+                        color: TriplTheme.obsidianBg,
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                        border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                       ),
-                      child: const Icon(Icons.bug_report_rounded, color: TallyTapTheme.primaryMint, size: 24),
+                      child: Icon(Icons.bug_report_rounded, color: TriplTheme.primaryMint, size: 24),
                     ),
                     const SizedBox(width: 16),
-                    const Expanded(
+                    Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -136,13 +146,13 @@ class ToolkitScreen extends ConsumerWidget {
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: TallyTapTheme.textLight,
+                              color: TriplTheme.textLight,
                             ),
                           ),
                           SizedBox(height: 2),
                           Text(
                             'Report a bug or share your suggestions with us',
-                            style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                            style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                           ),
                         ],
                       ),
@@ -152,13 +162,13 @@ class ToolkitScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
                 
                 // Piyush Contact Row
-                const Text(
+                Text(
                   'CONTACT PIYUSH',
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.5,
-                    color: TallyTapTheme.primaryMint,
+                    color: TriplTheme.primaryMint,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -168,15 +178,15 @@ class ToolkitScreen extends ConsumerWidget {
                       child: ListTile(
                         onTap: () {
                           Navigator.pop(context);
-                          PlatformService.sendEmail('piyushram.edu@gmail.com', 'TallyTap Feedback');
+                          PlatformService.sendEmail('piyushram.edu@gmail.com', 'Tripl Feedback');
                         },
-                        leading: const Icon(Icons.mail_rounded, color: TallyTapTheme.primaryMint, size: 18),
-                        title: const FittedBox(
+                        leading: Icon(Icons.mail_rounded, color: TriplTheme.primaryMint, size: 18),
+                        title: FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.centerLeft,
-                          child: Text('Email', style: TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13)),
+                          child: Text('Email', style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13)),
                         ),
-                        tileColor: const Color(0xFF141F1B),
+                        tileColor: TriplTheme.obsidianCard,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
@@ -188,21 +198,21 @@ class ToolkitScreen extends ConsumerWidget {
                           await Clipboard.setData(const ClipboardData(text: 'piyushram.edu@gmail.com'));
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text("Piyush's email copied!"),
                                 behavior: SnackBarBehavior.floating,
-                                backgroundColor: TallyTapTheme.primaryMint,
+                                backgroundColor: TriplTheme.primaryMint,
                               ),
                             );
                           }
                         },
-                        leading: const Icon(Icons.copy_rounded, color: TallyTapTheme.primaryMint, size: 18),
-                        title: const FittedBox(
+                        leading: Icon(Icons.copy_rounded, color: TriplTheme.primaryMint, size: 18),
+                        title: FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.centerLeft,
-                          child: Text('Copy Address', style: TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13)),
+                          child: Text('Copy Address', style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13)),
                         ),
-                        tileColor: const Color(0xFF141F1B),
+                        tileColor: TriplTheme.obsidianCard,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
@@ -212,13 +222,13 @@ class ToolkitScreen extends ConsumerWidget {
                 const SizedBox(height: 20),
                 
                 // Sushanth Contact Row
-                const Text(
+                Text(
                   'CONTACT SUSHANTH',
                   style: TextStyle(
                     fontSize: 10,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 1.5,
-                    color: TallyTapTheme.primaryMint,
+                    color: TriplTheme.primaryMint,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -228,15 +238,15 @@ class ToolkitScreen extends ConsumerWidget {
                       child: ListTile(
                         onTap: () {
                           Navigator.pop(context);
-                          PlatformService.sendEmail('aurus7900@gmail.com', 'TallyTap Feedback');
+                          PlatformService.sendEmail('aurus7900@gmail.com', 'Tripl Feedback');
                         },
-                        leading: const Icon(Icons.mail_rounded, color: TallyTapTheme.primaryMint, size: 18),
-                        title: const FittedBox(
+                        leading: Icon(Icons.mail_rounded, color: TriplTheme.primaryMint, size: 18),
+                        title: FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.centerLeft,
-                          child: Text('Email', style: TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13)),
+                          child: Text('Email', style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13)),
                         ),
-                        tileColor: const Color(0xFF141F1B),
+                        tileColor: TriplTheme.obsidianCard,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
@@ -248,21 +258,21 @@ class ToolkitScreen extends ConsumerWidget {
                           await Clipboard.setData(const ClipboardData(text: 'aurus7900@gmail.com'));
                           if (context.mounted) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
+                              SnackBar(
                                 content: Text("Sushanth's email copied!"),
                                 behavior: SnackBarBehavior.floating,
-                                backgroundColor: TallyTapTheme.primaryMint,
+                                backgroundColor: TriplTheme.primaryMint,
                               ),
                             );
                           }
                         },
-                        leading: const Icon(Icons.copy_rounded, color: TallyTapTheme.primaryMint, size: 18),
-                        title: const FittedBox(
+                        leading: Icon(Icons.copy_rounded, color: TriplTheme.primaryMint, size: 18),
+                        title: FittedBox(
                           fit: BoxFit.scaleDown,
                           alignment: Alignment.centerLeft,
-                          child: Text('Copy Address', style: TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13)),
+                          child: Text('Copy Address', style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13)),
                         ),
-                        tileColor: const Color(0xFF141F1B),
+                        tileColor: TriplTheme.obsidianCard,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
@@ -289,21 +299,21 @@ class ToolkitScreen extends ConsumerWidget {
       leading: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: const Color(0xFF0F1B17),
+          color: TriplTheme.obsidianBg,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+          border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
         ),
-        child: Icon(icon, color: TallyTapTheme.primaryMint, size: 20),
+        child: Icon(icon, color: TriplTheme.primaryMint, size: 20),
       ),
       title: Text(
         title,
-        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
       ),
       subtitle: Text(
         subtitle,
-        style: const TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+        style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
       ),
-      trailing: const Icon(Icons.chevron_right_rounded, color: TallyTapTheme.textGray),
+      trailing: Icon(Icons.chevron_right_rounded, color: TriplTheme.textGray),
     );
   }
 
@@ -325,8 +335,8 @@ class ToolkitScreen extends ConsumerWidget {
       showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => const Center(
-          child: CircularProgressIndicator(color: TallyTapTheme.primaryMint),
+        builder: (context) => Center(
+          child: CircularProgressIndicator(color: TriplTheme.primaryMint),
         ),
       );
 
@@ -335,10 +345,10 @@ class ToolkitScreen extends ConsumerWidget {
       if (context.mounted) {
         Navigator.pop(context); // Close loading dialog
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text('CSV backup generated successfully!'),
             behavior: SnackBarBehavior.floating,
-            backgroundColor: TallyTapTheme.primaryMint,
+            backgroundColor: TriplTheme.primaryMint,
           ),
         );
       }
@@ -439,7 +449,7 @@ class ToolkitScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -463,14 +473,14 @@ class ToolkitScreen extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF0F1B17),
+                            color: TriplTheme.obsidianBg,
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                            border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                           ),
-                          child: const Icon(Icons.splitscreen_rounded, color: TallyTapTheme.primaryMint, size: 24),
+                          child: Icon(Icons.splitscreen_rounded, color: TriplTheme.primaryMint, size: 24),
                         ),
                         const SizedBox(width: 16),
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -479,13 +489,13 @@ class ToolkitScreen extends ConsumerWidget {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: TallyTapTheme.textLight,
+                                  color: TriplTheme.textLight,
                                 ),
                               ),
                               SizedBox(height: 2),
                               Text(
                                 'Align external app headers with Tripl fields',
-                                style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                                style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                               ),
                             ],
                           ),
@@ -494,9 +504,9 @@ class ToolkitScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    const Text(
+                    Text(
                       'Tripl has auto-detected closely matching columns from your file. Please verify and fill in the required mappings (*) to parse the transactions correctly.',
-                      style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray, height: 1.4),
+                      style: TextStyle(fontSize: 12, color: TriplTheme.textGray, height: 1.4),
                     ),
                     const SizedBox(height: 20),
 
@@ -597,8 +607,8 @@ class ToolkitScreen extends ConsumerWidget {
                         _showAccountMapperSheet(context, ref, parsedTransactions);
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: TallyTapTheme.primaryMint,
-                        foregroundColor: TallyTapTheme.obsidianBg,
+                        backgroundColor: TriplTheme.primaryMint,
+                        foregroundColor: TriplTheme.obsidianBg,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
@@ -607,7 +617,7 @@ class ToolkitScreen extends ConsumerWidget {
                     const SizedBox(height: 8),
                     TextButton(
                       onPressed: () => Navigator.pop(ctx),
-                      child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+                      child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
                     ),
                   ],
                 ),
@@ -634,7 +644,7 @@ class ToolkitScreen extends ConsumerWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+              style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
             ),
             if (isRequired)
               const Text(
@@ -646,38 +656,38 @@ class ToolkitScreen extends ConsumerWidget {
         const SizedBox(height: 2),
         Text(
           subtitle,
-          style: const TextStyle(fontSize: 11, color: TallyTapTheme.textGray),
+          style: TextStyle(fontSize: 11, color: TriplTheme.textGray),
         ),
         const SizedBox(height: 8),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
-            color: const Color(0xFF141F1B),
+            color: TriplTheme.obsidianBg,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: TallyTapTheme.borderGreen.withOpacity(0.5), width: 1),
+            border: Border.all(color: TriplTheme.borderGreen.withOpacity(0.5), width: 1),
           ),
           child: DropdownButtonHideUnderline(
             child: DropdownButton<int>(
               value: currentValue == -1 ? null : currentValue,
               hint: Text(
                 isRequired ? 'Select Column (Required)' : 'None (Use Default)',
-                style: TextStyle(fontSize: 13, color: isRequired ? Colors.amber.withOpacity(0.7) : TallyTapTheme.textGray),
+                style: TextStyle(fontSize: 13, color: isRequired ? Colors.amber.withOpacity(0.7) : TriplTheme.textGray),
               ),
-              dropdownColor: TallyTapTheme.obsidianBg,
+              dropdownColor: TriplTheme.obsidianBg,
               isExpanded: true,
-              icon: const Icon(Icons.arrow_drop_down, color: TallyTapTheme.primaryMint),
+              icon: Icon(Icons.arrow_drop_down, color: TriplTheme.primaryMint),
               items: [
                 if (!isRequired)
-                  const DropdownMenuItem<int>(
+                  DropdownMenuItem<int>(
                     value: null,
-                    child: Text('None (Use Default)', style: TextStyle(fontSize: 13, color: TallyTapTheme.textGray)),
+                    child: Text('None (Use Default)', style: TextStyle(fontSize: 13, color: TriplTheme.textGray)),
                   ),
                 ...List.generate(headers.length, (index) {
                   return DropdownMenuItem<int>(
                     value: index,
                     child: Text(
                       'Column ${index + 1}: ${headers[index]}',
-                      style: const TextStyle(fontSize: 13, color: TallyTapTheme.textLight),
+                      style: TextStyle(fontSize: 13, color: TriplTheme.textLight),
                     ),
                   );
                 }),
@@ -725,7 +735,7 @@ class ToolkitScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -749,14 +759,14 @@ class ToolkitScreen extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF0F1B17),
+                            color: TriplTheme.obsidianBg,
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                            border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                           ),
-                          child: const Icon(Icons.account_balance_outlined, color: TallyTapTheme.primaryMint, size: 24),
+                          child: Icon(Icons.account_balance_outlined, color: TriplTheme.primaryMint, size: 24),
                         ),
                         const SizedBox(width: 16),
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -765,13 +775,13 @@ class ToolkitScreen extends ConsumerWidget {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: TallyTapTheme.textLight,
+                                  color: TriplTheme.textLight,
                                 ),
                               ),
                               SizedBox(height: 2),
                               Text(
                                 'Align CSV bank accounts with Tripl accounts',
-                                style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                                style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                               ),
                             ],
                           ),
@@ -780,9 +790,9 @@ class ToolkitScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
 
-                    const Text(
+                    Text(
                       'Tripl detected these payment accounts in your CSV file. You can map them to existing accounts in the app, or create them freshly.',
-                      style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray, height: 1.4),
+                      style: TextStyle(fontSize: 12, color: TriplTheme.textGray, height: 1.4),
                     ),
                     const SizedBox(height: 20),
 
@@ -802,12 +812,12 @@ class ToolkitScreen extends ConsumerWidget {
                             margin: const EdgeInsets.only(bottom: 16),
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF141F1B),
+                              color: TriplTheme.obsidianBg,
                               borderRadius: BorderRadius.circular(14),
                               border: Border.all(
                                 color: isNew 
-                                    ? TallyTapTheme.primaryMint.withOpacity(0.2) 
-                                    : TallyTapTheme.borderGreen.withOpacity(0.3),
+                                    ? TriplTheme.primaryMint.withOpacity(0.2) 
+                                    : TriplTheme.borderGreen.withOpacity(0.3),
                                 width: 1,
                               ),
                             ),
@@ -820,15 +830,15 @@ class ToolkitScreen extends ConsumerWidget {
                                     Expanded(
                                       child: Row(
                                         children: [
-                                          const Icon(Icons.credit_card_rounded, color: TallyTapTheme.textGray, size: 16),
+                                          Icon(Icons.credit_card_rounded, color: TriplTheme.textGray, size: 16),
                                           const SizedBox(width: 8),
                                           Flexible(
                                             child: Text(
                                               src,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 14, 
                                                 fontWeight: FontWeight.bold, 
-                                                color: TallyTapTheme.textLight
+                                                color: TriplTheme.textLight
                                               ),
                                               overflow: TextOverflow.ellipsis,
                                             ),
@@ -840,11 +850,11 @@ class ToolkitScreen extends ConsumerWidget {
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                                       decoration: BoxDecoration(
                                         color: isNew 
-                                            ? TallyTapTheme.primaryMint.withOpacity(0.1) 
-                                            : const Color(0xFF0F1B17),
+                                            ? TriplTheme.primaryMint.withOpacity(0.1) 
+                                            : TriplTheme.obsidianBg,
                                         borderRadius: BorderRadius.circular(8),
                                         border: Border.all(
-                                          color: isNew ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen,
+                                          color: isNew ? TriplTheme.primaryMint : TriplTheme.borderGreen,
                                           width: 0.5,
                                         ),
                                       ),
@@ -853,7 +863,7 @@ class ToolkitScreen extends ConsumerWidget {
                                         style: TextStyle(
                                           fontSize: 8, 
                                           fontWeight: FontWeight.w800, 
-                                          color: isNew ? TallyTapTheme.primaryMint : TallyTapTheme.textGray
+                                          color: isNew ? TriplTheme.primaryMint : TriplTheme.textGray
                                         ),
                                       ),
                                     ),
@@ -863,22 +873,22 @@ class ToolkitScreen extends ConsumerWidget {
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 12),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF0F1B17),
+                                    color: TriplTheme.obsidianBg,
                                     borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: TallyTapTheme.borderGreen.withOpacity(0.5), width: 1),
+                                    border: Border.all(color: TriplTheme.borderGreen.withOpacity(0.5), width: 1),
                                   ),
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: mappedVal,
-                                      dropdownColor: TallyTapTheme.obsidianBg,
+                                      dropdownColor: TriplTheme.obsidianBg,
                                       isExpanded: true,
-                                      icon: const Icon(Icons.arrow_drop_down, color: TallyTapTheme.primaryMint),
+                                      icon: Icon(Icons.arrow_drop_down, color: TriplTheme.primaryMint),
                                       items: [
                                         DropdownMenuItem<String>(
                                           value: '__CREATE_NEW__',
                                           child: Text(
                                             'Create New Account: "$src"',
-                                            style: const TextStyle(fontSize: 13, color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+                                            style: TextStyle(fontSize: 13, color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
                                           ),
                                         ),
                                         ...existingSources.map((ext) {
@@ -886,7 +896,7 @@ class ToolkitScreen extends ConsumerWidget {
                                             value: ext,
                                             child: Text(
                                               'Map to Existing: $ext',
-                                              style: const TextStyle(fontSize: 13, color: TallyTapTheme.textLight),
+                                              style: TextStyle(fontSize: 13, color: TriplTheme.textLight),
                                             ),
                                           );
                                         }),
@@ -936,8 +946,8 @@ class ToolkitScreen extends ConsumerWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: TallyTapTheme.primaryMint,
-                        foregroundColor: TallyTapTheme.obsidianBg,
+                        backgroundColor: TriplTheme.primaryMint,
+                        foregroundColor: TriplTheme.obsidianBg,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
@@ -946,7 +956,7 @@ class ToolkitScreen extends ConsumerWidget {
                     const SizedBox(height: 8),
                     TextButton(
                       onPressed: () => Navigator.pop(ctx),
-                      child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+                      child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
                     ),
                   ],
                 ),
@@ -973,7 +983,7 @@ class ToolkitScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -994,14 +1004,14 @@ class ToolkitScreen extends ConsumerWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF0F1B17),
+                      color: TriplTheme.obsidianBg,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                      border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                     ),
-                    child: const Icon(Icons.file_download_rounded, color: TallyTapTheme.primaryMint, size: 24),
+                    child: Icon(Icons.file_download_rounded, color: TriplTheme.primaryMint, size: 24),
                   ),
                   const SizedBox(width: 16),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -1010,13 +1020,13 @@ class ToolkitScreen extends ConsumerWidget {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: TallyTapTheme.textLight,
+                            color: TriplTheme.textLight,
                           ),
                         ),
                         SizedBox(height: 2),
                         Text(
                           'Select how you want to import this data',
-                          style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                          style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                         ),
                       ],
                     ),
@@ -1029,9 +1039,9 @@ class ToolkitScreen extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF141F1B),
+                  color: TriplTheme.obsidianBg,
                   borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: TallyTapTheme.borderGreen.withOpacity(0.3), width: 1),
+                  border: Border.all(color: TriplTheme.borderGreen.withOpacity(0.3), width: 1),
                 ),
                 child: Column(
                   children: [
@@ -1069,14 +1079,14 @@ class ToolkitScreen extends ConsumerWidget {
                       SnackBar(
                         content: Text('Successfully merged ${importedTransactions.length} transactions!'),
                         behavior: SnackBarBehavior.floating,
-                        backgroundColor: TallyTapTheme.primaryMint,
+                        backgroundColor: TriplTheme.primaryMint,
                       ),
                     );
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: TallyTapTheme.primaryMint,
-                  foregroundColor: TallyTapTheme.obsidianBg,
+                  backgroundColor: TriplTheme.primaryMint,
+                  foregroundColor: TriplTheme.obsidianBg,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 ),
@@ -1093,17 +1103,17 @@ class ToolkitScreen extends ConsumerWidget {
                     context: context,
                     builder: (doubleConfirmCtx) {
                       return AlertDialog(
-                        backgroundColor: TallyTapTheme.obsidianBg,
+                        backgroundColor: TriplTheme.obsidianBg,
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                         title: const Text('Danger: Overwrite Database?', style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold)),
-                        content: const Text(
+                        content: Text(
                           'This will permanently delete all your existing transactions and replace them with the CSV transactions. This action cannot be undone.\n\nAre you absolutely sure?',
-                          style: TextStyle(color: TallyTapTheme.textLight, fontSize: 14),
+                          style: TextStyle(color: TriplTheme.textLight, fontSize: 14),
                         ),
                         actions: [
                           TextButton(
                             onPressed: () => Navigator.pop(doubleConfirmCtx),
-                            child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+                            child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
                           ),
                           ElevatedButton(
                             onPressed: () async {
@@ -1165,7 +1175,7 @@ class ToolkitScreen extends ConsumerWidget {
       context: context,
       builder: (confirmCtx) {
         return AlertDialog(
-          backgroundColor: TallyTapTheme.obsidianBg,
+          backgroundColor: TriplTheme.obsidianBg,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
             side: const BorderSide(color: Colors.redAccent, width: 1.5),
@@ -1174,14 +1184,14 @@ class ToolkitScreen extends ConsumerWidget {
             'Delete All Transactions?', 
             style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold, fontFamily: 'Outfit'),
           ),
-          content: const Text(
+          content: Text(
             'This will permanently erase all transaction records from your device. This action is irreversible.\n\nAre you sure you want to proceed?',
-            style: TextStyle(color: TallyTapTheme.textLight, fontSize: 14),
+            style: TextStyle(color: TriplTheme.textLight, fontSize: 14),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(confirmCtx),
-              child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+              child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
             ),
             ElevatedButton(
               onPressed: () async {
@@ -1190,7 +1200,7 @@ class ToolkitScreen extends ConsumerWidget {
                   context: context,
                   builder: (doubleConfirmCtx) {
                     return AlertDialog(
-                      backgroundColor: TallyTapTheme.obsidianBg,
+                      backgroundColor: TriplTheme.obsidianBg,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                         side: const BorderSide(color: Colors.redAccent, width: 2.0),
@@ -1199,14 +1209,14 @@ class ToolkitScreen extends ConsumerWidget {
                         'WARNING: FINAL WARNING', 
                         style: TextStyle(color: Colors.redAccent, fontWeight: FontWeight.w900, fontFamily: 'Outfit'),
                       ),
-                      content: const Text(
+                      content: Text(
                         'This is your absolute final warning. All transactions will be deleted forever.\n\nAre you sure you want to delete everything?',
-                        style: TextStyle(color: TallyTapTheme.textLight, fontSize: 14),
+                        style: TextStyle(color: TriplTheme.textLight, fontSize: 14),
                       ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(doubleConfirmCtx),
-                          child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+                          child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
                         ),
                         ElevatedButton(
                           onPressed: () async {
@@ -1251,8 +1261,8 @@ class ToolkitScreen extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(fontSize: 13, color: TallyTapTheme.textGray)),
-        Text(value, style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight)),
+        Text(label, style: TextStyle(fontSize: 13, color: TriplTheme.textGray)),
+        Text(value, style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TriplTheme.textLight)),
       ],
     );
   }
@@ -1271,12 +1281,12 @@ class ToolkitScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Toolkit',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w900,
-                color: TallyTapTheme.textLight,
+                color: TriplTheme.textLight,
               ),
             ),
             const SizedBox(height: 24),
@@ -1288,13 +1298,13 @@ class ToolkitScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'HARDWARE INTERACTIONS',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.5,
-                        color: TallyTapTheme.primaryMint,
+                        color: TriplTheme.primaryMint,
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -1303,34 +1313,34 @@ class ToolkitScreen extends ConsumerWidget {
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF0F1B17),
+                            color: TriplTheme.obsidianBg,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.touch_app_rounded,
-                            color: TallyTapTheme.primaryMint,
+                            color: TriplTheme.primaryMint,
                           ),
                         ),
                         const SizedBox(width: 16),
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Triple Back Tap',
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                               ),
                               SizedBox(height: 4),
                               Text(
                                 'Triple tap the back of your phone to trigger',
-                                style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                                style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                               ),
                             ],
                           ),
                         ),
                         Switch.adaptive(
                           value: backTapEnabled,
-                          activeColor: TallyTapTheme.primaryMint,
+                          activeColor: TriplTheme.primaryMint,
                           onChanged: (val) {
                             ref.read(backTapEnabledProvider.notifier).toggle(val);
                             ScaffoldMessenger.of(context).showSnackBar(
@@ -1348,53 +1358,53 @@ class ToolkitScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 32),
+                    Divider(color: TriplTheme.borderGreen, height: 32),
                     Row(
                       children: [
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF0F1B17),
+                            color: TriplTheme.obsidianBg,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.vibration_rounded,
-                            color: TallyTapTheme.primaryMint,
+                            color: TriplTheme.primaryMint,
                           ),
                         ),
                         const SizedBox(width: 16),
-                        const Expanded(
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 'Haptic Feedback',
-                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                               ),
                               SizedBox(height: 4),
                               Text(
                                 'Vibrate when triple tap is detected',
-                                style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                                style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                               ),
                             ],
                           ),
                         ),
                         Switch.adaptive(
                           value: ref.watch(hapticsEnabledProvider),
-                          activeColor: TallyTapTheme.primaryMint,
+                          activeColor: TriplTheme.primaryMint,
                           onChanged: (val) {
                             ref.read(hapticsEnabledProvider.notifier).toggle(val);
                           },
                         ),
                       ],
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 32),
+                    Divider(color: TriplTheme.borderGreen, height: 32),
                     // Manual Test CTA Button
                     ElevatedButton(
                       onPressed: () => PlatformService.showPopup(),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: TallyTapTheme.primaryMint,
-                        foregroundColor: TallyTapTheme.obsidianBg,
+                        backgroundColor: TriplTheme.primaryMint,
+                        foregroundColor: TriplTheme.obsidianBg,
                         padding: const EdgeInsets.symmetric(vertical: 14),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       ),
@@ -1415,9 +1425,9 @@ class ToolkitScreen extends ConsumerWidget {
                     OutlinedButton(
                       onPressed: () => _showCalibrationScreen(context),
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: TallyTapTheme.primaryMint,
+                        foregroundColor: TriplTheme.primaryMint,
                         side: BorderSide(
-                          color: TallyTapTheme.primaryMint.withOpacity(0.5),
+                          color: TriplTheme.primaryMint.withOpacity(0.5),
                           width: 1.2,
                         ),
                         padding: const EdgeInsets.symmetric(vertical: 14),
@@ -1449,7 +1459,7 @@ class ToolkitScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 20.0, top: 16.0, bottom: 8.0),
                       child: Text(
                         'DATA CONFIGURATION',
@@ -1457,7 +1467,7 @@ class ToolkitScreen extends ConsumerWidget {
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.5,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                         ),
                       ),
                     ),
@@ -1467,35 +1477,42 @@ class ToolkitScreen extends ConsumerWidget {
                       subtitle: 'Change your dashboard username',
                       onTap: () => _showManageProfileSheet(context),
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                     _buildSettingsTile(
                       icon: Icons.dashboard_customize_rounded,
                       title: 'Customize Home Layout',
                       subtitle: 'Reorder cards on your home dashboard',
                       onTap: () => _showCustomizeHomeLayoutSheet(context),
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    _buildSettingsTile(
+                      icon: Icons.palette_rounded,
+                      title: 'App Theme & Colors',
+                      subtitle: 'Change accent colors, curated presets & base modes',
+                      onTap: () => _showManageThemeSheet(context),
+                    ),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                     _buildSettingsTile(
                       icon: Icons.category_rounded,
                       title: 'Manage Categories',
                       subtitle: 'Add or remove custom expense categories',
                       onTap: () => _showManageCategoriesSheet(context),
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                     _buildSettingsTile(
                       icon: Icons.account_balance_wallet_rounded,
                       title: 'Manage Payment Sources',
                       subtitle: 'Configure custom cash or bank accounts',
                       onTap: () => _showManageSourcesSheet(context),
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                     _buildSettingsTile(
                       icon: Icons.monetization_on_rounded,
                       title: 'Manage Currency',
                       subtitle: 'Select your preferred global currency',
                       onTap: () => _showManageCurrencySheet(context),
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                     _buildSettingsTile(
                       icon: Icons.autorenew_rounded,
                       title: 'Manage Recurring Payments',
@@ -1521,7 +1538,7 @@ class ToolkitScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 20.0, top: 16.0, bottom: 8.0),
                       child: Text(
                         'TOOLS & CALCULATORS',
@@ -1529,7 +1546,7 @@ class ToolkitScreen extends ConsumerWidget {
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.5,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                         ),
                       ),
                     ),
@@ -1544,7 +1561,7 @@ class ToolkitScreen extends ConsumerWidget {
                         );
                       },
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                     _buildSettingsTile(
                       icon: Icons.monetization_on_outlined,
                       title: 'Tip Calculator',
@@ -1556,7 +1573,7 @@ class ToolkitScreen extends ConsumerWidget {
                         );
                       },
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                     _buildSettingsTile(
                       icon: Icons.handshake_outlined,
                       title: 'Outstanding Ledger',
@@ -1568,7 +1585,7 @@ class ToolkitScreen extends ConsumerWidget {
                         );
                       },
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                     _buildSettingsTile(
                       icon: Icons.swap_horiz_rounded,
                       title: 'Account Transfer',
@@ -1593,7 +1610,7 @@ class ToolkitScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.only(left: 20.0, top: 16.0, bottom: 8.0),
                           child: Text(
                             'HELP & SUPPORT',
@@ -1601,7 +1618,7 @@ class ToolkitScreen extends ConsumerWidget {
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 1.5,
-                              color: TallyTapTheme.primaryMint,
+                              color: TriplTheme.primaryMint,
                             ),
                           ),
                         ),
@@ -1611,7 +1628,7 @@ class ToolkitScreen extends ConsumerWidget {
                           subtitle: 'Provide feedback or report issues',
                           onTap: () => _showFeedbackSheet(context),
                         ),
-                        const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                        Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                         _buildSettingsTile(
                           icon: Icons.share_rounded,
                           title: 'Share Tripl',
@@ -1635,7 +1652,7 @@ class ToolkitScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 20.0, top: 16.0, bottom: 8.0),
                       child: Text(
                         'NOTIFICATIONS',
@@ -1643,7 +1660,7 @@ class ToolkitScreen extends ConsumerWidget {
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.5,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                         ),
                       ),
                     ),
@@ -1655,7 +1672,7 @@ class ToolkitScreen extends ConsumerWidget {
                         showModalBottomSheet(
                           context: context,
                           isScrollControlled: true,
-                          backgroundColor: TallyTapTheme.obsidianBg,
+                          backgroundColor: TriplTheme.obsidianBg,
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                           ),
@@ -1676,7 +1693,7 @@ class ToolkitScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 20.0, top: 16.0, bottom: 12.0),
                       child: Text(
                         'SECURITY',
@@ -1684,7 +1701,7 @@ class ToolkitScreen extends ConsumerWidget {
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.5,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                         ),
                       ),
                     ),
@@ -1695,36 +1712,36 @@ class ToolkitScreen extends ConsumerWidget {
                           Container(
                             padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
-                              color: const Color(0xFF0F1B17),
+                              color: TriplTheme.obsidianBg,
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                              border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               Icons.fingerprint_rounded,
-                              color: TallyTapTheme.primaryMint,
+                              color: TriplTheme.primaryMint,
                               size: 20,
                             ),
                           ),
                           const SizedBox(width: 16),
-                          const Expanded(
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   'App Lock',
-                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                                 ),
                                 SizedBox(height: 4),
                                 Text(
                                   'Biometric or passcode unlock on start',
-                                  style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                                  style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                                 ),
                               ],
                             ),
                           ),
                           Switch.adaptive(
                             value: ref.watch(biometricsEnabledProvider),
-                            activeColor: TallyTapTheme.primaryMint,
+                            activeColor: TriplTheme.primaryMint,
                             onChanged: (val) async {
                               final success = await ref.read(biometricsEnabledProvider.notifier).toggle(val);
                               if (!success && context.mounted) {
@@ -1755,7 +1772,7 @@ class ToolkitScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 20.0, top: 16.0, bottom: 8.0),
                       child: Text(
                         'EXPORT & BACKUP',
@@ -1763,7 +1780,7 @@ class ToolkitScreen extends ConsumerWidget {
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.5,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                         ),
                       ),
                     ),
@@ -1773,7 +1790,7 @@ class ToolkitScreen extends ConsumerWidget {
                       subtitle: 'Export your private transaction log to a CSV file',
                       onTap: () => _handleExport(context, ref),
                     ),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
+                    Divider(color: TriplTheme.borderGreen, height: 1, indent: 20, endIndent: 20),
                     _buildSettingsTile(
                       icon: Icons.file_download_rounded,
                       title: 'Import Data from CSV',
@@ -1793,45 +1810,45 @@ class ToolkitScreen extends ConsumerWidget {
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       'SHORTCUT GUIDE',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.5,
-                        color: TallyTapTheme.primaryMint,
+                        color: TriplTheme.primaryMint,
                       ),
                     ),
                     SizedBox(height: 16),
                     Text(
                       '1. Static Shortcuts',
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'Long press TallyTap icon on your phone launcher, select "Quick Add" to trigger instant overlays under 100ms.',
-                      style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray, height: 1.3),
+                      'Long press Tripl icon on your phone launcher, select "Quick Add" to trigger instant overlays under 100ms.',
+                      style: TextStyle(fontSize: 12, color: TriplTheme.textGray, height: 1.3),
                     ),
                     SizedBox(height: 12),
                     Text(
                       '2. Quick Actions',
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                     ),
                     SizedBox(height: 4),
                     Text(
                       'Long press the + floating action button on any screen to reveal more transaction options.',
-                      style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray, height: 1.3),
+                      style: TextStyle(fontSize: 12, color: TriplTheme.textGray, height: 1.3),
                     ),
                     SizedBox(height: 12),
                     Text(
                       '3. Home Layout Customization',
-                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                      style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                     ),
                     SizedBox(height: 4),
                     Text(
                       'Navigate to the "Customize Layout" settings under the Toolkit page to reorder cards or toggle widget visibility on your Home dashboard.',
-                      style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray, height: 1.3),
+                      style: TextStyle(fontSize: 12, color: TriplTheme.textGray, height: 1.3),
                     ),
                   ],
                 ),
@@ -1842,17 +1859,17 @@ class ToolkitScreen extends ConsumerWidget {
             // Card: App Guides
             Card(
               key: TutorialService.toolkitReplayKey,
-              color: TallyTapTheme.obsidianCard,
+              color: TriplTheme.obsidianCard,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                side: BorderSide(color: TallyTapTheme.borderGreen.withOpacity(0.5), width: 1.0),
+                side: BorderSide(color: TriplTheme.borderGreen.withOpacity(0.5), width: 1.0),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const Padding(
+                    Padding(
                       padding: EdgeInsets.only(left: 20.0, top: 16.0, bottom: 8.0),
                       child: Text(
                         'APP GUIDES',
@@ -1860,7 +1877,7 @@ class ToolkitScreen extends ConsumerWidget {
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.5,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                         ),
                       ),
                     ),
@@ -1868,10 +1885,10 @@ class ToolkitScreen extends ConsumerWidget {
                       onTap: () {
                         ref.read(tutorialProvider.notifier).resetAll();
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text('App guides reset. Redirecting to tour...'),
                             behavior: SnackBarBehavior.floating,
-                            backgroundColor: TallyTapTheme.primaryMint,
+                            backgroundColor: TriplTheme.primaryMint,
                           ),
                         );
                       },
@@ -1879,21 +1896,21 @@ class ToolkitScreen extends ConsumerWidget {
                       leading: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF0F1B17),
+                          color: TriplTheme.obsidianBg,
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                          border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                         ),
-                        child: const Icon(Icons.refresh_rounded, color: TallyTapTheme.primaryMint, size: 20),
+                        child: Icon(Icons.refresh_rounded, color: TriplTheme.primaryMint, size: 20),
                       ),
-                      title: const Text(
+                      title: Text(
                         'Reset All App Guides',
-                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                       ),
-                      subtitle: const Text(
+                      subtitle: Text(
                         'Reset the main tour and all contextual tutorials',
-                        style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                        style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                       ),
-                      trailing: const Icon(Icons.chevron_right_rounded, color: TallyTapTheme.textGray),
+                      trailing: Icon(Icons.chevron_right_rounded, color: TriplTheme.textGray),
                     ),
                   ],
                 ),
@@ -1904,7 +1921,7 @@ class ToolkitScreen extends ConsumerWidget {
             // Card D: Danger Zone
             Card(
               key: TutorialService.toolkitDangerKey,
-              color: const Color(0xFF1F1212),
+              color: const Color(0xFFEF4444).withOpacity(0.15),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
                 side: BorderSide(color: Colors.redAccent.withOpacity(0.3), width: 1.0),
@@ -1932,7 +1949,7 @@ class ToolkitScreen extends ConsumerWidget {
                       leading: Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2C1616),
+                          color: const Color(0xFFEF4444).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(10),
                           border: Border.all(color: Colors.redAccent.withOpacity(0.3), width: 0.5),
                         ),
@@ -1942,9 +1959,9 @@ class ToolkitScreen extends ConsumerWidget {
                         'Delete All Transactions',
                         style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.redAccent),
                       ),
-                      subtitle: const Text(
+                      subtitle: Text(
                         'Permanently erase all transaction data from this device',
-                        style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                        style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                       ),
                       trailing: const Icon(Icons.chevron_right_rounded, color: Colors.redAccent),
                     ),

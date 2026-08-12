@@ -169,7 +169,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       body: SafeArea(
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
@@ -186,16 +186,16 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
                   fontSize: 11,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 2.5,
-                  color: TallyTapTheme.primaryMint.withOpacity(0.85),
+                  color: TriplTheme.primaryMint.withOpacity(0.85),
                 ),
               ),
               const SizedBox(height: 10),
-              const Text(
+              Text(
                 'Set Your Triple Back Tap',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.w900,
-                  color: TallyTapTheme.textLight,
+                  color: TriplTheme.textLight,
                   letterSpacing: -0.8,
                   fontFamily: 'Outfit',
                 ),
@@ -206,7 +206,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
-                  color: TallyTapTheme.textGray.withOpacity(0.85),
+                  color: TriplTheme.textGray.withOpacity(0.85),
                   height: 1.5,
                 ),
               ),
@@ -248,10 +248,10 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
                 child: ElevatedButton(
                   onPressed: _calibrationSucceeded ? _onDone : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: TallyTapTheme.primaryMint,
-                    foregroundColor: TallyTapTheme.obsidianBg,
+                    backgroundColor: TriplTheme.primaryMint,
+                    foregroundColor: TriplTheme.obsidianBg,
                     disabledBackgroundColor:
-                        TallyTapTheme.primaryMint.withOpacity(0.45),
+                        TriplTheme.primaryMint.withOpacity(0.45),
                     minimumSize: const Size.fromHeight(52),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -289,7 +289,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
                     'Skip for now',
                     style: TextStyle(
                       fontSize: 13,
-                      color: TallyTapTheme.textGray.withOpacity(0.55),
+                      color: TriplTheme.textGray.withOpacity(0.55),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -308,7 +308,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
   Widget _buildPhoneGraphic() {
     final isSuccess = _status == _TapStatus.success;
     final glowColor =
-        isSuccess ? const Color(0xFF22C55E) : TallyTapTheme.primaryMint;
+        isSuccess ? const Color(0xFF22C55E) : TriplTheme.primaryMint;
 
     return AnimatedBuilder(
       animation: _pulseAnim,
@@ -430,7 +430,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
     final isSuccess = _status == _TapStatus.success;
     final dotColor = isSuccess
         ? const Color(0xFF22C55E)
-        : TallyTapTheme.primaryMint;
+        : TriplTheme.primaryMint;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -477,7 +477,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
         break;
       case _TapStatus.idle:
         text = 'Waiting for triple back tap...';
-        color = TallyTapTheme.textGray;
+        color = TriplTheme.textGray;
         break;
     }
 
@@ -504,7 +504,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
       decoration: BoxDecoration(
         color: const Color(0xFF0D1A14),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: TallyTapTheme.borderGreen, width: 0.8),
+        border: Border.all(color: TriplTheme.borderGreen, width: 0.8),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -514,16 +514,16 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
               Container(
                 padding: const EdgeInsets.all(7),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0F1B17),
+                  color: TriplTheme.obsidianBg,
                   borderRadius: BorderRadius.circular(9),
                   border: Border.all(
-                      color: TallyTapTheme.borderGreen, width: 0.5),
+                      color: TriplTheme.borderGreen, width: 0.5),
                 ),
-                child: const Icon(Icons.speed_rounded,
-                    color: TallyTapTheme.primaryMint, size: 16),
+                child: Icon(Icons.speed_rounded,
+                    color: TriplTheme.primaryMint, size: 16),
               ),
               const SizedBox(width: 12),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -532,15 +532,15 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: TallyTapTheme.textLight,
+                        color: TriplTheme.textLight,
                       ),
                     ),
-                    SizedBox(height: 2),
+                    const SizedBox(height: 2),
                     Text(
                       'Adjust how quickly you need to tap',
                       style: TextStyle(
                         fontSize: 11,
-                        color: TallyTapTheme.textGray,
+                        color: TriplTheme.textGray,
                         height: 1.3,
                       ),
                     ),
@@ -552,19 +552,19 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: TallyTapTheme.primaryMint.withOpacity(0.1),
+                  color: TriplTheme.primaryMint.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(8),
                   border: Border.all(
-                    color: TallyTapTheme.primaryMint.withOpacity(0.4),
+                    color: TriplTheme.primaryMint.withOpacity(0.4),
                     width: 0.8,
                   ),
                 ),
                 child: Text(
                   '${_sensitivityMs.round()}ms',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w800,
-                    color: TallyTapTheme.primaryMint,
+                    color: TriplTheme.primaryMint,
                   ),
                 ),
               ),
@@ -574,11 +574,11 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
           SliderTheme(
             data: SliderThemeData(
               trackHeight: 3.0,
-              activeTrackColor: TallyTapTheme.primaryMint,
+              activeTrackColor: TriplTheme.primaryMint,
               inactiveTrackColor:
-                  TallyTapTheme.primaryMint.withOpacity(0.15),
-              thumbColor: TallyTapTheme.primaryMint,
-              overlayColor: TallyTapTheme.primaryMint.withOpacity(0.15),
+                  TriplTheme.primaryMint.withOpacity(0.15),
+              thumbColor: TriplTheme.primaryMint,
+              overlayColor: TriplTheme.primaryMint.withOpacity(0.15),
               thumbShape:
                   const RoundSliderThumbShape(enabledThumbRadius: 8),
             ),
@@ -603,12 +603,12 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
                 Text('Fast tap',
                     style: TextStyle(
                         fontSize: 10,
-                        color: TallyTapTheme.textGray.withOpacity(0.6),
+                        color: TriplTheme.textGray.withOpacity(0.6),
                         fontWeight: FontWeight.w600)),
                 Text('Relaxed tap',
                     style: TextStyle(
                         fontSize: 10,
-                        color: TallyTapTheme.textGray.withOpacity(0.6),
+                        color: TriplTheme.textGray.withOpacity(0.6),
                         fontWeight: FontWeight.w600)),
               ],
             ),
@@ -625,23 +625,23 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
       decoration: BoxDecoration(
         color: const Color(0xFF0D1A14),
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: TallyTapTheme.borderGreen, width: 0.8),
+        border: Border.all(color: TriplTheme.borderGreen, width: 0.8),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(7),
             decoration: BoxDecoration(
-              color: const Color(0xFF0F1B17),
+              color: TriplTheme.obsidianBg,
               borderRadius: BorderRadius.circular(9),
               border: Border.all(
-                  color: TallyTapTheme.borderGreen, width: 0.5),
+                  color: TriplTheme.borderGreen, width: 0.5),
             ),
-            child: const Icon(Icons.gesture_rounded,
-                color: TallyTapTheme.primaryMint, size: 16),
+            child: Icon(Icons.gesture_rounded,
+                color: TriplTheme.primaryMint, size: 16),
           ),
           const SizedBox(width: 12),
-          const Expanded(
+          Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -650,15 +650,15 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                    color: TallyTapTheme.textLight,
+                    color: TriplTheme.textLight,
                   ),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
                   'Run gesture detector in the background',
                   style: TextStyle(
                     fontSize: 11,
-                    color: TallyTapTheme.textGray,
+                    color: TriplTheme.textGray,
                     height: 1.3,
                   ),
                 ),
@@ -667,9 +667,9 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
           ),
           Switch.adaptive(
             value: isEnabled,
-            activeColor: TallyTapTheme.primaryMint,
-            activeTrackColor: TallyTapTheme.primaryMint.withOpacity(0.2),
-            inactiveThumbColor: TallyTapTheme.textGray,
+            activeColor: TriplTheme.primaryMint,
+            activeTrackColor: TriplTheme.primaryMint.withOpacity(0.2),
+            inactiveThumbColor: TriplTheme.textGray,
             inactiveTrackColor: Colors.transparent,
             onChanged: (val) async {
               HapticFeedback.lightImpact();

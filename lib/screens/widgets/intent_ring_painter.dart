@@ -92,11 +92,11 @@ class _IntentRingGraphState extends ConsumerState<IntentRingGraph> with SingleTi
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     'TOTAL SPENT',
                     style: TextStyle(
                       fontSize: 10,
-                      color: TallyTapTheme.textGray,
+                      color: TriplTheme.textGray,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.0,
                     ),
@@ -104,9 +104,9 @@ class _IntentRingGraphState extends ConsumerState<IntentRingGraph> with SingleTi
                   const SizedBox(height: 6),
                   Text(
                     '${widget.currency}${animatedTotal.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 26,
-                      color: TallyTapTheme.primaryMint,
+                      color: TriplTheme.primaryMint,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.5,
                     ),
@@ -129,7 +129,7 @@ class _IntentRingPainter extends CustomPainter {
   final double animationValue;
 
   // Intent bucket colours
-  static const Color _essentialColor = TallyTapTheme.primaryMint;       // Mint
+  Color get _essentialColor => TriplTheme.primaryMint;       // Mint accent
   static const Color _joyfulColor = Color(0xFF9FB6DF);                   // Slate blue
   static const Color _avoidableColor = Color(0xFFFFB5B5);               // Coral pink
   static const Color _investmentsColor = Color(0xFF8B5CF6);             // Royal violet
@@ -166,7 +166,7 @@ class _IntentRingPainter extends CustomPainter {
       Offset(size.width / 2, size.height / 2),
       size.width / 2,
       Paint()
-        ..color = const Color(0xFF14241F)
+        ..color = TriplTheme.borderGreen.withOpacity(0.3)
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth,
     );

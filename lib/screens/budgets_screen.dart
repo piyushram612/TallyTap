@@ -83,7 +83,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -107,12 +107,12 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
 
   Color _getColorForCategory(String category, int index) {
     final lower = category.toLowerCase();
-    if (lower.contains('din')) return TallyTapTheme.primaryMint;
+    if (lower.contains('din')) return TriplTheme.primaryMint;
     if (lower.contains('commute')) return Colors.orangeAccent;
     if (lower.contains('sub')) return Colors.pinkAccent;
     if (lower.contains('util')) return Colors.lightBlueAccent;
     final palette = [
-      TallyTapTheme.primaryViolet,
+      TriplTheme.primaryViolet,
       Colors.purpleAccent,
       Colors.yellowAccent,
       Colors.tealAccent,
@@ -217,33 +217,33 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Budgets Hub',
               style: TextStyle(
                 fontSize: 26,
                 fontWeight: FontWeight.w900,
-                color: TallyTapTheme.primaryMint,
+                color: TriplTheme.primaryMint,
                 letterSpacing: -0.8,
               ),
             ),
             const SizedBox(height: 6),
-            const Text(
+            Text(
               'Overview your parameters and adjust allocations directly.',
               style: TextStyle(
                 fontSize: 14,
-                color: TallyTapTheme.textGray,
+                color: TriplTheme.textGray,
               ),
             ),
             const SizedBox(height: 24),
             
             // 1. Double Global Budgets stack at the top
-            const Text(
+            Text(
               'GLOBAL LIMITS',
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.5,
-                      color: TallyTapTheme.textGray,
+                      color: TriplTheme.textGray,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -306,8 +306,8 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                         alignment: Alignment.center,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
-                            Icon(Icons.tune_rounded, color: TallyTapTheme.primaryMint, size: 18),
+                          children: [
+                            Icon(Icons.tune_rounded, color: TriplTheme.primaryMint, size: 18),
                             SizedBox(width: 8),
                             Text(
                               'ADJUST BUDGET LIMITS',
@@ -315,7 +315,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                                 fontSize: 11,
                                 fontWeight: FontWeight.w800,
                                 letterSpacing: 0.5,
-                                color: TallyTapTheme.primaryMint,
+                                color: TriplTheme.primaryMint,
                               ),
                             ),
                           ],
@@ -331,7 +331,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF2C1616),
+                          color: const Color(0xFFEF4444).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: const Color(0xFFEF4444), width: 1.0),
                         ),
@@ -343,20 +343,20 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Category Budgets Overallocated',
                                     style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold,
-                                      color: TallyTapTheme.textLight,
+                                      color: TriplTheme.textLight,
                                     ),
                                   ),
                                   const SizedBox(height: 4),
                                   Text(
                                     'The sum of your category budgets ($currency${totalCategoryBudgets.toStringAsFixed(0)}) exceeds your global limit ($currency${currentGlobalLimit.toStringAsFixed(0)}) by $currency${overallocationDelta.toStringAsFixed(0)}.',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 11,
-                                      color: TallyTapTheme.textGray,
+                                      color: TriplTheme.textGray,
                                     ),
                                   ),
                                 ],
@@ -375,7 +375,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                       child: Container(
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1E1809),
+                          color: const Color(0xFFF59E0B).withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(color: const Color(0xFFF59E0B), width: 1.0),
                         ),
@@ -388,10 +388,10 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                                 const SizedBox(width: 10),
                                 Text(
                                   '${budgetAlerts.length} ${budgetAlerts.length == 1 ? 'category is' : 'categories are'} over threshold',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 13,
                                     fontWeight: FontWeight.bold,
-                                    color: TallyTapTheme.textLight,
+                                    color: TriplTheme.textLight,
                                   ),
                                 ),
                               ],
@@ -414,10 +414,10 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                                     Expanded(
                                       child: Text(
                                         alert.category,
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w600,
-                                          color: TallyTapTheme.textLight,
+                                          color: TriplTheme.textLight,
                                         ),
                                       ),
                                     ),
@@ -452,24 +452,24 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                   const SizedBox(height: 32),
                   
                   // 2. Category Wise Budgets section displayed directly on screen
-                  const Text(
+                  Text(
                     'CATEGORIES',
                     style: TextStyle(
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.5,
-                      color: TallyTapTheme.textGray,
+                      color: TriplTheme.textGray,
                     ),
                   ),
                   const SizedBox(height: 16),
                   
                   if (activeCategories.isEmpty)
-                    const Center(
+                    Center(
                       child: Padding(
                         padding: EdgeInsets.symmetric(vertical: 24.0),
                         child: Text(
                           'No categories defined. Configure them in Settings!',
-                          style: TextStyle(color: TallyTapTheme.textGray, fontSize: 13),
+                          style: TextStyle(color: TriplTheme.textGray, fontSize: 13),
                         ),
                       ),
                     )
@@ -485,7 +485,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                           final intent = CategoryIntent.all[index];
                           final isSelected = _selectedIntent == intent;
                           final count = intentCounts[intent] ?? 0;
-                          final color = _intentColors[intent] ?? TallyTapTheme.primaryMint;
+                          final color = _intentColors[intent] ?? TriplTheme.primaryMint;
                           final icon = _intentIcons[intent] ?? Icons.shield_outlined;
                           
                           return GestureDetector(
@@ -500,10 +500,10 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                               margin: const EdgeInsets.only(right: 10),
                               padding: const EdgeInsets.symmetric(horizontal: 14),
                               decoration: BoxDecoration(
-                                color: isSelected ? color.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+                                color: isSelected ? color.withOpacity(0.15) : TriplTheme.obsidianCard,
                                 borderRadius: BorderRadius.circular(100),
                                 border: Border.all(
-                                  color: isSelected ? color.withOpacity(0.5) : TallyTapTheme.borderGreen,
+                                  color: isSelected ? color.withOpacity(0.5) : TriplTheme.borderGreen,
                                   width: isSelected ? 1.5 : 1.0,
                                 ),
                               ),
@@ -513,7 +513,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                                 children: [
                                   Icon(
                                     icon,
-                                    color: isSelected ? color : TallyTapTheme.textGray,
+                                    color: isSelected ? color : TriplTheme.textGray,
                                     size: 13,
                                   ),
                                   const SizedBox(width: 6),
@@ -522,7 +522,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                                     style: TextStyle(
                                       fontSize: 11,
                                       fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                                      color: isSelected ? color : TallyTapTheme.textLight,
+                                      color: isSelected ? color : TriplTheme.textLight,
                                     ),
                                   ),
                                 ],
@@ -542,7 +542,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                               padding: const EdgeInsets.symmetric(vertical: 32.0),
                               child: Text(
                                 'No categories assigned to $_selectedIntent.',
-                                style: const TextStyle(color: TallyTapTheme.textGray, fontSize: 13),
+                                style: TextStyle(color: TriplTheme.textGray, fontSize: 13),
                               ),
                             ),
                           )
@@ -643,16 +643,16 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
         duration: const Duration(milliseconds: 150),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          color: isDragging ? const Color(0xFF132A22) : TallyTapTheme.obsidianCard,
+          color: isDragging ? const Color(0xFF132A22) : TriplTheme.obsidianCard,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isDragging ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen,
+            color: isDragging ? TriplTheme.primaryMint : TriplTheme.borderGreen,
             width: isDragging ? 1.5 : 1.0,
           ),
           boxShadow: isDragging
               ? [
                   BoxShadow(
-                    color: TallyTapTheme.primaryMint.withOpacity(0.15),
+                    color: TriplTheme.primaryMint.withOpacity(0.15),
                     blurRadius: 16,
                     offset: const Offset(0, 4),
                   ),
@@ -670,13 +670,13 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                       Container(
                         padding: const EdgeInsets.all(5),
                         decoration: BoxDecoration(
-                          color: isExceeded ? const Color(0xFF2C1616) : const Color(0xFF0F1B17),
+                          color: isExceeded ? const Color(0xFFEF4444).withOpacity(0.15) : TriplTheme.obsidianBg,
                           borderRadius: BorderRadius.circular(6),
-                          border: Border.all(color: isExceeded ? const Color(0xFF5A1E1E) : TallyTapTheme.borderGreen, width: 0.5),
+                          border: Border.all(color: isExceeded ? const Color(0xFFEF4444).withOpacity(0.5) : TriplTheme.borderGreen, width: 0.5),
                         ),
                         child: Icon(
                           icon,
-                          color: isExceeded ? const Color(0xFFEF4444) : TallyTapTheme.primaryMint,
+                          color: isExceeded ? const Color(0xFFEF4444) : TriplTheme.primaryMint,
                           size: 14,
                         ),
                       ),
@@ -693,17 +693,17 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
-                                color: isExceeded ? const Color(0xFFEF4444) : TallyTapTheme.textLight,
+                                color: isExceeded ? const Color(0xFFEF4444) : TriplTheme.textLight,
                               ),
                             ),
                             if (isDragging) ...[
                               const SizedBox(height: 1),
-                              const Text(
+                              Text(
                                 'Adjusting...',
                                 style: TextStyle(
                                   fontSize: 8,
                                   fontWeight: FontWeight.bold,
-                                  color: TallyTapTheme.primaryMint,
+                                  color: TriplTheme.primaryMint,
                                 ),
                               ),
                             ],
@@ -742,7 +742,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
-                            color: isExceeded ? const Color(0xFFEF4444) : TallyTapTheme.textLight.withValues(alpha: 0.8),
+                            color: isExceeded ? const Color(0xFFEF4444) : TriplTheme.textLight.withValues(alpha: 0.8),
                           ),
                         ),
                     ],
@@ -757,13 +757,13 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                       '$currency${spent.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")}',
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: TallyTapTheme.textLight),
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.w900, color: TriplTheme.textLight),
                     ),
                   ),
                   const SizedBox(width: 4),
                   Text(
                     '/ $currency${limit.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")}',
-                    style: const TextStyle(fontSize: 9, color: TallyTapTheme.textGray, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 9, color: TriplTheme.textGray, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
@@ -771,7 +771,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                 height: 3.5,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF14241F),
+                  color: TriplTheme.borderGreen.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(100),
                 ),
                 child: FractionallySizedBox(
@@ -815,16 +815,16 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
         width: MediaQuery.of(context).size.width * 0.82,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: TallyTapTheme.obsidianCard,
+          color: TriplTheme.obsidianCard,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: isActive ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen,
+            color: isActive ? TriplTheme.primaryMint : TriplTheme.borderGreen,
             width: isActive ? 1.5 : 1.0,
           ),
           boxShadow: isActive
               ? [
                   BoxShadow(
-                    color: TallyTapTheme.primaryMint.withOpacity(0.06),
+                    color: TriplTheme.primaryMint.withOpacity(0.06),
                     blurRadius: 16,
                     offset: const Offset(0, 4),
                   ),
@@ -839,7 +839,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
               height: 80,
               child: Builder(
                 builder: (context) {
-                  Color ringColor = TallyTapTheme.textLight;
+                  Color ringColor = TriplTheme.textLight;
                   if (proportion >= 0.75) {
                     ringColor = const Color(0xFFEF4444);
                   } else if (proportion >= 0.50) {
@@ -877,11 +877,11 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                       Flexible(
                         child: Text(
                           title.toUpperCase(),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 1.0,
-                            color: TallyTapTheme.textGray,
+                            color: TriplTheme.textGray,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -896,10 +896,10 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                             borderRadius: BorderRadius.circular(100),
                             border: Border.all(color: const Color(0xFF144D37)),
                           ),
-                          child: const Text(
+                          child: Text(
                             'ACTIVE',
                             style: TextStyle(
-                              color: TallyTapTheme.primaryMint,
+                              color: TriplTheme.primaryMint,
                               fontSize: 8,
                               fontWeight: FontWeight.bold,
                             ),
@@ -911,9 +911,9 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                   const SizedBox(height: 4),
                   Text(
                     dateString,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: TallyTapTheme.textGray,
+                      color: TriplTheme.textGray,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -923,18 +923,18 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
                       children: [
                         TextSpan(
                           text: '$currency${animatedSpent.toStringAsFixed(0)} ',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
-                            color: TallyTapTheme.textLight,
+                            color: TriplTheme.textLight,
                           ),
                         ),
                         TextSpan(
                           text: '/ $currency${limit.toStringAsFixed(0)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
-                            color: TallyTapTheme.textGray,
+                            color: TriplTheme.textGray,
                           ),
                         ),
                       ],
@@ -967,7 +967,7 @@ class _MiniBudgetRingPainter extends CustomPainter {
 
     canvas.drawCircle(Offset(size.width / 2, size.height / 2), size.width / 2, trackPaint);
 
-    Color progressColor = TallyTapTheme.primaryMint;
+    Color progressColor = TriplTheme.primaryMint;
     if (proportion >= 0.75) {
       progressColor = const Color(0xFFEF4444);
     } else if (proportion >= 0.50) {

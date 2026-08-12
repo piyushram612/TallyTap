@@ -8,12 +8,14 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.waypointlattice.tripl.ui.theme.LocalTriplColors
 
 @Composable
 fun SectionHeader(
     text: String,
     modifier: Modifier = Modifier
 ) {
+    val theme = LocalTriplColors.current
     Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Start) {
         Text(
             text = text,
@@ -21,7 +23,7 @@ fun SectionHeader(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.W800,
                 letterSpacing = 1.0.sp,
-                color = GreenPrimary.copy(alpha = 0.8f)
+                color = theme.primaryAccent.copy(alpha = 0.8f)
             )
         )
     }

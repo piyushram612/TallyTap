@@ -101,13 +101,13 @@ class HomeScreen extends ConsumerWidget {
             const SizedBox(width: 10),
             Text(
               title,
-              style: const TextStyle(fontSize: 13, color: TallyTapTheme.textGray, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 13, color: TriplTheme.textGray, fontWeight: FontWeight.w500),
             ),
           ],
         ),
         Text(
           '$currency${spent.toStringAsFixed(0)}',
-          style: const TextStyle(fontSize: 13, color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 13, color: TriplTheme.textLight, fontWeight: FontWeight.bold),
         ),
       ],
     );
@@ -456,7 +456,7 @@ class HomeScreen extends ConsumerWidget {
 
     int catIdx = 0;
     final dynamicCategories = catSum.entries.map((entry) {
-      final color = TallyTapTheme.getColorForCategory(entry.key, catIdx++);
+      final color = TriplTheme.getColorForCategory(entry.key, catIdx++);
       return DonutChartItem(
         name: entry.key,
         amount: entry.value,
@@ -482,7 +482,7 @@ class HomeScreen extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
                   // Horizontal scrollable payment sources panel
-                  const Align(
+                  Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'ACCOUNTS & BALANCES',
@@ -490,7 +490,7 @@ class HomeScreen extends ConsumerWidget {
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.5,
-                        color: TallyTapTheme.textGray,
+                        color: TriplTheme.textGray,
                       ),
                     ),
                   ),
@@ -503,8 +503,8 @@ class HomeScreen extends ConsumerWidget {
                       itemCount: sources.length,
                       itemBuilder: (context, index) {
                         final src = sources[index];
-                        final srcColor = TallyTapTheme.getColorForSource(src);
-                        final srcIcon = TallyTapTheme.getIconForSource(src);
+                        final srcColor = TriplTheme.getColorForSource(src);
+                        final srcIcon = TriplTheme.getIconForSource(src);
 
                         // Calculate balance and transaction count
                         double inflows = 0.0;
@@ -537,7 +537,7 @@ class HomeScreen extends ConsumerWidget {
                           width: 170,
                           margin: const EdgeInsets.only(right: 14),
                           decoration: BoxDecoration(
-                            color: TallyTapTheme.obsidianCard,
+                            color: TriplTheme.obsidianCard,
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(color: srcColor.withOpacity(0.3), width: 1.0),
                           ),
@@ -572,10 +572,10 @@ class HomeScreen extends ConsumerWidget {
                                       children: [
                                         Text(
                                           src,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 12,
                                             fontWeight: FontWeight.bold,
-                                            color: TallyTapTheme.textLight,
+                                            color: TriplTheme.textLight,
                                           ),
                                           maxLines: 1,
                                           overflow: TextOverflow.ellipsis,
@@ -608,9 +608,9 @@ class HomeScreen extends ConsumerWidget {
                                         const SizedBox(height: 2),
                                         Text(
                                           '$txCount txs',
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 9,
-                                            color: TallyTapTheme.textGray,
+                                            color: TriplTheme.textGray,
                                           ),
                                         ),
                                       ],
@@ -666,11 +666,11 @@ class HomeScreen extends ConsumerWidget {
                                   }(),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.w800,
                                     letterSpacing: 1.5,
-                                    color: TallyTapTheme.textGray,
+                                    color: TriplTheme.textGray,
                                   ),
                                 ),
                               ),
@@ -695,9 +695,9 @@ class HomeScreen extends ConsumerWidget {
                                       );
                                     },
                                     behavior: HitTestBehavior.opaque,
-                                    child: const Padding(
+                                    child: Padding(
                                       padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 6.0),
-                                      child: Icon(Icons.more_horiz, color: TallyTapTheme.textGray, size: 20),
+                                      child: Icon(Icons.more_horiz, color: TriplTheme.textGray, size: 20),
                                     ),
                                   ),
                                 ],
@@ -715,13 +715,13 @@ class HomeScreen extends ConsumerWidget {
                                 child: Container(
                                   padding: const EdgeInsets.all(4),
                                   decoration: BoxDecoration(
-                                    color: TallyTapTheme.obsidianCard,
+                                    color: TriplTheme.obsidianCard,
                                     borderRadius: BorderRadius.circular(6),
-                                    border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                                    border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                                   ),
-                                  child: const Icon(
+                                  child: Icon(
                                     Icons.chevron_left_rounded,
-                                    color: TallyTapTheme.primaryMint,
+                                    color: TriplTheme.primaryMint,
                                     size: 16,
                                   ),
                                 ),
@@ -729,10 +729,10 @@ class HomeScreen extends ConsumerWidget {
                               const SizedBox(width: 10),
                               Text(
                                 dateRangeString,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w800,
-                                  color: TallyTapTheme.primaryMint,
+                                  color: TriplTheme.primaryMint,
                                   letterSpacing: 0.5,
                                 ),
                               ),
@@ -747,13 +747,13 @@ class HomeScreen extends ConsumerWidget {
                                   child: Container(
                                     padding: const EdgeInsets.all(4),
                                     decoration: BoxDecoration(
-                                      color: TallyTapTheme.obsidianCard,
+                                      color: TriplTheme.obsidianCard,
                                       borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                                      border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                                     ),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.chevron_right_rounded,
-                                      color: TallyTapTheme.primaryMint,
+                                      color: TriplTheme.primaryMint,
                                       size: 16,
                                     ),
                                   ),
@@ -774,19 +774,19 @@ class HomeScreen extends ConsumerWidget {
                                 children: [
                                   Text(
                                     '${summaryTotalSpent < 0 ? '-' : ''}$currency${summaryTotalSpent.abs().toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 34,
                                       fontWeight: FontWeight.w900,
-                                      color: TallyTapTheme.textLight,
+                                      color: TriplTheme.textLight,
                                       letterSpacing: -1.0,
                                     ),
                                   ),
-                                  const Text(
+                                  Text(
                                     '.00',
                                     style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w800,
-                                      color: TallyTapTheme.textGray,
+                                      color: TriplTheme.textGray,
                                     ),
                                   ),
                                 ],
@@ -795,23 +795,23 @@ class HomeScreen extends ConsumerWidget {
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                 decoration: BoxDecoration(
-                                  color: isOverspending ? const Color(0xFF2C1616) : const Color(0xFF0F2B20),
+                                  color: isOverspending ? const Color(0xFFEF4444).withOpacity(0.15) : const Color(0xFF10B981).withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(100),
-                                  border: Border.all(color: isOverspending ? const Color(0xFF4C1D1D) : const Color(0xFF144D37)),
+                                  border: Border.all(color: isOverspending ? const Color(0xFFEF4444).withOpacity(0.4) : const Color(0xFF10B981).withOpacity(0.4)),
                                 ),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Icon(
                                       isTrendingUp ? Icons.trending_up : Icons.trending_down, 
-                                      color: isOverspending ? const Color(0xFFEF4444) : TallyTapTheme.primaryMint, 
+                                      color: isOverspending ? const Color(0xFFEF4444) : TriplTheme.primaryMint, 
                                       size: 14,
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
                                       percentText,
                                       style: TextStyle(
-                                        color: isOverspending ? const Color(0xFFEF4444) : TallyTapTheme.primaryMint,
+                                        color: isOverspending ? const Color(0xFFEF4444) : TriplTheme.primaryMint,
                                         fontSize: 11,
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -872,10 +872,10 @@ class HomeScreen extends ConsumerWidget {
                                 Expanded(
                                   child: Text(
                                     breakdownType == 'income' ? 'Income Breakdown' : 'Spending Breakdown',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.w800,
-                                      color: TallyTapTheme.textLight,
+                                      color: TriplTheme.textLight,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -906,13 +906,13 @@ class HomeScreen extends ConsumerWidget {
                                         child: Container(
                                           padding: const EdgeInsets.all(4),
                                           decoration: BoxDecoration(
-                                            color: TallyTapTheme.obsidianCard,
+                                            color: TriplTheme.obsidianCard,
                                             borderRadius: BorderRadius.circular(6),
-                                            border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                                            border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                                           ),
-                                          child: const Icon(
+                                          child: Icon(
                                             Icons.chevron_left_rounded,
-                                            color: TallyTapTheme.primaryMint,
+                                            color: TriplTheme.primaryMint,
                                             size: 16,
                                           ),
                                         ),
@@ -924,10 +924,10 @@ class HomeScreen extends ConsumerWidget {
                                             fit: BoxFit.scaleDown,
                                             child: Text(
                                               dateRangeBreakdownString,
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                 fontSize: 11,
                                                 fontWeight: FontWeight.w800,
-                                                color: TallyTapTheme.primaryMint,
+                                                color: TriplTheme.primaryMint,
                                                 letterSpacing: 0.5,
                                               ),
                                             ),
@@ -945,13 +945,13 @@ class HomeScreen extends ConsumerWidget {
                                           child: Container(
                                             padding: const EdgeInsets.all(4),
                                             decoration: BoxDecoration(
-                                              color: TallyTapTheme.obsidianCard,
+                                              color: TriplTheme.obsidianCard,
                                               borderRadius: BorderRadius.circular(6),
-                                              border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                                              border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                                             ),
-                                            child: const Icon(
+                                            child: Icon(
                                               Icons.chevron_right_rounded,
-                                              color: TallyTapTheme.primaryMint,
+                                              color: TriplTheme.primaryMint,
                                               size: 16,
                                             ),
                                           ),
@@ -985,9 +985,9 @@ class HomeScreen extends ConsumerWidget {
                                     padding: const EdgeInsets.symmetric(vertical: 12.0),
                                     child: Text(
                                       breakdownType == 'income' ? 'No income yet' : 'No expenses yet',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 13,
-                                        color: TallyTapTheme.textGray,
+                                        color: TriplTheme.textGray,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -1024,9 +1024,9 @@ class HomeScreen extends ConsumerWidget {
                                                     decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFF6B7280)),
                                                   ),
                                                   const SizedBox(width: 10),
-                                                  const Text(
+                                                  Text(
                                                     'Others',
-                                                    style: TextStyle(fontSize: 13, color: TallyTapTheme.textGray, fontWeight: FontWeight.w500),
+                                                    style: TextStyle(fontSize: 13, color: TriplTheme.textGray, fontWeight: FontWeight.w500),
                                                   ),
                                                 ],
                                               ),
@@ -1034,13 +1034,13 @@ class HomeScreen extends ConsumerWidget {
                                                 children: [
                                                   Text(
                                                     '$currency${dynamicCategories.skip(5).fold(0.0, (sum, item) => sum + item.amount).toStringAsFixed(0)}',
-                                                    style: const TextStyle(fontSize: 13, color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                                                    style: TextStyle(fontSize: 13, color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                                                   ),
                                                   const SizedBox(width: 8),
                                                   AnimatedRotation(
                                                     turns: ref.watch(homeLegendExpandedProvider) ? 0.5 : 0.0,
                                                     duration: const Duration(milliseconds: 300),
-                                                    child: const Icon(Icons.expand_more, size: 20, color: TallyTapTheme.textGray),
+                                                    child: Icon(Icons.expand_more, size: 20, color: TriplTheme.textGray),
                                                   ),
                                                 ],
                                               ),
@@ -1095,16 +1095,16 @@ class HomeScreen extends ConsumerWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const Text(
+                              Text(
                                 'Recent Reflections',
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w800,
-                                  color: TallyTapTheme.textLight,
+                                  color: TriplTheme.textLight,
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.more_horiz, color: TallyTapTheme.textGray, size: 20),
+                                icon: Icon(Icons.more_horiz, color: TriplTheme.textGray, size: 20),
                                 onPressed: () {
                                   showModalBottomSheet(
                                     context: context,
@@ -1128,13 +1128,13 @@ class HomeScreen extends ConsumerWidget {
                                       Icon(
                                         Icons.receipt_long_outlined,
                                         size: 40,
-                                        color: TallyTapTheme.textGray.withOpacity(0.3),
+                                        color: TriplTheme.textGray.withOpacity(0.3),
                                       ),
                                       const SizedBox(height: 8),
-                                      const Text(
+                                      Text(
                                         'No transactions matched',
                                         style: TextStyle(
-                                          color: TallyTapTheme.textGray,
+                                          color: TriplTheme.textGray,
                                           fontSize: 13,
                                           fontWeight: FontWeight.w500,
                                         ),
@@ -1151,7 +1151,7 @@ class HomeScreen extends ConsumerWidget {
                                       ? filteredRecentTransactions.length 
                                       : (filteredRecentTransactions.length > recentCount ? recentCount : filteredRecentTransactions.length),
                                   separatorBuilder: (_, __) => Divider(
-                                    color: TallyTapTheme.borderGreen, 
+                                    color: TriplTheme.borderGreen, 
                                     height: recentDensity == 'compact' ? 12 : 24, 
                                     thickness: 0.5
                                   ),
@@ -1186,14 +1186,14 @@ class HomeScreen extends ConsumerWidget {
                               ref.read(activeTabProvider.notifier).state = 3; // Switch to Timeline Tab
                             },
                             style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: TallyTapTheme.borderGreen),
+                              side: BorderSide(color: TriplTheme.borderGreen),
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                               padding: const EdgeInsets.symmetric(vertical: 14),
                             ),
-                            child: const Text(
+                            child: Text(
                               'VIEW ALL TRANSACTIONS',
                               style: TextStyle(
-                                color: TallyTapTheme.primaryMint,
+                                color: TriplTheme.primaryMint,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w800,
                                 letterSpacing: 0.5,
@@ -1249,10 +1249,10 @@ class HomeScreen extends ConsumerWidget {
 
                       return Text(
                         '$greetingWord, $username',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w900,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                           letterSpacing: -0.8,
                         ),
                       );
@@ -1261,23 +1261,23 @@ class HomeScreen extends ConsumerWidget {
                   const SizedBox(height: 6),
                   RichText(
                     text: TextSpan(
-                      style: const TextStyle(fontSize: 14, color: TallyTapTheme.textGray, height: 1.4),
+                      style: TextStyle(fontSize: 14, color: TriplTheme.textGray, height: 1.4),
                       children: [
                         const TextSpan(text: "You've spent "),
                         TextSpan(
                           text: '$currency${totalSpent.toStringAsFixed(0)}',
-                          style: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+                          style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
                         ),
                         if (totalSpent > globalBudget.amount) ...[
                           const TextSpan(text: ' recently.\nYou\'ve exceeded your '),
                           TextSpan(
                             text: '${globalBudget.period} budget',
-                            style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                           ),
                           const TextSpan(text: ' of '),
                           TextSpan(
                             text: '$currency${globalBudget.amount.toStringAsFixed(0)}',
-                            style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                           ),
                           const TextSpan(text: ' by '),
                           TextSpan(
@@ -1315,9 +1315,9 @@ class HomeScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: const Color(0xFF0F1B17),
+        color: TriplTheme.obsidianBg,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+        border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1336,7 +1336,7 @@ class HomeScreen extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
-          color: isActive ? TallyTapTheme.primaryMint : Colors.transparent,
+          color: isActive ? TriplTheme.primaryMint : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
@@ -1344,7 +1344,7 @@ class HomeScreen extends ConsumerWidget {
           style: TextStyle(
             fontSize: 9,
             fontWeight: FontWeight.w900,
-            color: isActive ? TallyTapTheme.obsidianBg : TallyTapTheme.textGray,
+            color: isActive ? TriplTheme.obsidianBg : TriplTheme.textGray,
             letterSpacing: 0.5,
           ),
         ),
@@ -1359,9 +1359,9 @@ class HomeScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        color: const Color(0xFF0F1B17),
+        color: TriplTheme.obsidianBg,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+        border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -1380,7 +1380,7 @@ class HomeScreen extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
         decoration: BoxDecoration(
-          color: isActive ? TallyTapTheme.primaryMint : Colors.transparent,
+          color: isActive ? TriplTheme.primaryMint : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Text(
@@ -1388,7 +1388,7 @@ class HomeScreen extends ConsumerWidget {
           style: TextStyle(
             fontSize: 9,
             fontWeight: FontWeight.w900,
-            color: isActive ? TallyTapTheme.obsidianBg : TallyTapTheme.textGray,
+            color: isActive ? TriplTheme.obsidianBg : TriplTheme.textGray,
             letterSpacing: 0.5,
           ),
         ),

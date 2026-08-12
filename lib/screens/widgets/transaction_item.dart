@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../core/app_theme.dart';
 import '../../core/theme.dart';
 import '../../models/transaction_model.dart';
 import '../transaction_details_screen.dart';
@@ -32,19 +33,19 @@ class TransactionItem extends StatelessWidget {
     final isTransfer = transaction.category.toLowerCase() == 'transfer';
     final activeColor = isTransfer
         ? const Color(0xFF94A3B8)
-        : (isIncome ? const Color(0xFF10B981) : TallyTapTheme.textLight);
+        : (isIncome ? const Color(0xFF10B981) : context.textPrimary);
     
     final icon = isSelected
         ? Icons.check_circle_rounded
-        : TallyTapTheme.getIconForCategory(transaction.category, isIncome);
+        : TriplTheme.getIconForCategory(transaction.category, isIncome);
     final iconBg = isSelected
-        ? TallyTapTheme.primaryMint.withOpacity(0.15)
-        : TallyTapTheme.getIconBgForCategory(transaction.category, isIncome);
+        ? context.primaryAccent.withOpacity(0.15)
+        : TriplTheme.getIconBgForCategory(transaction.category, isIncome);
     final iconColor = isSelected
-        ? TallyTapTheme.primaryMint
+        ? context.primaryAccent
         : (isTransfer
             ? const Color(0xFF94A3B8)
-            : (isIncome ? const Color(0xFF10B981) : TallyTapTheme.textLight));
+            : (isIncome ? const Color(0xFF10B981) : context.textPrimary));
 
     return InkWell(
       onTap: onTap ?? () {
@@ -69,11 +70,11 @@ class TransactionItem extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: isSelected 
-              ? TallyTapTheme.primaryMint.withOpacity(0.05) 
+              ? context.primaryAccent.withOpacity(0.05) 
               : (transaction.needsVerification ? const Color(0xFFF59E0B).withOpacity(0.05) : Colors.transparent),
           borderRadius: BorderRadius.circular(16),
           border: isSelected
-              ? Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.3), width: 1.0)
+              ? Border.all(color: context.primaryAccent.withOpacity(0.3), width: 1.0)
               : (transaction.needsVerification ? Border.all(color: const Color(0xFFF59E0B).withOpacity(0.3), width: 1.0) : null),
         ),
         child: Padding(
@@ -88,7 +89,7 @@ class TransactionItem extends StatelessWidget {
                   shape: BoxShape.circle,
                   color: iconBg,
                   border: Border.all(
-                    color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen,
+                    color: isSelected ? context.primaryAccent : context.cardBorder,
                     width: 0.5,
                   ),
                 ),
@@ -102,10 +103,10 @@ class TransactionItem extends StatelessWidget {
                   children: [
                     Text(
                       transaction.merchant,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
-                        color: TallyTapTheme.textLight,
+                        color: context.textPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -113,7 +114,7 @@ class TransactionItem extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       subtitle,
-                      style: const TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                      style: TextStyle(fontSize: 12, color: context.textMuted),
                     ),
                   ],
                 ),

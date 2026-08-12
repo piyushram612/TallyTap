@@ -9,10 +9,10 @@ class SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
-          color: TallyTapTheme.textGray,
+          color: TriplTheme.textGray,
         ),
       );
 }
@@ -28,15 +28,15 @@ class TypeToggle extends StatelessWidget {
     return Container(
       height: 34 * textScale,
       decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianCard,
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: TallyTapTheme.borderGreen),
+        border: Border.all(color: TriplTheme.borderGreen),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          _pill('Expense', !isIncome, TallyTapTheme.primaryMint,
+          _pill('Expense', !isIncome, TriplTheme.primaryMint,
               () => onChanged(false)),
           _pill('Income', isIncome, const Color(0xFF10B981),
               () => onChanged(true)),
@@ -68,7 +68,7 @@ class TypeToggle extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.w800,
-              color: active ? color : TallyTapTheme.textGray,
+              color: active ? color : TriplTheme.textGray,
             ),
           ),
         ),
@@ -96,9 +96,9 @@ class AmountCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianCard,
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: TallyTapTheme.borderGreen),
+        border: Border.all(color: TriplTheme.borderGreen),
         boxShadow: [
           BoxShadow(
             color: activeColor.withOpacity(0.06),
@@ -110,13 +110,13 @@ class AmountCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'TRANSACTION AMOUNT',
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               letterSpacing: 1.8,
-              color: TallyTapTheme.textGray,
+              color: TriplTheme.textGray,
             ),
           ),
           const SizedBox(height: 16),
@@ -138,10 +138,10 @@ class AmountCard extends StatelessWidget {
                 child: IntrinsicWidth(
                   child: TextFormField(
                     controller: controller,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 48,
                       fontWeight: FontWeight.w900,
-                      color: TallyTapTheme.textLight,
+                      color: TriplTheme.textLight,
                       fontFamily: 'Outfit',
                       letterSpacing: -2,
                     ),
@@ -153,7 +153,7 @@ class AmountCard extends StatelessWidget {
                       hintStyle: TextStyle(
                         fontSize: 48,
                         fontWeight: FontWeight.w900,
-                        color: TallyTapTheme.textGray.withOpacity(0.25),
+                        color: TriplTheme.textGray.withOpacity(0.25),
                         fontFamily: 'Outfit',
                         letterSpacing: -2,
                       ),

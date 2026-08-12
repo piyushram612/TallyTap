@@ -13,7 +13,7 @@ final recurringTransactionsProvider = StateNotifierProvider<RecurringTransaction
 });
 
 class RecurringTransactionsNotifier extends StateNotifier<List<RecurringTransaction>> {
-  static const _storageKey = 'tallytap_recurring_transactions';
+  static const _storageKey = 'tripl_recurring_transactions';
   final Ref _ref;
   Timer? _timer;
 
