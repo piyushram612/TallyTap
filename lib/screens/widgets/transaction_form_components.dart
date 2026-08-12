@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/theme.dart';
 import '../../core/math_evaluator.dart';
+import '../../models/transaction_model.dart';
 
 class SectionLabel extends StatelessWidget {
   const SectionLabel({super.key, required this.label});
@@ -483,3 +484,322 @@ class _CalculatorKeyboardSheetState extends State<_CalculatorKeyboardSheet> {
     );
   }
 }
+
+class AutofillSuggestion {
+  final String merchant;
+  final String category;
+  final String paidTo;
+  final bool isIncome;
+  final DateTime date;
+
+  AutofillSuggestion({
+    required this.merchant,
+    required this.category,
+    required this.paidTo,
+    required this.isIncome,
+    required this.date,
+  });
+}
+
+class MerchantAutofillField extends StatefulWidget {
+  const MerchantAutofillField({
+    super.key,
+    required this.controller,
+    required this.transactions,
+    required this.activeColor,
+    required this.hintText,
+    required this.onSuggestionSelected,
+    this.isIncome = false,
+    this.focusNode,
+  });
+
+  final TextEditingController controller;
+  final List<ExpenseTransaction> transactions;
+  final Color activeColor;
+  final String hintText;
+  final ValueChanged<AutofillSuggestion> onSuggestionSelected;
+  final bool isIncome;
+  final FocusNode? focusNode;
+
+  @override
+  State<MerchantAutofillField> createState() => _MerchantAutofillFieldState();
+}
+
+class _MerchantAutofillFieldState extends State<MerchantAutofillField> {
+  late FocusNode _focusNode;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = widget.focusNode ?? FocusNode();
+    _focusNode.addListener(_onFocusChange);
+    widget.controller.addListener(_onTextChange);
+  }
+
+  @override
+  void dispose() {
+    if (widget.focusNode == null) {
+      _focusNode.dispose();
+    } else {
+      _focusNode.removeListener(_onFocusChange);
+    }
+    widget.controller.removeListener(_onTextChange);
+    super.dispose();
+  }
+
+  void _onFocusChange() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void _onTextChange() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  List<AutofillSuggestion> _getSuggestions() {
+    final query = widget.controller.text.trim().toLowerCase();
+    if (query.isEmpty) return [];
+
+    // Deduplicate by merchant title (case-insensitive), keeping the most recent transaction
+    final Map<String, ExpenseTransaction> uniqueMap = {};
+    for (final tx in widget.transactions) {
+      final merchantKey = tx.merchant.trim().toLowerCase();
+      if (merchantKey.isEmpty) continue;
+
+      if (!uniqueMap.containsKey(merchantKey)) {
+        uniqueMap[merchantKey] = tx;
+      } else {
+        if (tx.date.isAfter(uniqueMap[merchantKey]!.date)) {
+          uniqueMap[merchantKey] = tx;
+        }
+      }
+    }
+
+    final suggestions = uniqueMap.values
+        .where((tx) => tx.merchant.trim().toLowerCase().contains(query))
+        .map((tx) => AutofillSuggestion(
+              merchant: tx.merchant.trim(),
+              category: tx.category,
+              paidTo: tx.paidTo,
+              isIncome: tx.isIncome,
+              date: tx.date,
+            ))
+        .toList();
+
+    // Sort: prefix matches first, then matching isIncome type, then by recency
+    suggestions.sort((a, b) {
+      final aLower = a.merchant.toLowerCase();
+      final bLower = b.merchant.toLowerCase();
+      final aStartsWith = aLower.startsWith(query);
+      final bStartsWith = bLower.startsWith(query);
+
+      if (aStartsWith && !bStartsWith) return -1;
+      if (!aStartsWith && bStartsWith) return 1;
+
+      final aSameType = a.isIncome == widget.isIncome;
+      final bSameType = b.isIncome == widget.isIncome;
+      if (aSameType && !bSameType) return -1;
+      if (!aSameType && bSameType) return 1;
+
+      return b.date.compareTo(a.date);
+    });
+
+    return suggestions.take(4).toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final suggestions = _focusNode.hasFocus ? _getSuggestions() : <AutofillSuggestion>[];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        TextFormField(
+          controller: widget.controller,
+          focusNode: _focusNode,
+          style: TextStyle(
+            color: TriplTheme.textLight,
+            fontWeight: FontWeight.w600,
+          ),
+          textCapitalization: TextCapitalization.sentences,
+          decoration: InputDecoration(
+            hintText: widget.hintText,
+            hintStyle: TextStyle(
+              color: TriplTheme.textGray,
+              fontSize: 14,
+            ),
+            filled: true,
+            fillColor: TriplTheme.obsidianCard,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 16,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(color: TriplTheme.borderGreen),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(color: widget.activeColor, width: 1.5),
+            ),
+          ),
+        ),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOutCubic,
+          child: suggestions.isNotEmpty
+              ? Container(
+                  margin: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: TriplTheme.obsidianCard,
+                    borderRadius: BorderRadius.circular(18),
+                    border: Border.all(
+                      color: widget.activeColor.withOpacity(0.35),
+                      width: 1.2,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: widget.activeColor.withOpacity(0.08),
+                        blurRadius: 16,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.auto_awesome,
+                            size: 13,
+                            color: widget.activeColor,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'AUTOFILL SUGGESTIONS',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              letterSpacing: 1.2,
+                              color: widget.activeColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Column(
+                        children: suggestions.map((s) {
+                          final catColor = s.isIncome
+                              ? const Color(0xFF10B981)
+                              : TriplTheme.getColorForCategory(s.category);
+                          final catIcon = TriplTheme.getIconForCategory(
+                              s.category, s.isIncome);
+
+                          return InkWell(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              widget.onSuggestionSelected(s);
+                              _focusNode.unfocus();
+                            },
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 8,
+                              ),
+                              margin: const EdgeInsets.only(bottom: 4),
+                              decoration: BoxDecoration(
+                                color: TriplTheme.obsidianBg.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: TriplTheme.borderGreen.withOpacity(0.4),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.history_rounded,
+                                    size: 16,
+                                    color: TriplTheme.textGray,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          s.merchant,
+                                          style: TextStyle(
+                                            fontSize: 13,
+                                            fontWeight: FontWeight.w700,
+                                            color: TriplTheme.textLight,
+                                          ),
+                                        ),
+                                        if (s.paidTo.isNotEmpty) ...[
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            'Paid to: ${s.paidTo}',
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: TriplTheme.textGray,
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: catColor.withOpacity(0.18),
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                        color: catColor.withOpacity(0.4),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          catIcon,
+                                          size: 12,
+                                          color: catColor,
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          s.category,
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.w700,
+                                            color: catColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                    ],
+                  ),
+                )
+              : const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+}
+

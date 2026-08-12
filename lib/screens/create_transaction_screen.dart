@@ -365,34 +365,24 @@ class _CreateTransactionScreenState
                       // ── MERCHANT FIELD ───────────────────────────────────
                       SectionLabel(label: 'Title / Purpose'),
                       const SizedBox(height: 10),
-                      TextFormField(
+                      MerchantAutofillField(
                         controller: _merchantController,
-                        style: TextStyle(
-                          color: TriplTheme.textLight,
-                          fontWeight: FontWeight.w600,
-                        ),
-                        textCapitalization: TextCapitalization.sentences,
-                        decoration: InputDecoration(
-                          hintText: _isIncome
-                              ? 'e.g. Salary, Dividend, Gift...'
-                              : 'e.g. Starbucks, Amazon, Rent...',
-                          hintStyle: TextStyle(
-                              color: TriplTheme.textGray, fontSize: 14),
-                          filled: true,
-                          fillColor: TriplTheme.obsidianCard,
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 16),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide: BorderSide(
-                                color: TriplTheme.borderGreen),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            borderSide:
-                                BorderSide(color: activeColor, width: 1.5),
-                          ),
-                        ),
+                        transactions: allTx,
+                        activeColor: activeColor,
+                        isIncome: _isIncome,
+                        hintText: _isIncome
+                            ? 'e.g. Salary, Dividend, Gift...'
+                            : 'e.g. Starbucks, Amazon, Rent...',
+                        onSuggestionSelected: (suggestion) {
+                          setState(() {
+                            _merchantController.text = suggestion.merchant;
+                            _isIncome = suggestion.isIncome;
+                            _selectedCategory = suggestion.category;
+                            if (suggestion.paidTo.isNotEmpty) {
+                              _paidToController.text = suggestion.paidTo;
+                            }
+                          });
+                        },
                       ),
 
                       // ── PAID TO / PAID BY FIELD ──────────────────────────
