@@ -41,9 +41,9 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
 
   void _showColorPicker() {
     final List<Color> colorPalette = [
-      TallyTapTheme.primaryMint,
-      TallyTapTheme.primaryViolet,
-      TallyTapTheme.primarySlate,
+      TriplTheme.primaryMint,
+      TriplTheme.primaryViolet,
+      TriplTheme.primarySlate,
       const Color(0xFFF59E0B), // Amber
       const Color(0xFFEC4899), // Pink
       const Color(0xFF8B5CF6), // Purple
@@ -56,17 +56,17 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
     ];
 
     // Track the locally-selected color; only applied on Save
-    Color selectedColor = TallyTapTheme.getColorForSource(widget.sourceName);
+    Color selectedColor = TriplTheme.getColorForSource(widget.sourceName);
 
     showDialog(
       context: context,
       builder: (dialogContext) => StatefulBuilder(
         builder: (dialogContext, setDialogState) {
           return AlertDialog(
-            backgroundColor: TallyTapTheme.obsidianCard,
+            backgroundColor: TriplTheme.obsidianCard,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
-              side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+              side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
             ),
             title: Row(
               children: [
@@ -79,10 +79,10 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                   ),
                 ),
                 const SizedBox(width: 10),
-                const Text(
+                Text(
                   'Choose Accent Color',
                   style: TextStyle(
-                    color: TallyTapTheme.textLight,
+                    color: TriplTheme.textLight,
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
@@ -141,9 +141,9 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(dialogContext),
-                child: const Text(
+                child: Text(
                   'Cancel',
-                  style: TextStyle(color: TallyTapTheme.textGray),
+                  style: TextStyle(color: TriplTheme.textGray),
                 ),
               ),
               ElevatedButton.icon(
@@ -151,7 +151,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                 label: const Text('Save'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: selectedColor,
-                  foregroundColor: TallyTapTheme.obsidianBg,
+                  foregroundColor: TriplTheme.obsidianBg,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -183,43 +183,43 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: TallyTapTheme.obsidianCard,
+        backgroundColor: TriplTheme.obsidianCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+          side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
         ),
-        title: const Text(
+        title: Text(
           'Correct Account Balance',
-          style: TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+          style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
         ),
         content: TextField(
           controller: _balanceController,
           keyboardType: const TextInputType.numberWithOptions(decimal: true),
-          style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+          style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
           decoration: InputDecoration(
             hintText: 'Enter actual balance...',
-            hintStyle: const TextStyle(color: TallyTapTheme.textGray),
+            hintStyle: TextStyle(color: TriplTheme.textGray),
             filled: true,
-            fillColor: TallyTapTheme.obsidianBg,
+            fillColor: TriplTheme.obsidianBg,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+              borderSide: BorderSide(color: TriplTheme.borderGreen),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: TallyTapTheme.primaryMint),
+              borderSide: BorderSide(color: TriplTheme.primaryMint),
             ),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+            child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -267,42 +267,42 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          backgroundColor: TallyTapTheme.obsidianCard,
+          backgroundColor: TriplTheme.obsidianCard,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+            side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
           ),
           title: Text(
             'Merge "${widget.sourceName}"',
-            style: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+            style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
+              Text(
                 'This will move all transactions from this account into the selected target account, merge their balances, and delete this account.',
-                style: TextStyle(color: TallyTapTheme.textLight, fontSize: 13, height: 1.4),
+                style: TextStyle(color: TriplTheme.textLight, fontSize: 13, height: 1.4),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'TARGET ACCOUNT',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 1.0),
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
               ),
               const SizedBox(height: 8),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 decoration: BoxDecoration(
-                  color: TallyTapTheme.obsidianBg,
+                  color: TriplTheme.obsidianBg,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: TallyTapTheme.borderGreen),
+                  border: Border.all(color: TriplTheme.borderGreen),
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
                     value: selectedTarget,
-                    dropdownColor: TallyTapTheme.obsidianCard,
+                    dropdownColor: TriplTheme.obsidianCard,
                     isExpanded: true,
-                    style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                     items: otherSources.map((s) {
                       return DropdownMenuItem<String>(
                         value: s,
@@ -324,7 +324,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+              child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -388,7 +388,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
     final currency = ref.watch(currencyProvider);
     final startingBalances = ref.watch(sourceStartingBalancesProvider);
     
-    final activeColor = TallyTapTheme.getColorForSource(widget.sourceName);
+    final activeColor = TriplTheme.getColorForSource(widget.sourceName);
 
 
 
@@ -532,29 +532,29 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
 
     int expIdx = 0;
     final List<DonutChartItem> expenseCategories = expenseSum.entries.map((e) {
-      return DonutChartItem(name: e.key, amount: e.value, color: TallyTapTheme.getColorForCategory(e.key, expIdx++));
+      return DonutChartItem(name: e.key, amount: e.value, color: TriplTheme.getColorForCategory(e.key, expIdx++));
     }).toList()..sort((a, b) => b.amount.compareTo(a.amount));
 
     int incIdx = 0;
     final List<DonutChartItem> incomeCategories = incomeSum.entries.map((e) {
-      return DonutChartItem(name: e.key, amount: e.value, color: TallyTapTheme.getColorForCategory(e.key, incIdx++));
+      return DonutChartItem(name: e.key, amount: e.value, color: TriplTheme.getColorForCategory(e.key, incIdx++));
     }).toList()..sort((a, b) => b.amount.compareTo(a.amount));
 
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: TallyTapTheme.textLight),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: TriplTheme.textLight),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           widget.sourceName,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w900,
-            color: TallyTapTheme.textLight,
+            color: TriplTheme.textLight,
             fontFamily: 'Outfit',
           ),
         ),
@@ -593,12 +593,12 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                         ),
                         child: Column(
                           children: [
-                            const Text(
+                            Text(
                               'CURRENT BALANCE',
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.w800,
-                                color: TallyTapTheme.textGray,
+                                color: TriplTheme.textGray,
                                 letterSpacing: 1.5,
                               ),
                             ),
@@ -629,10 +629,10 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                                 ),
                                 Text(
                                   netCalculated.abs().toStringAsFixed(2),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 40,
                                     fontWeight: FontWeight.w900,
-                                    color: TallyTapTheme.textLight,
+                                    color: TriplTheme.textLight,
                                     height: 1.0,
                                     letterSpacing: -1.0,
                                   ),
@@ -640,14 +640,14 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                               ],
                             ),
                             const SizedBox(height: 24),
-                            const Divider(color: TallyTapTheme.borderGreen, height: 1),
+                            Divider(color: TriplTheme.borderGreen, height: 1),
                             const SizedBox(height: 16),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Column(
                                   children: [
-                                    const Text('Total Inflows', style: TextStyle(fontSize: 10, color: TallyTapTheme.textGray)),
+                                    Text('Total Inflows', style: TextStyle(fontSize: 10, color: TriplTheme.textGray)),
                                     const SizedBox(height: 4),
                                     Text(
                                       '+ $currency${totalIncome.toStringAsFixed(0)}',
@@ -657,7 +657,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                                 ),
                                 Column(
                                   children: [
-                                    const Text('Total Outflows', style: TextStyle(fontSize: 10, color: TallyTapTheme.textGray)),
+                                    Text('Total Outflows', style: TextStyle(fontSize: 10, color: TriplTheme.textGray)),
                                     const SizedBox(height: 4),
                                     Text(
                                       '- $currency${totalExpense.toStringAsFixed(0)}',
@@ -702,7 +702,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                             child: OutlinedButton.icon(
                               onPressed: _showMergeDialog,
                               style: OutlinedButton.styleFrom(
-                                side: const BorderSide(color: TallyTapTheme.borderGreen),
+                                side: BorderSide(color: TriplTheme.borderGreen),
                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 padding: const EdgeInsets.symmetric(vertical: 12),
                               ),
@@ -718,12 +718,12 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                       const SizedBox(height: 32),
 
                       // All-time balance graph
-                      const Text(
+                      Text(
                         'ALL TIME BALANCE CURVE',
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w800,
-                          color: TallyTapTheme.textGray,
+                          color: TriplTheme.textGray,
                           letterSpacing: 1.5,
                         ),
                       ),
@@ -732,9 +732,9 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                         height: 200,
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: TallyTapTheme.obsidianCard,
+                          color: TriplTheme.obsidianCard,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: TallyTapTheme.borderGreen),
+                          border: Border.all(color: TriplTheme.borderGreen),
                         ),
                         child: CustomPaint(
                           painter: AllTimeBalancePainter(
@@ -751,9 +751,9 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                       Container(
                         height: 48,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF0F1B17),
+                          color: TriplTheme.obsidianBg,
                           borderRadius: BorderRadius.circular(14),
-                          border: Border.all(color: TallyTapTheme.borderGreen),
+                          border: Border.all(color: TriplTheme.borderGreen),
                         ),
                         child: TabBar(
                           controller: _tabController,
@@ -763,8 +763,8 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                             color: activeColor,
                             borderRadius: BorderRadius.circular(12),
                           ),
-                          labelColor: TallyTapTheme.obsidianBg,
-                          unselectedLabelColor: TallyTapTheme.textGray,
+                          labelColor: TriplTheme.obsidianBg,
+                          unselectedLabelColor: TriplTheme.textGray,
                           labelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                           tabs: const [
                             Tab(text: 'EXPENSES'),
@@ -801,7 +801,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
       return Center(
         child: Text(
           emptyText,
-          style: const TextStyle(color: TallyTapTheme.textGray, fontSize: 13),
+          style: TextStyle(color: TriplTheme.textGray, fontSize: 13),
         ),
       );
     }
@@ -832,13 +832,13 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                         const SizedBox(width: 10),
                         Text(
                           cat.name,
-                          style: const TextStyle(fontSize: 13, color: TallyTapTheme.textGray, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: 13, color: TriplTheme.textGray, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
                     Text(
                       '$currency${cat.amount.toStringAsFixed(2)}',
-                      style: const TextStyle(fontSize: 13, color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                      style: TextStyle(fontSize: 13, color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -858,10 +858,10 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
       String currentCycleStr,
       String dueDateStr,
       int daysRemaining) {
-    final activeColor = TallyTapTheme.getColorForSource(widget.sourceName);
+    final activeColor = TriplTheme.getColorForSource(widget.sourceName);
     final currency = ref.read(currencyProvider);
     return Card(
-      color: TallyTapTheme.obsidianCard,
+      color: TriplTheme.obsidianCard,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: activeColor.withOpacity(0.2), width: 1.0),
@@ -878,10 +878,10 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                   children: [
                     Icon(Icons.credit_card_rounded, color: activeColor, size: 18),
                     const SizedBox(width: 8),
-                    const Text(
+                    Text(
                       'Billing Cycle Details',
                       style: TextStyle(
-                        color: TallyTapTheme.textLight,
+                        color: TriplTheme.textLight,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                       ),
@@ -889,7 +889,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                   ],
                 ),
                 IconButton(
-                  icon: const Icon(Icons.settings_rounded, color: TallyTapTheme.textGray, size: 16),
+                  icon: Icon(Icons.settings_rounded, color: TriplTheme.textGray, size: 16),
                   onPressed: () => _showBillingCycleConfigDialog(config),
                   constraints: const BoxConstraints(),
                   padding: EdgeInsets.zero,
@@ -903,28 +903,28 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('Current Cycle Spent', style: TextStyle(color: TallyTapTheme.textGray, fontSize: 11)),
+                    Text('Current Cycle Spent', style: TextStyle(color: TriplTheme.textGray, fontSize: 11)),
                     const SizedBox(height: 4),
                     Text(
                       '$currentCycleStr',
-                      style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 10, fontWeight: FontWeight.w500),
+                      style: TextStyle(color: TriplTheme.textLight, fontSize: 10, fontWeight: FontWeight.w500),
                     ),
                   ],
                 ),
                 Text(
                   '- $currency${currentCycleSpent.toStringAsFixed(2)}',
-                  style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 14, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: TriplTheme.textLight, fontSize: 14, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
-            const Divider(color: TallyTapTheme.borderGreen, height: 20, thickness: 0.5),
+            Divider(color: TriplTheme.borderGreen, height: 20, thickness: 0.5),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Last Statement Balance', style: TextStyle(color: TallyTapTheme.textGray, fontSize: 11)),
+                Text('Last Statement Balance', style: TextStyle(color: TriplTheme.textGray, fontSize: 11)),
                 Text(
                   '- $currency${lastStatementSpent.toStringAsFixed(2)}',
-                  style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 12, fontWeight: FontWeight.bold),
+                  style: TextStyle(color: TriplTheme.textLight, fontSize: 12, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -933,17 +933,17 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: daysRemaining < 0
-                    ? const Color(0xFF3B1616)
+                    ? Colors.redAccent.withOpacity(0.15)
                     : daysRemaining <= 5
-                        ? const Color(0xFF33200D)
-                        : const Color(0xFF0F1B17),
+                        ? Colors.amber.withOpacity(0.15)
+                        : TriplTheme.obsidianBg,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color: daysRemaining < 0
                       ? Colors.redAccent.withOpacity(0.3)
                       : daysRemaining <= 5
                           ? Colors.amber.withOpacity(0.3)
-                          : TallyTapTheme.borderGreen,
+                          : TriplTheme.borderGreen,
                   width: 0.5,
                 ),
               ),
@@ -953,11 +953,11 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Payment Due Date', style: TextStyle(color: TallyTapTheme.textGray, fontSize: 10)),
+                      Text('Payment Due Date', style: TextStyle(color: TriplTheme.textGray, fontSize: 10)),
                       const SizedBox(height: 4),
                       Text(
                         '$dueDateStr',
-                        style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 12, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: TriplTheme.textLight, fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -968,7 +968,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                           ? Colors.redAccent.withOpacity(0.2)
                           : daysRemaining <= 5
                               ? Colors.amber.withOpacity(0.2)
-                              : TallyTapTheme.primaryMint.withOpacity(0.2),
+                              : TriplTheme.primaryMint.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -984,7 +984,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                             ? Colors.redAccent
                             : daysRemaining <= 5
                                 ? Colors.amber
-                                : TallyTapTheme.primaryMint,
+                                : TriplTheme.primaryMint,
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1000,12 +1000,12 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
   }
 
   Widget _buildBillingCycleDisabledCard(BuildContext context, SourceBillingCycleConfig config) {
-    final activeColor = TallyTapTheme.getColorForSource(widget.sourceName);
+    final activeColor = TriplTheme.getColorForSource(widget.sourceName);
     return Card(
-      color: TallyTapTheme.obsidianCard,
+      color: TriplTheme.obsidianCard,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
-        side: BorderSide(color: TallyTapTheme.borderGreen.withOpacity(0.5), width: 1.0),
+        side: BorderSide(color: TriplTheme.borderGreen.withOpacity(0.5), width: 1.0),
       ),
       child: InkWell(
         onTap: () => _showBillingCycleConfigDialog(config),
@@ -1027,10 +1027,10 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Setup Billing Cycle',
                       style: TextStyle(
-                        color: TallyTapTheme.textLight,
+                        color: TriplTheme.textLight,
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
                       ),
@@ -1039,7 +1039,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                     Text(
                       'Track statement period spend, payment due dates, and alerts (ideal for Credit Cards).',
                       style: TextStyle(
-                        color: TallyTapTheme.textGray.withOpacity(0.7),
+                        color: TriplTheme.textGray.withOpacity(0.7),
                         fontSize: 11,
                         height: 1.3,
                       ),
@@ -1048,7 +1048,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                 ),
               ),
               const SizedBox(width: 8),
-              Icon(Icons.arrow_forward_ios_rounded, color: TallyTapTheme.textGray.withOpacity(0.5), size: 14),
+              Icon(Icons.arrow_forward_ios_rounded, color: TriplTheme.textGray.withOpacity(0.5), size: 14),
             ],
           ),
         ),
@@ -1067,15 +1067,15 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              backgroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
               title: Row(
                 children: [
-                  const Icon(Icons.credit_card_rounded, color: TallyTapTheme.primaryMint, size: 20),
+                  Icon(Icons.credit_card_rounded, color: TriplTheme.primaryMint, size: 20),
                   const SizedBox(width: 8),
-                  const Text(
+                  Text(
                     'Billing Cycle Settings',
-                    style: TextStyle(color: TallyTapTheme.textLight, fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(color: TriplTheme.textLight, fontSize: 16, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -1087,14 +1087,14 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'Enable Billing Cycle',
-                          style: TextStyle(color: TallyTapTheme.textLight, fontSize: 13, fontWeight: FontWeight.w600),
+                          style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.w600),
                         ),
                         Switch(
                           value: isEnabled,
-                          activeColor: TallyTapTheme.primaryMint,
-                          activeTrackColor: TallyTapTheme.primaryMint.withOpacity(0.3),
+                          activeColor: TriplTheme.primaryMint,
+                          activeTrackColor: TriplTheme.primaryMint.withOpacity(0.3),
                           onChanged: (val) {
                             setDialogState(() {
                               isEnabled = val;
@@ -1105,9 +1105,9 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                     ),
                     if (isEnabled) ...[
                       const SizedBox(height: 16),
-                      const Text(
+                      Text(
                         'Statement Closing Day of Month',
-                        style: TextStyle(color: TallyTapTheme.textGray, fontSize: 11),
+                        style: TextStyle(color: TriplTheme.textGray, fontSize: 11),
                       ),
                       const SizedBox(height: 4),
                       Row(
@@ -1118,7 +1118,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                               min: 1,
                               max: 28,
                               divisions: 27,
-                              activeColor: TallyTapTheme.primaryMint,
+                              activeColor: TriplTheme.primaryMint,
                               onChanged: (val) {
                                 setDialogState(() {
                                   statementDay = val.round();
@@ -1128,14 +1128,14 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                           ),
                           Text(
                             '$statementDay',
-                            style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                       const SizedBox(height: 16),
-                      const Text(
+                      Text(
                         'Payment Due Day of Month',
-                        style: TextStyle(color: TallyTapTheme.textGray, fontSize: 11),
+                        style: TextStyle(color: TriplTheme.textGray, fontSize: 11),
                       ),
                       const SizedBox(height: 4),
                       Row(
@@ -1146,7 +1146,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                               min: 1,
                               max: 28,
                               divisions: 27,
-                              activeColor: TallyTapTheme.primaryMint,
+                              activeColor: TriplTheme.primaryMint,
                               onChanged: (val) {
                                 setDialogState(() {
                                   dueDay = val.round();
@@ -1156,14 +1156,14 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                           ),
                           Text(
                             '$dueDay',
-                            style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
                       const SizedBox(height: 12),
-                      const Text(
+                      Text(
                         'Note: Days are capped at 28 to support all calendar months seamlessly.',
-                        style: TextStyle(color: TallyTapTheme.textGray, fontSize: 10, fontStyle: FontStyle.italic),
+                        style: TextStyle(color: TriplTheme.textGray, fontSize: 10, fontStyle: FontStyle.italic),
                       ),
                     ],
                   ],
@@ -1172,7 +1172,7 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
               actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(dialogCtx),
-                  child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+                  child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -1190,14 +1190,14 @@ class _PaymentSourceDetailsScreenState extends ConsumerState<PaymentSourceDetail
                               ? 'Billing cycle configured successfully!'
                               : 'Billing cycle disabled.'),
                           behavior: SnackBarBehavior.floating,
-                          backgroundColor: TallyTapTheme.primaryMint,
+                          backgroundColor: TriplTheme.primaryMint,
                         ),
                       );
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: TallyTapTheme.primaryMint,
-                    foregroundColor: TallyTapTheme.obsidianBg,
+                    backgroundColor: TriplTheme.primaryMint,
+                    foregroundColor: TriplTheme.obsidianBg,
                   ),
                   child: const Text('Save', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
@@ -1259,7 +1259,7 @@ class AllTimeBalancePainter extends CustomPainter {
 
     // Draw grid bounds guide line
     final boundsPaint = Paint()
-      ..color = TallyTapTheme.borderGreen
+      ..color = TriplTheme.borderGreen
       ..strokeWidth = 0.5
       ..style = PaintingStyle.stroke;
     canvas.drawLine(Offset(paddingX, paddingY), Offset(paddingX + usableWidth, paddingY), boundsPaint);
@@ -1292,7 +1292,7 @@ class AllTimeBalancePainter extends CustomPainter {
     canvas.drawPath(path, paintLine);
 
     // Labels drawing
-    const textStyle = TextStyle(color: TallyTapTheme.textGray, fontSize: 10, fontWeight: FontWeight.bold);
+    final textStyle = TextStyle(color: TriplTheme.textGray, fontSize: 10, fontWeight: FontWeight.bold);
     
     // Draw min / max values
     final maxTp = TextPainter(

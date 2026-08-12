@@ -27,27 +27,27 @@ class _SnoozeDurationSheetState extends ConsumerState<SnoozeDurationSheet> {
       context: context,
       builder: (ctx) {
         return AlertDialog(
-          backgroundColor: TallyTapTheme.obsidianBg,
+          backgroundColor: TriplTheme.obsidianBg,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
-            side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1),
+            side: BorderSide(color: TriplTheme.borderGreen, width: 1),
           ),
-          title: const Text('Custom Snooze Time', style: TextStyle(color: TallyTapTheme.textLight)),
+          title: Text('Custom Snooze Time', style: TextStyle(color: TriplTheme.textLight)),
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
-            style: const TextStyle(color: TallyTapTheme.textLight),
-            decoration: const InputDecoration(
+            style: TextStyle(color: TriplTheme.textLight),
+            decoration: InputDecoration(
               hintText: 'Enter duration in minutes',
-              hintStyle: TextStyle(color: TallyTapTheme.textGray),
-              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: TallyTapTheme.borderGreen)),
-              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: TallyTapTheme.primaryMint)),
+              hintStyle: TextStyle(color: TriplTheme.textGray),
+              enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: TriplTheme.borderGreen)),
+              focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: TriplTheme.primaryMint)),
             ),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+              child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -58,7 +58,7 @@ class _SnoozeDurationSheetState extends ConsumerState<SnoozeDurationSheet> {
                   Navigator.pop(context); // Close the sheet as well
                 }
               },
-              style: ElevatedButton.styleFrom(backgroundColor: TallyTapTheme.primaryMint, foregroundColor: TallyTapTheme.obsidianBg),
+              style: ElevatedButton.styleFrom(backgroundColor: TriplTheme.primaryMint, foregroundColor: TriplTheme.obsidianBg),
               child: const Text('Save'),
             ),
           ],
@@ -89,14 +89,14 @@ class _SnoozeDurationSheetState extends ConsumerState<SnoozeDurationSheet> {
               Container(
                 padding: const EdgeInsets.all(8),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0F1B17),
+                  color: TriplTheme.obsidianBg,
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: TallyTapTheme.borderGreen, width: 0.5),
+                  border: Border.all(color: TriplTheme.borderGreen, width: 0.5),
                 ),
-                child: const Icon(Icons.snooze_rounded, color: TallyTapTheme.primaryMint, size: 24),
+                child: Icon(Icons.snooze_rounded, color: TriplTheme.primaryMint, size: 24),
               ),
               const SizedBox(width: 16),
-              const Expanded(
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -105,13 +105,13 @@ class _SnoozeDurationSheetState extends ConsumerState<SnoozeDurationSheet> {
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: TallyTapTheme.textLight,
+                        color: TriplTheme.textLight,
                       ),
                     ),
                     SizedBox(height: 2),
                     Text(
                       'Select how long to snooze notifications',
-                      style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                      style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                     ),
                   ],
                 ),
@@ -122,18 +122,18 @@ class _SnoozeDurationSheetState extends ConsumerState<SnoozeDurationSheet> {
           ..._options.entries.map((entry) {
             final isSelected = currentDuration == entry.value;
             return ListTile(
-              title: Text(entry.key, style: TextStyle(color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight)),
-              trailing: isSelected ? const Icon(Icons.check, color: TallyTapTheme.primaryMint) : null,
+              title: Text(entry.key, style: TextStyle(color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight)),
+              trailing: isSelected ? Icon(Icons.check, color: TriplTheme.primaryMint) : null,
               onTap: () {
                 ref.read(snoozeDurationProvider.notifier).setDuration(entry.value);
                 Navigator.pop(context);
               },
             );
           }),
-          const Divider(color: TallyTapTheme.borderGreen),
+          Divider(color: TriplTheme.borderGreen),
           ListTile(
-            title: const Text('Custom Time...', style: TextStyle(color: TallyTapTheme.textLight)),
-            trailing: const Icon(Icons.keyboard_arrow_right, color: TallyTapTheme.textGray),
+            title: Text('Custom Time...', style: TextStyle(color: TriplTheme.textLight)),
+            trailing: Icon(Icons.keyboard_arrow_right, color: TriplTheme.textGray),
             onTap: _showCustomTimeDialog,
           ),
         ],

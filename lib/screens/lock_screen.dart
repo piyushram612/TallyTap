@@ -75,7 +75,7 @@ class _LockScreenState extends ConsumerState<LockScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -90,7 +90,7 @@ class _LockScreenState extends ConsumerState<LockScreen>
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    TallyTapTheme.primaryMint.withOpacity(0.06),
+                    TriplTheme.primaryMint.withOpacity(0.06),
                     Colors.transparent,
                   ],
                 ),
@@ -119,7 +119,7 @@ class _LockScreenState extends ConsumerState<LockScreen>
                             BoxShadow(
                               color: _authFailed
                                   ? Colors.redAccent.withOpacity(0.15 * _pulseGlow.value)
-                                  : TallyTapTheme.primaryMint.withOpacity(0.15 * _pulseGlow.value),
+                                  : TriplTheme.primaryMint.withOpacity(0.15 * _pulseGlow.value),
                               blurRadius: 32 * _pulseGlow.value,
                               spreadRadius: 2 * _pulseGlow.value,
                             ),
@@ -149,7 +149,7 @@ class _LockScreenState extends ConsumerState<LockScreen>
                           ),
                           child: Icon(
                             _authFailed ? Icons.lock_open_outlined : Icons.lock_outline_rounded,
-                            color: _authFailed ? Colors.redAccent : TallyTapTheme.primaryMint,
+                            color: _authFailed ? Colors.redAccent : TriplTheme.primaryMint,
                             size: 40,
                           ),
                         ),
@@ -159,13 +159,13 @@ class _LockScreenState extends ConsumerState<LockScreen>
                   const SizedBox(height: 36),
 
                   // Heading
-                  const Text(
+                  Text(
                     'TRIPL LOCKED',
                     style: TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.w900,
                       letterSpacing: 2.0,
-                      color: TallyTapTheme.textLight,
+                      color: TriplTheme.textLight,
                       fontFamily: 'Outfit',
                     ),
                   ),
@@ -180,7 +180,7 @@ class _LockScreenState extends ConsumerState<LockScreen>
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: _authFailed ? Colors.redAccent.withOpacity(0.8) : TallyTapTheme.textGray,
+                      color: _authFailed ? Colors.redAccent.withOpacity(0.8) : TriplTheme.textGray,
                     ),
                   ),
                   const SizedBox(height: 56),
@@ -189,8 +189,8 @@ class _LockScreenState extends ConsumerState<LockScreen>
                   ElevatedButton(
                     onPressed: _triggerBiometricAuth,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: _authFailed ? Colors.redAccent : TallyTapTheme.primaryMint,
-                      foregroundColor: TallyTapTheme.obsidianBg,
+                      backgroundColor: _authFailed ? Colors.redAccent : TriplTheme.primaryMint,
+                      foregroundColor: TriplTheme.obsidianBg,
                       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16),

@@ -69,9 +69,9 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
     }
 
     return Container(
-      decoration: const BoxDecoration(
-        color: TallyTapTheme.obsidianBg,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      decoration: BoxDecoration(
+        color: TriplTheme.obsidianBg,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: const EdgeInsets.all(24.0),
       child: Column(
@@ -81,16 +81,16 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Filters',
                 style: TextStyle(
-                  color: TallyTapTheme.textLight,
+                  color: TriplTheme.textLight,
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.close, color: TallyTapTheme.textGray),
+                icon: Icon(Icons.close, color: TriplTheme.textGray),
                 onPressed: () => Navigator.of(context).pop(),
               )
             ],
@@ -115,8 +115,8 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
                     min: 0,
                     max: maxAmount,
                     divisions: maxAmount > 0 ? maxAmount.toInt() : 1,
-                    activeColor: TallyTapTheme.primaryMint,
-                    inactiveColor: TallyTapTheme.borderGreen,
+                    activeColor: TriplTheme.primaryMint,
+                    inactiveColor: TriplTheme.borderGreen,
                     labels: RangeLabels(
                       currentMin.toStringAsFixed(0),
                       currentMax.toStringAsFixed(0),
@@ -138,12 +138,12 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
                         child: TextField(
                           controller: _minController,
                           keyboardType: TextInputType.number,
-                          style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 14),
+                          style: TextStyle(color: TriplTheme.textLight, fontSize: 14),
                           decoration: InputDecoration(
                             labelText: 'Min',
-                            labelStyle: const TextStyle(color: TallyTapTheme.textGray, fontSize: 12),
+                            labelStyle: TextStyle(color: TriplTheme.textGray, fontSize: 12),
                             filled: true,
-                            fillColor: TallyTapTheme.obsidianCard,
+                            fillColor: TriplTheme.obsidianCard,
                             isDense: true,
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                           ),
@@ -164,12 +164,12 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
                         child: TextField(
                           controller: _maxController,
                           keyboardType: TextInputType.number,
-                          style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 14),
+                          style: TextStyle(color: TriplTheme.textLight, fontSize: 14),
                           decoration: InputDecoration(
                             labelText: 'Max',
-                            labelStyle: const TextStyle(color: TallyTapTheme.textGray, fontSize: 12),
+                            labelStyle: TextStyle(color: TriplTheme.textGray, fontSize: 12),
                             filled: true,
-                            fillColor: TallyTapTheme.obsidianCard,
+                            fillColor: TriplTheme.obsidianCard,
                             isDense: true,
                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
                           ),
@@ -274,10 +274,10 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
-                      side: const BorderSide(color: TallyTapTheme.borderGreen),
+                      side: BorderSide(color: TriplTheme.borderGreen),
                     ),
                   ),
-                  child: const Text('Reset', style: TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.w700)),
+                  child: Text('Reset', style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.w700)),
                 ),
               ),
               const SizedBox(width: 16),
@@ -285,8 +285,8 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
                 child: ElevatedButton(
                   onPressed: _apply,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: TallyTapTheme.primaryMint,
-                    foregroundColor: TallyTapTheme.obsidianBg,
+                    backgroundColor: TriplTheme.primaryMint,
+                    foregroundColor: TriplTheme.obsidianBg,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -306,8 +306,8 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
   Widget _buildSectionTitle(String title) {
     return Text(
       title,
-      style: const TextStyle(
-        color: TallyTapTheme.textLight,
+      style: TextStyle(
+        color: TriplTheme.textLight,
         fontSize: 16,
         fontWeight: FontWeight.w700,
       ),
@@ -320,9 +320,9 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+          color: isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : TriplTheme.obsidianCard,
           border: Border.all(
-            color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.5) : TallyTapTheme.borderGreen,
+            color: isSelected ? TriplTheme.primaryMint.withOpacity(0.5) : TriplTheme.borderGreen,
             width: isSelected ? 1.5 : 1.0,
           ),
           borderRadius: BorderRadius.circular(100),
@@ -330,7 +330,7 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
         child: Text(
           label,
           style: TextStyle(
-            color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+            color: isSelected ? TriplTheme.primaryMint : TriplTheme.textGray,
             fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
             fontSize: 13,
           ),
@@ -367,8 +367,8 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
         margin: const EdgeInsets.only(top: 8),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
-          color: TallyTapTheme.obsidianCard,
-          border: Border.all(color: TallyTapTheme.borderGreen),
+          color: TriplTheme.obsidianCard,
+          border: Border.all(color: TriplTheme.borderGreen),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -377,7 +377,7 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
             Text(
               dateText,
               style: TextStyle(
-                color: hasDate ? TallyTapTheme.textLight : TallyTapTheme.textGray,
+                color: hasDate ? TriplTheme.textLight : TriplTheme.textGray,
                 fontSize: 14,
               ),
             ),
@@ -388,10 +388,10 @@ class _TimelineFilterSheetState extends ConsumerState<TimelineFilterSheet> {
                     _criteria = _criteria.copyWith(clearStartDate: true, clearEndDate: true);
                   });
                 },
-                child: const Icon(Icons.close, color: TallyTapTheme.textGray, size: 20),
+                child: Icon(Icons.close, color: TriplTheme.textGray, size: 20),
               )
             else
-              const Icon(Icons.calendar_today, color: TallyTapTheme.textGray, size: 20),
+              Icon(Icons.calendar_today, color: TriplTheme.textGray, size: 20),
           ],
         ),
       ),

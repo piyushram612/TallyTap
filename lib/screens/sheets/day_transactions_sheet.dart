@@ -33,8 +33,8 @@ class DayTransactionsSheet extends ConsumerWidget {
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.85,
       ),
-      decoration: const BoxDecoration(
-        color: TallyTapTheme.obsidianBg,
+      decoration: BoxDecoration(
+        color: TriplTheme.obsidianBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: EdgeInsets.only(
@@ -56,7 +56,7 @@ class DayTransactionsSheet extends ConsumerWidget {
                 width: 36,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: TallyTapTheme.borderGreen,
+                  color: TriplTheme.borderGreen,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -70,28 +70,28 @@ class DayTransactionsSheet extends ConsumerWidget {
                     children: [
                       Text(
                         formattedDate,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w900,
-                          color: TallyTapTheme.textLight,
+                          color: TriplTheme.textLight,
                           letterSpacing: -0.5,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'DAILY REFLECTIONS & SCHEDULING',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 9,
                           fontWeight: FontWeight.w800,
                           letterSpacing: 1.2,
-                          color: TallyTapTheme.textGray,
+                          color: TriplTheme.textGray,
                         ),
                       ),
                     ],
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close_rounded, color: TallyTapTheme.textGray),
+                  icon: Icon(Icons.close_rounded, color: TriplTheme.textGray),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -102,9 +102,9 @@ class DayTransactionsSheet extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: TallyTapTheme.obsidianCard,
+                color: TriplTheme.obsidianCard,
                 borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: TallyTapTheme.borderGreen, width: 1.0),
+                border: Border.all(color: TriplTheme.borderGreen, width: 1.0),
               ),
               child: Row(
                 children: [
@@ -112,13 +112,13 @@ class DayTransactionsSheet extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'TOTAL EXPENSE',
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w800,
                             letterSpacing: 1.0,
-                            color: TallyTapTheme.textGray,
+                            color: TriplTheme.textGray,
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -136,7 +136,7 @@ class DayTransactionsSheet extends ConsumerWidget {
                   Container(
                     width: 1,
                     height: 36,
-                    color: TallyTapTheme.borderGreen,
+                    color: TriplTheme.borderGreen,
                   ),
                   Expanded(
                     child: Padding(
@@ -144,13 +144,13 @@ class DayTransactionsSheet extends ConsumerWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'TOTAL INCOME',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 1.0,
-                              color: TallyTapTheme.textGray,
+                              color: TriplTheme.textGray,
                             ),
                           ),
                           const SizedBox(height: 4),
@@ -169,13 +169,13 @@ class DayTransactionsSheet extends ConsumerWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: 20),
 
             // Scheduled Payments Section (if any)
             if (scheduledRecurring.isNotEmpty) ...[
               Row(
-                children: const [
-                  Icon(Icons.autorenew_rounded, color: TallyTapTheme.primarySlate, size: 16),
+                children: [
+                  Icon(Icons.autorenew_rounded, color: TriplTheme.primarySlate, size: 16),
                   SizedBox(width: 6),
                   Text(
                     'SCHEDULED BILLS & RECURRING',
@@ -183,19 +183,19 @@ class DayTransactionsSheet extends ConsumerWidget {
                       fontSize: 10,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.2,
-                      color: TallyTapTheme.primarySlate,
+                      color: TriplTheme.primarySlate,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 10),
               ...scheduledRecurring.map((rec) {
-                final catColor = TallyTapTheme.getColorForCategory(rec.category);
+                final catColor = TriplTheme.getColorForCategory(rec.category);
                 return Container(
                   margin: const EdgeInsets.only(bottom: 8),
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
-                    color: TallyTapTheme.obsidianCard,
+                    color: TriplTheme.obsidianCard,
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(color: catColor.withOpacity(0.4), width: 0.8),
                   ),
@@ -211,7 +211,7 @@ class DayTransactionsSheet extends ConsumerWidget {
                               color: catColor.withOpacity(0.15),
                             ),
                             child: Icon(
-                              TallyTapTheme.getIconForCategory(rec.category),
+                              TriplTheme.getIconForCategory(rec.category),
                               color: catColor,
                               size: 16,
                             ),
@@ -222,17 +222,17 @@ class DayTransactionsSheet extends ConsumerWidget {
                             children: [
                               Text(
                                 rec.title,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 13,
-                                  color: TallyTapTheme.textLight,
+                                  color: TriplTheme.textLight,
                                 ),
                               ),
                               Text(
                                 '${rec.category} • ${rec.frequency.name.toUpperCase()}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 10,
-                                  color: TallyTapTheme.textGray,
+                                  color: TriplTheme.textGray,
                                 ),
                               ),
                             ],
@@ -242,16 +242,16 @@ class DayTransactionsSheet extends ConsumerWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: TallyTapTheme.primarySlate.withOpacity(0.15),
+                          color: TriplTheme.primarySlate.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: TallyTapTheme.primarySlate.withOpacity(0.4), width: 0.5),
+                          border: Border.all(color: TriplTheme.primarySlate.withOpacity(0.4), width: 0.5),
                         ),
                         child: Text(
                           '$currency${rec.amount.toStringAsFixed(2)}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w800,
-                            color: TallyTapTheme.primarySlate,
+                            color: TriplTheme.primarySlate,
                           ),
                         ),
                       ),
@@ -263,13 +263,13 @@ class DayTransactionsSheet extends ConsumerWidget {
             ],
 
             // Itemized Logged Transactions
-            const Text(
+            Text(
               'LOGGED TRANSACTIONS',
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.2,
-                color: TallyTapTheme.textGray,
+                color: TriplTheme.textGray,
               ),
             ),
             const SizedBox(height: 10),
@@ -282,13 +282,13 @@ class DayTransactionsSheet extends ConsumerWidget {
                     Icon(
                       Icons.event_busy_outlined,
                       size: 40,
-                      color: TallyTapTheme.textGray.withOpacity(0.3),
+                      color: TriplTheme.textGray.withOpacity(0.3),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'No transactions logged on this day',
                       style: TextStyle(
-                        color: TallyTapTheme.textGray,
+                        color: TriplTheme.textGray,
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
                       ),
@@ -303,8 +303,8 @@ class DayTransactionsSheet extends ConsumerWidget {
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: transactions.length,
-                separatorBuilder: (context, index) => const Divider(
-                  color: TallyTapTheme.borderGreen,
+                separatorBuilder: (context, index) => Divider(
+                  color: TriplTheme.borderGreen,
                   height: 16,
                   thickness: 0.5,
                 ),
@@ -335,8 +335,8 @@ class DayTransactionsSheet extends ConsumerWidget {
               icon: const Icon(Icons.add_rounded, size: 20),
               label: Text('LOG EXPENSE FOR ${DateFormat('MMM d').format(date).toUpperCase()}'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: TallyTapTheme.primaryMint,
-                foregroundColor: TallyTapTheme.obsidianBg,
+                backgroundColor: TriplTheme.primaryMint,
+                foregroundColor: TriplTheme.obsidianBg,
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                 textStyle: const TextStyle(

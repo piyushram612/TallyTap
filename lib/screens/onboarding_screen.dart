@@ -19,7 +19,7 @@ class OnboardingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 20.0),
@@ -35,18 +35,18 @@ class OnboardingScreen extends StatelessWidget {
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 2.0,
-                    color: TallyTapTheme.primaryMint.withOpacity(0.8),
+                    color: TriplTheme.primaryMint.withOpacity(0.8),
                   ),
                 ),
               ),
               const SizedBox(height: 12),
-              const Center(
+              Center(
                 child: Text(
                   'Track without thinking.',
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.w900,
-                    color: TallyTapTheme.textLight,
+                    color: TriplTheme.textLight,
                     letterSpacing: -1.0,
                     fontFamily: 'Outfit',
                   ),
@@ -122,23 +122,23 @@ class OnboardingScreen extends StatelessWidget {
                               height: 50,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: TallyTapTheme.primaryMint.withOpacity(0.04),
+                                color: TriplTheme.primaryMint.withOpacity(0.04),
                                 border: Border.all(
-                                  color: TallyTapTheme.primaryMint.withOpacity(0.4),
+                                  color: TriplTheme.primaryMint.withOpacity(0.4),
                                   width: 1.5,
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: TallyTapTheme.primaryMint.withOpacity(0.08),
+                                    color: TriplTheme.primaryMint.withOpacity(0.08),
                                     blurRadius: 10,
                                     spreadRadius: 2,
                                   ),
                                 ],
                               ),
                               alignment: Alignment.center,
-                              child: const Icon(
+                              child: Icon(
                                 Icons.touch_app_outlined,
-                                color: TallyTapTheme.primaryMint,
+                                color: TriplTheme.primaryMint,
                                 size: 24,
                               ),
                             ),
@@ -152,14 +152,14 @@ class OnboardingScreen extends StatelessWidget {
               const SizedBox(height: 32),
 
               // 3. Description
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text(
                   'Triple tap the back of your phone to log an expense instantly.',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
-                    color: TallyTapTheme.textGray,
+                    color: TriplTheme.textGray,
                     height: 1.5,
                     fontWeight: FontWeight.w500,
                   ),
@@ -171,8 +171,8 @@ class OnboardingScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () => _completeOnboarding(context),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: TallyTapTheme.primaryMint,
-                  foregroundColor: TallyTapTheme.obsidianBg,
+                  backgroundColor: TriplTheme.primaryMint,
+                  foregroundColor: TriplTheme.obsidianBg,
                   padding: const EdgeInsets.symmetric(vertical: 18),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18),

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:ui';
+import '../../core/theme.dart';
 
 class DashedBorderContainer extends StatelessWidget {
   final Widget child;
-  final Color color;
+  final Color? color;
   final double strokeWidth;
   final double gap;
   final double dashLength;
@@ -12,7 +13,7 @@ class DashedBorderContainer extends StatelessWidget {
   const DashedBorderContainer({
     super.key,
     required this.child,
-    this.color = const Color(0xFF1D2F28),
+    this.color,
     this.strokeWidth = 1.0,
     this.gap = 5.0,
     this.dashLength = 7.0,
@@ -23,7 +24,7 @@ class DashedBorderContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: _DashedBorderPainter(
-        color: color,
+        color: color ?? TriplTheme.borderGreen,
         strokeWidth: strokeWidth,
         gap: gap,
         dashLength: dashLength,

@@ -65,20 +65,20 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: TallyTapTheme.textLight),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: TriplTheme.textLight),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Tip Calculator',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w900,
-            color: TallyTapTheme.textLight,
+            color: TriplTheme.textLight,
             fontFamily: 'Outfit',
           ),
         ),
@@ -97,23 +97,23 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        TallyTapTheme.primaryMint.withOpacity(0.12),
-                        TallyTapTheme.primaryMint.withOpacity(0.02),
+                        TriplTheme.primaryMint.withOpacity(0.12),
+                        TriplTheme.primaryMint.withOpacity(0.02),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.4), width: 1.5),
+                    border: Border.all(color: TriplTheme.primaryMint.withOpacity(0.4), width: 1.5),
                   ),
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'EACH PERSON PAYS',
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                           letterSpacing: 1.5,
                         ),
                       ),
@@ -127,16 +127,16 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: TallyTapTheme.primaryMint,
+                              color: TriplTheme.primaryMint,
                               height: 1.2,
                             ),
                           ),
                           Text(
                             _amountPerPerson.toStringAsFixed(2),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.w900,
-                              color: TallyTapTheme.textLight,
+                              color: TriplTheme.textLight,
                               height: 1.0,
                               letterSpacing: -1.0,
                             ),
@@ -144,7 +144,7 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                         ],
                       ),
                       const SizedBox(height: 24),
-                      const Divider(color: TallyTapTheme.borderGreen, height: 1),
+                      Divider(color: TriplTheme.borderGreen, height: 1),
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -167,12 +167,12 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                 const SizedBox(height: 32),
 
                 // Section Title: Input details
-                const Text(
+                Text(
                   'BILL DETAILS',
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
-                    color: TallyTapTheme.textGray,
+                    color: TriplTheme.textGray,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -186,12 +186,12 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
                             'Bill Amount',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -202,16 +202,16 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                               controller: _billController,
                               keyboardType: const TextInputType.numberWithOptions(decimal: true),
                               textAlign: TextAlign.end,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900,
-                                color: TallyTapTheme.primaryMint,
+                                color: TriplTheme.primaryMint,
                               ),
                               decoration: InputDecoration(
                                 hintText: '0.00',
-                                hintStyle: TextStyle(color: TallyTapTheme.primaryMint.withOpacity(0.5)),
+                                hintStyle: TextStyle(color: TriplTheme.primaryMint.withOpacity(0.5)),
                                 prefixText: '₹ ',
-                                prefixStyle: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+                                prefixStyle: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
                                 border: InputBorder.none,
                               ),
                               onChanged: (val) {
@@ -237,16 +237,16 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
+                            Text(
                               'Tip Percentage',
-                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                             ),
                             Text(
                               '${_tipPercentage.toStringAsFixed(0)}%',
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w900,
-                                  color: TallyTapTheme.primaryMint,
+                                  color: TriplTheme.primaryMint,
                                 ),
                             ),
                           ],
@@ -254,10 +254,10 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                         const SizedBox(height: 16),
                         SliderTheme(
                           data: SliderTheme.of(context).copyWith(
-                            activeTrackColor: TallyTapTheme.primaryMint,
-                            inactiveTrackColor: TallyTapTheme.borderGreen,
-                            thumbColor: TallyTapTheme.primaryMint,
-                            overlayColor: TallyTapTheme.primaryMint.withOpacity(0.2),
+                            activeTrackColor: TriplTheme.primaryMint,
+                            inactiveTrackColor: TriplTheme.borderGreen,
+                            thumbColor: TriplTheme.primaryMint,
+                            overlayColor: TriplTheme.primaryMint.withOpacity(0.2),
                           ),
                           child: Slider(
                             value: _tipPercentage,
@@ -296,12 +296,12 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
                             'Split Between',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -310,7 +310,7 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                           child: Row(
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.remove_circle_outline_rounded, color: TallyTapTheme.textGray),
+                                icon: Icon(Icons.remove_circle_outline_rounded, color: TriplTheme.textGray),
                                 onPressed: _peopleCount <= 1
                                     ? null
                                     : () {
@@ -324,15 +324,15 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
                                 padding: const EdgeInsets.symmetric(horizontal: 16),
                                 child: Text(
                                   '$_peopleCount',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w900,
-                                    color: TallyTapTheme.textLight,
+                                    color: TriplTheme.textLight,
                                   ),
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.add_circle_outline_rounded, color: TallyTapTheme.primaryMint),
+                                icon: Icon(Icons.add_circle_outline_rounded, color: TriplTheme.primaryMint),
                                 onPressed: () {
                                   HapticFeedback.lightImpact();
                                   setState(() {
@@ -362,12 +362,12 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
       children: [
         Text(
           label,
-          style: const TextStyle(fontSize: 11, color: TallyTapTheme.textGray),
+          style: TextStyle(fontSize: 11, color: TriplTheme.textGray),
         ),
         const SizedBox(height: 4),
         Text(
           value,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: TallyTapTheme.textLight),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: TriplTheme.textLight),
         ),
       ],
     );
@@ -380,10 +380,10 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : Colors.transparent,
+          color: isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen,
+            color: isSelected ? TriplTheme.primaryMint : TriplTheme.borderGreen,
             width: 1.0,
           ),
         ),
@@ -392,7 +392,7 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
           style: TextStyle(
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-            color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+            color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight,
           ),
         ),
       ),
@@ -454,8 +454,8 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
           child: ElevatedButton(
             onPressed: () => controller.next(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: Text(nextText),

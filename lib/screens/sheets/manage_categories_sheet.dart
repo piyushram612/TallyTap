@@ -42,8 +42,8 @@ class _ManageCategoriesSheetState extends ConsumerState<ManageCategoriesSheet> {
       expand: false,
       builder: (context, scrollController) {
         return Container(
-          decoration: const BoxDecoration(
-            color: TallyTapTheme.obsidianBg,
+          decoration: BoxDecoration(
+            color: TriplTheme.obsidianBg,
             borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
           ),
           child: Column(

@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 
-class TallyTapTheme {
+class TriplTheme {
   // Mappings for user customizations
   static Map<String, Color> customCategoryColors = {};
   static Map<String, IconData> customCategoryIcons = {};
   static Map<String, Color> customSourceColors = {};
 
-  // Mockup forest-obsidian dark theme colors
-  static const Color obsidianBg = Color(0xFF08100E);
-  static const Color obsidianCard = Color(0xFF111C18);
-  static const Color primaryMint = Color(0xFF4EDEA3); // Vibrant mint green accent
-  static const Color primaryViolet = Color(0xFF3A41C7); // Commute deep violet accent
-  static const Color primarySlate = Color(0xFF9FB6DF); // Subscriptions slate blue accent
+  // Dynamic active theme colors (updated by ThemeNotifier)
+  static Color obsidianBg = const Color(0xFF08100E);
+  static Color obsidianCard = const Color(0xFF111C18);
+  static Color primaryMint = const Color(0xFF4EDEA3); // Active accent color
+  static Color primaryViolet = const Color(0xFF3A41C7);
+  static Color primarySlate = const Color(0xFF9FB6DF);
   
-  static const Color textLight = Color(0xFFF3F4F6);
-  static const Color textGray = Color(0xFF9CA3AF);
-  static const Color borderGreen = Color(0xFF1D2F28);
+  static Color textLight = const Color(0xFFF3F4F6);
+  static Color textGray = const Color(0xFF9CA3AF);
+  static Color borderGreen = const Color(0xFF1D2F28);
 
   static ThemeData get darkTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
-      colorScheme: const ColorScheme.dark(
+      colorScheme: ColorScheme.dark(
         background: obsidianBg,
         primary: primaryMint,
         onPrimary: obsidianBg,
@@ -55,21 +55,21 @@ class TallyTapTheme {
           return null;
         }),
         todayForegroundColor: WidgetStateProperty.all(primaryMint),
-        todayBorder: const BorderSide(color: primaryMint, width: 1.0),
+        todayBorder: BorderSide(color: primaryMint, width: 1.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: borderGreen, width: 1.0),
+          side: BorderSide(color: borderGreen, width: 1.0),
         ),
       ),
       cardTheme: CardThemeData(
         color: obsidianCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: borderGreen, width: 1.0),
+          side: BorderSide(color: borderGreen, width: 1.0),
         ),
         elevation: 0,
       ),
-      textTheme: const TextTheme(
+      textTheme: TextTheme(
         headlineLarge: TextStyle(
           fontSize: 32,
           fontWeight: FontWeight.w900,
@@ -134,10 +134,27 @@ class TallyTapTheme {
     if (customCategoryColors.containsKey(trimmed)) {
       return customCategoryColors[trimmed]!;
     }
-    // Use a stable hash of the category name so every name always maps to
-    // the same color regardless of order — no need for an index parameter.
     final hash = trimmed.codeUnits.fold(0, (h, c) => (h * 31 + c) & 0xFFFFFFFF);
     return _categoryPalette[hash % _categoryPalette.length];
+  }
+
+  static bool isLight = false;
+
+  /// Ensures category title text is sharp and legible regardless of theme brightness (Light or Dark mode)
+  static Color ensureLegibleTextColor(Color color, {bool? isDark}) {
+    final dark = isDark ?? !isLight;
+    final hsl = HSLColor.fromColor(color);
+    if (dark) {
+      if (hsl.lightness < 0.65) {
+        return hsl.withLightness(0.72).withSaturation(hsl.saturation.clamp(0.3, 0.9)).toColor();
+      }
+    } else {
+      // In Light Mode, light or medium-bright colors on white background must be darkened for crisp contrast
+      if (hsl.lightness > 0.38) {
+        return hsl.withLightness(0.28).withSaturation(hsl.saturation.clamp(0.4, 1.0)).toColor();
+      }
+    }
+    return color;
   }
 
   static IconData getIconForCategory(String cat, [bool isIncome = false]) {
@@ -171,33 +188,8 @@ class TallyTapTheme {
   }
 
   static Color getIconBgForCategory(String cat, [bool isIncome = false]) {
-    final trimmed = cat.trim();
-    if (customCategoryColors.containsKey(trimmed)) {
-      return customCategoryColors[trimmed]!.withOpacity(0.15);
-    }
-    final clean = trimmed.toLowerCase();
-    if (clean == 'transfer') {
-      return const Color(0xFF1E293B); // Dark slate bg
-    }
-    if (clean.contains('dining') || clean.contains('food') || clean.contains('dinner') || clean.contains('restaurant')) {
-      return const Color(0xFF261D4C);
-    } else if (clean.contains('commute') || clean.contains('transport') || clean.contains('car') || clean.contains('cab')) {
-      return const Color(0xFF1E284C);
-    } else if (clean.contains('sub') || clean.contains('subscriptions') || clean.contains('entertainment')) {
-      return const Color(0xFF1B2B3A);
-    } else if (clean.contains('utility') || clean.contains('bill') || clean.contains('electricity')) {
-      return const Color(0xFF332A15);
-    } else if (clean.contains('salary') || clean.contains('income')) {
-      return const Color(0xFF163321);
-    } else if (clean.contains('bonus') || clean.contains('dividend') || clean.contains('invest')) {
-      return const Color(0xFF332015);
-    } else if (clean.contains('savings')) {
-      return const Color(0xFF0F2B20);
-    } else if (clean.contains('gift')) {
-      return const Color(0xFF331526);
-    } else {
-      return isIncome || clean == 'income' ? const Color(0xFF0F2B20) : const Color(0xFF142B24);
-    }
+    final catColor = getColorForCategory(cat);
+    return catColor.withOpacity(0.15);
   }
 
   static Color getColorForSource(String src, [int index = 0]) {

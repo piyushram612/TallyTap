@@ -175,7 +175,7 @@ class BackTapService : Service(), SensorEventListener {
             triggerVibration()
 
             // Always notify MainActivity (used by calibration event stream)
-            Log.d("TallyTapCalib", "BackTapService: triple tap complete, notifying MainActivity. calibrationMode=${MainActivity.calibrationMode}")
+            Log.d("TriplCalib", "BackTapService: triple tap complete, notifying MainActivity. calibrationMode=${MainActivity.calibrationMode}")
             MainActivity.onBackTapDetected(force, jerk)
 
             // Only launch/dismiss popup when NOT in calibration mode

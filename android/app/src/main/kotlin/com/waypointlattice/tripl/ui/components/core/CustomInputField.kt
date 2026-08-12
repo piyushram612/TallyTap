@@ -22,9 +22,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import com.waypointlattice.tripl.ui.components.outerGlow
-
-val GreenPrimary = Color(0xFF10B981)
-val InactivePill = Color(0xFF131D1A)
+import com.waypointlattice.tripl.ui.theme.LocalTriplColors
 
 @Composable
 fun CustomInputField(
@@ -36,6 +34,12 @@ fun CustomInputField(
     onClick: (() -> Unit)? = null
 ) {
     var isFocused by remember { mutableStateOf(false) }
+    val theme = LocalTriplColors.current
+
+    val activeAccent = theme.primaryAccent
+    val fieldBg = if (theme.isLight) theme.cardBorder.copy(alpha = 0.4f) else theme.cardBorder.copy(alpha = 0.3f)
+    val textColor = theme.textPrimary
+    val mutedColor = theme.textMuted
 
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
@@ -44,7 +48,7 @@ fun CustomInputField(
                 fontSize = 11.sp,
                 fontWeight = FontWeight.W800,
                 letterSpacing = 1.0.sp,
-                color = GreenPrimary.copy(alpha = 0.8f)
+                color = activeAccent.copy(alpha = 0.8f)
             )
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -52,9 +56,9 @@ fun CustomInputField(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(52.dp)
-                .then(if (isFocused || (onClick != null && value.isNotEmpty())) Modifier.outerGlow(color = GreenPrimary, radius = 8.dp, alpha = 0.25f, cornerRadius = 14.dp) else Modifier)
-                .background(InactivePill, RoundedCornerShape(14.dp))
-                .border(1.dp, if (isFocused || (onClick != null && value.isNotEmpty())) GreenPrimary else Color.Transparent, RoundedCornerShape(14.dp))
+                .then(if (isFocused || (onClick != null && value.isNotEmpty())) Modifier.outerGlow(color = activeAccent, radius = 8.dp, alpha = 0.25f, cornerRadius = 14.dp) else Modifier)
+                .background(fieldBg, RoundedCornerShape(14.dp))
+                .border(1.dp, if (isFocused || (onClick != null && value.isNotEmpty())) activeAccent else Color.Transparent, RoundedCornerShape(14.dp))
                 .then(
                     if (onClick != null) {
                         Modifier.clickable(
@@ -74,7 +78,7 @@ fun CustomInputField(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = if (isFocused || (onClick != null && value.isNotEmpty())) GreenPrimary else Color.White.copy(alpha = 0.4f),
+                        tint = if (isFocused || (onClick != null && value.isNotEmpty())) activeAccent else mutedColor,
                         modifier = Modifier.size(20.dp)
                     )
                     Spacer(modifier = Modifier.width(12.dp))
@@ -85,7 +89,7 @@ fun CustomInputField(
                         style = TextStyle(
                             fontSize = 14.sp,
                             fontWeight = FontWeight.W600,
-                            color = if (value.isNotEmpty()) Color.White else Color.White.copy(alpha = 0.4f)
+                            color = if (value.isNotEmpty()) textColor else mutedColor
                         )
                     )
                 } else {
@@ -95,7 +99,7 @@ fun CustomInputField(
                         textStyle = TextStyle(
                             fontSize = 14.sp,
                             fontWeight = FontWeight.W600,
-                            color = Color.White
+                            color = textColor
                         ),
                         keyboardOptions = KeyboardOptions(
                             capitalization = KeyboardCapitalization.Sentences
@@ -116,7 +120,7 @@ fun CustomInputField(
                                         style = TextStyle(
                                             fontSize = 14.sp,
                                             fontWeight = FontWeight.W600,
-                                            color = Color.White.copy(alpha = 0.4f)
+                                            color = mutedColor
                                         )
                                     )
                                 }

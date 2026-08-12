@@ -27,19 +27,19 @@ class MainActivity : FlutterFragmentActivity() {
         var flutterEngineInstance: FlutterEngine? = null
 
         fun onBackTapDetected(recommendedForce: Float, recommendedJerk: Float) {
-            android.util.Log.d("TallyTapCalib", "onBackTapDetected: calibrationMode=$calibrationMode sink=$backTapEventSink")
+            android.util.Log.d("TriplCalib", "onBackTapDetected: calibrationMode=$calibrationMode sink=$backTapEventSink")
             if (calibrationMode) {
                 // EventSink.success() must be called on the main thread
                 android.os.Handler(android.os.Looper.getMainLooper()).post {
                     if (backTapEventSink != null) {
-                        android.util.Log.d("TallyTapCalib", "Sending tap event to Flutter event channel with recommended thresholds")
+                        android.util.Log.d("TriplCalib", "Sending tap event to Flutter event channel with recommended thresholds")
                         backTapEventSink?.success(mapOf(
                             "event" to "tap",
                             "recommendedForce" to recommendedForce.toDouble(),
                             "recommendedJerk" to recommendedJerk.toDouble()
                         ))
                     } else {
-                        android.util.Log.w("TallyTapCalib", "Sink is null! Flutter has not subscribed to the event channel yet.")
+                        android.util.Log.w("TriplCalib", "Sink is null! Flutter has not subscribed to the event channel yet.")
                     }
                 }
             }

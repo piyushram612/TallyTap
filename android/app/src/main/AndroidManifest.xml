@@ -43,7 +43,7 @@
         <!-- Popup Activity (Dialog themed translucent Compose) -->
         <activity
             android:name="com.waypointlattice.tripl.ui.PopupActivity"
-            android:theme="@style/Theme.TallyTap.Transparent"
+            android:theme="@style/Theme.Tripl.Transparent"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:taskAffinity=""

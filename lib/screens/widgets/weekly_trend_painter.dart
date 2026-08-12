@@ -329,7 +329,7 @@ class _WeeklyTrendPainter extends CustomPainter {
     // Grid paint for horizontal helper guidelines
     if (showGrid) {
       final gridPaint = Paint()
-        ..color = const Color(0xFF152620)
+        ..color = TriplTheme.borderGreen.withOpacity(0.3)
         ..strokeWidth = 0.8
         ..style = PaintingStyle.stroke;
       
@@ -349,8 +349,8 @@ class _WeeklyTrendPainter extends CustomPainter {
         final String text = '${val < 0 ? '-' : ''}$currency${val.abs().toStringAsFixed(0)}';
         labelTextPainter.text = TextSpan(
           text: text,
-          style: const TextStyle(
-            color: TallyTapTheme.textGray,
+          style: TextStyle(
+            color: TriplTheme.textGray,
             fontSize: 8,
             fontWeight: FontWeight.w600,
             fontFamily: 'Outfit',
@@ -383,8 +383,8 @@ class _WeeklyTrendPainter extends CustomPainter {
       if (i < labels.length && labels[i].isNotEmpty) {
         textPainter.text = TextSpan(
           text: labels[i],
-          style: const TextStyle(
-            color: TallyTapTheme.textGray,
+          style: TextStyle(
+            color: TriplTheme.textGray,
             fontSize: 10,
             fontWeight: FontWeight.w700,
             fontFamily: 'Outfit',
@@ -397,8 +397,8 @@ class _WeeklyTrendPainter extends CustomPainter {
     }
 
     // Determine curve and gradient colors based on overspending status (Mint Green vs Vibrant Red)
-    final Color strokeColor = isOverspending ? const Color(0xFFEF4444) : TallyTapTheme.primaryMint;
-    final Color fillStartColor = isOverspending ? const Color(0xFFEF4444).withValues(alpha: 0.2) : TallyTapTheme.primaryMint.withValues(alpha: 0.25);
+    final Color strokeColor = isOverspending ? const Color(0xFFEF4444) : TriplTheme.primaryMint;
+    final Color fillStartColor = isOverspending ? const Color(0xFFEF4444).withValues(alpha: 0.2) : TriplTheme.primaryMint.withValues(alpha: 0.25);
 
     if (styleType == 'bar') {
       // Draw Bar Chart representation
@@ -507,7 +507,7 @@ class _WeeklyTrendPainter extends CustomPainter {
       
       // Draw vertical tracking guide line
       final verticalLinePaint = Paint()
-        ..color = TallyTapTheme.textGray.withValues(alpha: 0.4)
+        ..color = TriplTheme.textGray.withValues(alpha: 0.4)
         ..strokeWidth = 1.0
         ..style = PaintingStyle.stroke;
       
@@ -525,7 +525,7 @@ class _WeeklyTrendPainter extends CustomPainter {
         ..style = PaintingStyle.fill;
       
       final markerOutlinePaint = Paint()
-        ..color = TallyTapTheme.obsidianCard
+        ..color = TriplTheme.obsidianCard
         ..style = PaintingStyle.stroke
         ..strokeWidth = 2.0;
       
@@ -542,8 +542,8 @@ class _WeeklyTrendPainter extends CustomPainter {
       );
       tooltipTextPainter.text = TextSpan(
         text: tooltipText,
-        style: const TextStyle(
-          color: TallyTapTheme.textLight,
+        style: TextStyle(
+          color: TriplTheme.textLight,
           fontSize: 10,
           fontWeight: FontWeight.bold,
           fontFamily: 'Outfit',
@@ -569,7 +569,7 @@ class _WeeklyTrendPainter extends CustomPainter {
       );
       
       final tooltipBgPaint = Paint()
-        ..color = const Color(0xFF162521)
+        ..color = TriplTheme.obsidianCard
         ..style = PaintingStyle.fill;
       
       final tooltipBorderPaint = Paint()

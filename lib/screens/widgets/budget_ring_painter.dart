@@ -73,11 +73,11 @@ class _BudgetRingGraphState extends State<BudgetRingGraph> with SingleTickerProv
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     'SPENT',
                     style: TextStyle(
                       fontSize: 10,
-                      color: TallyTapTheme.textGray,
+                      color: TriplTheme.textGray,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 1.5,
                     ),
@@ -85,7 +85,7 @@ class _BudgetRingGraphState extends State<BudgetRingGraph> with SingleTickerProv
                   const SizedBox(height: 4),
                   Builder(
                     builder: (context) {
-                      Color spentColor = TallyTapTheme.textLight;
+                      Color spentColor = TriplTheme.textLight;
                       if (proportion >= 0.75) {
                         spentColor = const Color(0xFFEF4444);
                       } else if (proportion >= 0.50) {
@@ -105,9 +105,9 @@ class _BudgetRingGraphState extends State<BudgetRingGraph> with SingleTickerProv
                   const SizedBox(height: 2),
                   Text(
                     'of ${widget.currency}${widget.limit.toStringAsFixed(0).replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: TallyTapTheme.textGray,
+                      color: TriplTheme.textGray,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -132,13 +132,13 @@ class _BudgetRingPainter extends CustomPainter {
     const double strokeWidth = 14.0;
 
     final Paint trackPaint = Paint()
-      ..color = const Color(0xFF14241F)
+      ..color = TriplTheme.borderGreen.withOpacity(0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
 
     canvas.drawCircle(Offset(size.width / 2, size.height / 2), size.width / 2, trackPaint);
 
-    Color progressColor = TallyTapTheme.primaryMint;
+    Color progressColor = TriplTheme.primaryMint;
     if (proportion >= 0.75) {
       progressColor = const Color(0xFFEF4444);
     } else if (proportion >= 0.50) {

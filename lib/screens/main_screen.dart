@@ -107,7 +107,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
 
     return Scaffold(
       extendBody: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -133,14 +133,14 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
         width: 56,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: const LinearGradient(
-            colors: [TallyTapTheme.primaryMint, Color(0xFF33C28A)],
+          gradient: LinearGradient(
+            colors: [TriplTheme.primaryMint, Color(0xFF33C28A)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           boxShadow: [
             BoxShadow(
-              color: TallyTapTheme.primaryMint.withOpacity(0.35),
+              color: TriplTheme.primaryMint.withOpacity(0.35),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -163,7 +163,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
               HapticFeedback.heavyImpact();
               _showFabMenu(context);
             },
-            child: const Icon(Icons.add_rounded, color: TallyTapTheme.obsidianBg, size: 28),
+            child: Icon(Icons.add_rounded, color: TriplTheme.obsidianBg, size: 28),
           ),
         ),
       ),
@@ -217,10 +217,10 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: paddingHorizontal),
               decoration: BoxDecoration(
-                color: TallyTapTheme.obsidianCard.withOpacity(0.10),
+                color: TriplTheme.obsidianCard.withOpacity(0.10),
                 borderRadius: BorderRadius.circular(28),
                 border: Border.all(
-                  color: TallyTapTheme.borderGreen.withOpacity(0.8),
+                  color: TriplTheme.borderGreen.withOpacity(0.8),
                   width: 1.2,
                 ),
               ),
@@ -238,19 +238,19 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                         borderRadius: BorderRadius.circular(16),
                         gradient: LinearGradient(
                           colors: [
-                            TallyTapTheme.primaryMint.withOpacity(0.24),
-                            TallyTapTheme.primaryMint.withOpacity(0.04),
+                            TriplTheme.primaryMint.withOpacity(0.24),
+                            TriplTheme.primaryMint.withOpacity(0.04),
                           ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         border: Border.all(
-                          color: TallyTapTheme.primaryMint.withOpacity(0.25),
+                          color: TriplTheme.primaryMint.withOpacity(0.25),
                           width: 1.0,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: TallyTapTheme.primaryMint.withOpacity(0.12),
+                            color: TriplTheme.primaryMint.withOpacity(0.12),
                             blurRadius: 10,
                             offset: const Offset(0, 2),
                           ),
@@ -305,7 +305,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
               top: isActive ? 13 : 25,
               child: Icon(
                 icon,
-                color: isActive ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+                color: isActive ? TriplTheme.primaryMint : TriplTheme.textGray,
                 size: 22,
               ),
             ),
@@ -321,7 +321,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                   style: TextStyle(
                     fontSize: 9,
                     fontWeight: isActive ? FontWeight.w900 : FontWeight.w500,
-                    color: isActive ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+                    color: isActive ? TriplTheme.primaryMint : TriplTheme.textGray,
                     letterSpacing: 0.2,
                   ),
                 ),
@@ -361,7 +361,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                     child: BackdropFilter(
                       filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
                       child: Container(
-                        color: TallyTapTheme.obsidianBg.withOpacity(0.5),
+                        color: TriplTheme.obsidianBg.withOpacity(0.5),
                       ),
                     ),
                   ),
@@ -438,14 +438,14 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                       width: fabSize.width,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        gradient: const LinearGradient(
-                          colors: [TallyTapTheme.primaryMint, Color(0xFF33C28A)],
+                        gradient: LinearGradient(
+                          colors: [TriplTheme.primaryMint, Color(0xFF33C28A)],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: TallyTapTheme.primaryMint.withOpacity(0.35),
+                            color: TriplTheme.primaryMint.withOpacity(0.35),
                             blurRadius: 12,
                             offset: const Offset(0, 4),
                           ),
@@ -458,7 +458,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                             curve: Curves.easeOutBack,
                           )
                         ),
-                        child: const Icon(Icons.add_rounded, color: TallyTapTheme.obsidianBg, size: 28),
+                        child: Icon(Icons.add_rounded, color: TriplTheme.obsidianBg, size: 28),
                       ),
                     ),
                   ),
@@ -478,15 +478,15 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         decoration: BoxDecoration(
-          color: TallyTapTheme.primaryMint.withOpacity(0.15),
+          color: TriplTheme.primaryMint.withOpacity(0.15),
           borderRadius: BorderRadius.circular(30),
           border: Border.all(
-            color: TallyTapTheme.primaryMint.withOpacity(0.6),
+            color: TriplTheme.primaryMint.withOpacity(0.6),
             width: 1.2,
           ),
           boxShadow: [
             BoxShadow(
-              color: TallyTapTheme.primaryMint.withOpacity(0.12),
+              color: TriplTheme.primaryMint.withOpacity(0.12),
               blurRadius: 10,
               offset: const Offset(0, 2),
             ),
@@ -495,12 +495,12 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, color: TallyTapTheme.primaryMint, size: 22),
+            Icon(icon, color: TriplTheme.primaryMint, size: 22),
             const SizedBox(width: 12),
             Text(
               label,
-              style: const TextStyle(
-                color: TallyTapTheme.primaryMint,
+              style: TextStyle(
+                color: TriplTheme.primaryMint,
                 fontWeight: FontWeight.w700,
                 fontSize: 15,
                 letterSpacing: 0.3,
@@ -526,17 +526,17 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
       barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: TallyTapTheme.obsidianCard,
+          backgroundColor: TriplTheme.obsidianCard,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          title: const Text('Welcome to Tripl!', style: TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold)),
-          content: const Text('Would you like a quick tour to see how things work?', style: TextStyle(color: TallyTapTheme.textGray)),
+          title: Text('Welcome to Tripl!', style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold)),
+          content: Text('Would you like a quick tour to see how things work?', style: TextStyle(color: TriplTheme.textGray)),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 ref.read(tutorialProvider.notifier).markCompleted(kPrefTutorialPrimary);
               },
-              child: const Text('Skip Tour', style: TextStyle(color: TallyTapTheme.textGray)),
+              child: Text('Skip Tour', style: TextStyle(color: TriplTheme.textGray)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -544,8 +544,8 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                 _initTutorial();
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: TallyTapTheme.primaryMint,
-                foregroundColor: TallyTapTheme.obsidianBg,
+                backgroundColor: TriplTheme.primaryMint,
+                foregroundColor: TriplTheme.obsidianBg,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
               child: const Text('Start Tour', style: TextStyle(fontWeight: FontWeight.bold)),
@@ -644,8 +644,8 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
             child: ElevatedButton(
               onPressed: () => controller.next(),
               style: ElevatedButton.styleFrom(
-                backgroundColor: TallyTapTheme.primaryMint,
-                foregroundColor: TallyTapTheme.obsidianBg,
+                backgroundColor: TriplTheme.primaryMint,
+                foregroundColor: TriplTheme.obsidianBg,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
               ),
               child: Text(nextText, style: const TextStyle(fontWeight: FontWeight.bold)),

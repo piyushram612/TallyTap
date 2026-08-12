@@ -33,13 +33,13 @@ class InsightsScreen extends ConsumerWidget {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
                       'Spend Intentionality',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w900,
-                        color: TallyTapTheme.primaryMint,
+                        color: TriplTheme.primaryMint,
                         letterSpacing: -0.8,
                       ),
                     ),
@@ -51,9 +51,9 @@ class InsightsScreen extends ConsumerWidget {
               const SizedBox(height: 6),
               Text(
                 'Overview of resources from ${_formatDateRange(filter)}, categorized by intent.',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: TallyTapTheme.textGray,
+                  color: TriplTheme.textGray,
                   height: 1.4,
                 ),
               ),
@@ -75,12 +75,12 @@ class InsightsScreen extends ConsumerWidget {
                         currency: currency,
                       ),
                       const SizedBox(height: 20),
-                      _buildIntentLegendRow('Essential', insights.essentialPercent, TallyTapTheme.primaryMint, TutorialService.insightsPillEssentialKey),
-                      const Divider(color: TallyTapTheme.borderGreen, height: 24, thickness: 0.5),
+                      _buildIntentLegendRow('Essential', insights.essentialPercent, TriplTheme.primaryMint, TutorialService.insightsPillEssentialKey),
+                      Divider(color: TriplTheme.borderGreen, height: 24, thickness: 0.5),
                       _buildIntentLegendRow('Joyful', insights.joyfulPercent, const Color(0xFF9FB6DF), TutorialService.insightsPillJoyfulKey),
-                      const Divider(color: TallyTapTheme.borderGreen, height: 24, thickness: 0.5),
+                      Divider(color: TriplTheme.borderGreen, height: 24, thickness: 0.5),
                       _buildIntentLegendRow('Avoidable', insights.avoidablePercent, const Color(0xFFFFB5B5), TutorialService.insightsPillAvoidableKey),
-                      const Divider(color: TallyTapTheme.borderGreen, height: 24, thickness: 0.5),
+                      Divider(color: TriplTheme.borderGreen, height: 24, thickness: 0.5),
                       _buildIntentLegendRow('Investments', insights.investmentsPercent, const Color(0xFF8B5CF6), TutorialService.insightsPillInvestKey),
                     ],
                   ),
@@ -100,9 +100,9 @@ class InsightsScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(Icons.lightbulb_outline_rounded, color: TallyTapTheme.primaryMint, size: 18),
+                          Icon(Icons.lightbulb_outline_rounded, color: TriplTheme.primaryMint, size: 18),
                           SizedBox(width: 8),
                           Text(
                             'INSIGHT OF THE DAY',
@@ -110,7 +110,7 @@ class InsightsScreen extends ConsumerWidget {
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 1.5,
-                              color: TallyTapTheme.primaryMint,
+                              color: TriplTheme.primaryMint,
                             ),
                           ),
                         ],
@@ -131,24 +131,24 @@ class InsightsScreen extends ConsumerWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Category Breakdown',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w800,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                         ),
                       ),
                       const SizedBox(height: 20),
                       if (insights.categoryBreakdowns.isEmpty)
-                        const Padding(
+                        Padding(
                           padding: EdgeInsets.symmetric(vertical: 20.0),
                           child: Center(
                             child: Text(
                               'No category breakdown data available for this period.',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: TallyTapTheme.textGray,
+                                color: TriplTheme.textGray,
                               ),
                             ),
                           ),
@@ -197,25 +197,25 @@ class InsightsScreen extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         decoration: BoxDecoration(
-          color: TallyTapTheme.obsidianCard,
+          color: TriplTheme.obsidianCard,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: TallyTapTheme.borderGreen),
+          border: Border.all(color: TriplTheme.borderGreen),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.calendar_today_rounded, color: TallyTapTheme.primaryMint, size: 12),
+            Icon(Icons.calendar_today_rounded, color: TriplTheme.primaryMint, size: 12),
             const SizedBox(width: 6),
             Text(
               filter.label,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                color: TallyTapTheme.textLight,
+                color: TriplTheme.textLight,
               ),
             ),
             const SizedBox(width: 4),
-            const Icon(Icons.keyboard_arrow_down_rounded, color: TallyTapTheme.textGray, size: 14),
+            Icon(Icons.keyboard_arrow_down_rounded, color: TriplTheme.textGray, size: 14),
           ],
         ),
       ),
@@ -226,10 +226,10 @@ class InsightsScreen extends ConsumerWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
-      shape: const RoundedRectangleBorder(
+      backgroundColor: TriplTheme.obsidianBg,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-        side: BorderSide(color: TallyTapTheme.borderGreen, width: 1.0),
+        side: BorderSide(color: TriplTheme.borderGreen, width: 1.0),
       ),
       builder: (context) {
         return const _PeriodSelectorSheet();
@@ -252,20 +252,20 @@ class InsightsScreen extends ConsumerWidget {
             const SizedBox(width: 10),
             Text(
               title,
-              style: const TextStyle(fontSize: 13, color: TallyTapTheme.textGray, fontWeight: FontWeight.w500),
+              style: TextStyle(fontSize: 13, color: TriplTheme.textGray, fontWeight: FontWeight.w500),
             ),
           ],
         ),
         Text(
           percent,
-          style: const TextStyle(fontSize: 13, color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 13, color: TriplTheme.textLight, fontWeight: FontWeight.bold),
         ),
       ],
     );
   }
 
   Widget _buildCategoryProgressRow(String title, double amount, double proportion, String currency, String percentOfTotal) {
-    final color = TallyTapTheme.getColorForCategory(title);
+    final color = TriplTheme.getColorForCategory(title);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -276,12 +276,12 @@ class InsightsScreen extends ConsumerWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(fontSize: 13, color: TallyTapTheme.textLight, fontWeight: FontWeight.w500),
+                  style: TextStyle(fontSize: 13, color: TriplTheme.textLight, fontWeight: FontWeight.w500),
                 ),
                 const SizedBox(width: 6),
                 Text(
                   '($percentOfTotal)',
-                  style: const TextStyle(fontSize: 11, color: TallyTapTheme.textGray, fontWeight: FontWeight.normal),
+                  style: TextStyle(fontSize: 11, color: TriplTheme.textGray, fontWeight: FontWeight.normal),
                 ),
               ],
             ),
@@ -316,9 +316,9 @@ class InsightsScreen extends ConsumerWidget {
 
   Widget _buildDynamicInsight(InsightsState insights, String currency) {
     if (insights.totalSpent == 0) {
-      return const Text(
+      return Text(
         "You haven't logged any expenses this period. Start tracking your transactions to unlock personalized, value-based intentionality insights!",
-        style: TextStyle(fontSize: 13, color: TallyTapTheme.textLight, height: 1.5),
+        style: TextStyle(fontSize: 13, color: TriplTheme.textLight, height: 1.5),
       );
     }
 
@@ -340,7 +340,7 @@ class InsightsScreen extends ConsumerWidget {
 
     if (essential == maxVal) {
       spans.add(const TextSpan(text: "primarily focused on "));
-      spans.add(const TextSpan(text: "Essential", style: TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold)));
+      spans.add(TextSpan(text: "Essential", style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold)));
       spans.add(TextSpan(text: " needs ($essentialPct of total), showing disciplined baseline habits. "));
     } else if (joyful == maxVal) {
       spans.add(const TextSpan(text: "largely driven by "));
@@ -382,7 +382,7 @@ class InsightsScreen extends ConsumerWidget {
 
     return RichText(
       text: TextSpan(
-        style: const TextStyle(fontSize: 13, color: TallyTapTheme.textLight, height: 1.5),
+        style: TextStyle(fontSize: 13, color: TriplTheme.textLight, height: 1.5),
         children: spans,
       ),
     );
@@ -487,14 +487,14 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
     Color tipColor;
     if (ins.totalSpent == 0) {
       tipText = 'Log your first transaction to see how your spending compares to your targets.';
-      tipColor = TallyTapTheme.textGray;
+      tipColor = TriplTheme.textGray;
     } else if (needsDelta.abs() >= wantsDelta.abs() && needsDelta.abs() >= savingsDelta.abs()) {
       if (needsDelta > 5) {
         tipText = 'Your Needs are ${needsDelta.toStringAsFixed(0)}% above target. Look for areas to trim essential fixed costs.';
         tipColor = const Color(0xFFF59E0B);
       } else {
         tipText = 'Your Needs spending is right on track. Great foundational discipline!';
-        tipColor = TallyTapTheme.primaryMint;
+        tipColor = TriplTheme.primaryMint;
       }
     } else if (wantsDelta.abs() >= savingsDelta.abs()) {
       if (wantsDelta > 5) {
@@ -529,7 +529,7 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
                       Container(
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1A1040),
+                          color: const Color(0xFF8B5CF6).withOpacity(0.15),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(Icons.pie_chart_outline_rounded, color: Color(0xFF8B5CF6), size: 16),
@@ -569,10 +569,10 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: _isEditing ? const Color(0xFF8B5CF6) : TallyTapTheme.obsidianCard,
+                        color: _isEditing ? const Color(0xFF8B5CF6) : TriplTheme.obsidianCard,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: _isEditing ? const Color(0xFF8B5CF6) : TallyTapTheme.borderGreen,
+                          color: _isEditing ? const Color(0xFF8B5CF6) : TriplTheme.borderGreen,
                         ),
                       ),
                       child: Text(
@@ -581,7 +581,7 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
                           fontSize: 9,
                           fontWeight: FontWeight.w900,
                           letterSpacing: 1.0,
-                          color: _isEditing ? Colors.white : TallyTapTheme.textGray,
+                          color: _isEditing ? Colors.white : TriplTheme.textGray,
                         ),
                       ),
                     ),
@@ -593,17 +593,17 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
 
             if (_isEditing) ...[
               // ── Target Editor ────────────────────────────────────────────────
-              const Text(
+              Text(
                 'ADJUST YOUR TARGETS',
-                style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, letterSpacing: 1.5, color: TallyTapTheme.textGray),
+                style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, letterSpacing: 1.5, color: TriplTheme.textGray),
               ),
               const SizedBox(height: 4),
-              const Text(
+              Text(
                 'Drag the sliders to set how you want to distribute your spending. Values auto-balance to 100%.',
-                style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray, height: 1.4),
+                style: TextStyle(fontSize: 12, color: TriplTheme.textGray, height: 1.4),
               ),
               const SizedBox(height: 16),
-              _buildTargetSlider('Needs', _needsTarget, TallyTapTheme.primaryMint, _onNeedsChanged),
+              _buildTargetSlider('Needs', _needsTarget, TriplTheme.primaryMint, _onNeedsChanged),
               const SizedBox(height: 12),
               _buildTargetSlider('Wants', _wantsTarget, const Color(0xFF9FB6DF), _onWantsChanged),
               const SizedBox(height: 12),
@@ -614,7 +614,7 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
                 children: [
                   Text(
                     'Total: ${(_needsTarget + _wantsTarget + _savingsTarget).toStringAsFixed(0)}%',
-                    style: const TextStyle(fontSize: 11, color: TallyTapTheme.textGray, fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: 11, color: TriplTheme.textGray, fontWeight: FontWeight.w700),
                   ),
                 ],
               ),
@@ -625,8 +625,8 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
                 subtitle: 'Essential expenses',
                 actual: needsActual,
                 target: targets.needsTarget,
-                actualColor: TallyTapTheme.primaryMint,
-                targetColor: TallyTapTheme.primaryMint.withOpacity(0.25),
+                actualColor: TriplTheme.primaryMint,
+                targetColor: TriplTheme.primaryMint.withOpacity(0.25),
               ),
               const SizedBox(height: 16),
               _buildSplitRow(
@@ -702,13 +702,13 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
                     label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 13, color: TallyTapTheme.textLight, fontWeight: FontWeight.w700),
+                    style: TextStyle(fontSize: 13, color: TriplTheme.textLight, fontWeight: FontWeight.w700),
                   ),
                   Text(
                     subtitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontSize: 11, color: TallyTapTheme.textGray),
+                    style: TextStyle(fontSize: 11, color: TriplTheme.textGray),
                   ),
                 ],
               ),
@@ -730,7 +730,7 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
                           ? const Color(0xFFFFB5B5).withOpacity(0.15)
                           : underTarget
                               ? const Color(0xFFF59E0B).withOpacity(0.12)
-                              : TallyTapTheme.primaryMint.withOpacity(0.1),
+                              : TriplTheme.primaryMint.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
@@ -742,7 +742,7 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
                             ? const Color(0xFFFFB5B5)
                             : underTarget
                                 ? const Color(0xFFF59E0B)
-                                : TallyTapTheme.primaryMint,
+                                : TriplTheme.primaryMint,
                       ),
                     ),
                   ),
@@ -759,7 +759,7 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
               height: 8,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: const Color(0xFF14241F),
+                color: TriplTheme.borderGreen.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(100),
               ),
             ),
@@ -796,7 +796,7 @@ class _BudgetSplitCardState extends ConsumerState<_BudgetSplitCard> {
       children: [
         SizedBox(
           width: 58,
-          child: Text(label, style: const TextStyle(fontSize: 12, color: TallyTapTheme.textLight, fontWeight: FontWeight.w600)),
+          child: Text(label, style: TextStyle(fontSize: 12, color: TriplTheme.textLight, fontWeight: FontWeight.w600)),
         ),
         Expanded(
           child: SliderTheme(
@@ -905,7 +905,7 @@ class _PeriodSelectorSheet extends ConsumerWidget {
               width: 36,
               height: 4,
               decoration: BoxDecoration(
-                color: TallyTapTheme.textGray.withOpacity(0.3),
+                color: TriplTheme.textGray.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -914,19 +914,19 @@ class _PeriodSelectorSheet extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Filter Insights',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
-                  color: TallyTapTheme.primaryMint,
+                  color: TriplTheme.primaryMint,
                 ),
               ),
               IconButton(
                 onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.close_rounded, color: TallyTapTheme.textGray, size: 20),
+                icon: Icon(Icons.close_rounded, color: TriplTheme.textGray, size: 20),
                 style: IconButton.styleFrom(
-                  backgroundColor: TallyTapTheme.borderGreen.withOpacity(0.3),
+                  backgroundColor: TriplTheme.borderGreen.withOpacity(0.3),
                   padding: EdgeInsets.zero,
                   minimumSize: const Size(32, 32),
                 ),
@@ -956,13 +956,13 @@ class _PeriodSelectorSheet extends ConsumerWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
-                color: const Color(0xFF14241F),
+                color: TriplTheme.obsidianCard,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.3)),
+                border: Border.all(color: TriplTheme.primaryMint.withOpacity(0.3)),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.date_range_rounded, color: TallyTapTheme.primaryMint, size: 18),
+                  Icon(Icons.date_range_rounded, color: TriplTheme.primaryMint, size: 18),
                   SizedBox(width: 12),
                   Expanded(
                     child: Text(
@@ -970,11 +970,11 @@ class _PeriodSelectorSheet extends ConsumerWidget {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: TallyTapTheme.primaryMint,
+                        color: TriplTheme.primaryMint,
                       ),
                     ),
                   ),
-                  Icon(Icons.chevron_right_rounded, color: TallyTapTheme.primaryMint, size: 20),
+                  Icon(Icons.chevron_right_rounded, color: TriplTheme.primaryMint, size: 20),
                 ],
               ),
             ),
@@ -982,13 +982,13 @@ class _PeriodSelectorSheet extends ConsumerWidget {
           const SizedBox(height: 20),
 
           // Presets
-          const Text(
+          Text(
             'PRESETS',
             style: TextStyle(
               fontSize: 10,
               fontWeight: FontWeight.w800,
               letterSpacing: 1.5,
-              color: TallyTapTheme.textGray,
+              color: TriplTheme.textGray,
             ),
           ),
           const SizedBox(height: 8),
@@ -999,13 +999,13 @@ class _PeriodSelectorSheet extends ConsumerWidget {
 
           if (availableMonths.isNotEmpty) ...[
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'MONTHLY ARCHIVE',
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.5,
-                color: TallyTapTheme.textGray,
+                color: TriplTheme.textGray,
               ),
             ),
             const SizedBox(height: 8),
@@ -1052,10 +1052,10 @@ class _PeriodSelectorSheet extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: item.isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+          color: item.isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : TriplTheme.obsidianCard,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: item.isSelected ? TallyTapTheme.primaryMint.withOpacity(0.5) : TallyTapTheme.borderGreen,
+            color: item.isSelected ? TriplTheme.primaryMint.withOpacity(0.5) : TriplTheme.borderGreen,
             width: item.isSelected ? 1.5 : 1.0,
           ),
         ),
@@ -1063,7 +1063,7 @@ class _PeriodSelectorSheet extends ConsumerWidget {
           children: [
             Icon(
               item.icon,
-              color: item.isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+              color: item.isSelected ? TriplTheme.primaryMint : TriplTheme.textGray,
               size: 18,
             ),
             const SizedBox(width: 12),
@@ -1073,14 +1073,14 @@ class _PeriodSelectorSheet extends ConsumerWidget {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: item.isSelected ? FontWeight.bold : FontWeight.w500,
-                  color: item.isSelected ? TallyTapTheme.textLight : TallyTapTheme.textGray,
+                  color: item.isSelected ? TriplTheme.textLight : TriplTheme.textGray,
                 ),
               ),
             ),
             if (item.isSelected)
-              const Icon(
+              Icon(
                 Icons.check_circle_rounded,
-                color: TallyTapTheme.primaryMint,
+                color: TriplTheme.primaryMint,
                 size: 18,
               ),
           ],

@@ -145,17 +145,17 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
     final groupName = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: TallyTapTheme.obsidianCard,
+        backgroundColor: TriplTheme.obsidianCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+          side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
         ),
-        title: const Text(
+        title: Text(
           'Group Transaction Name',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: TallyTapTheme.primaryMint,
+            color: TriplTheme.primaryMint,
             fontFamily: 'Outfit',
           ),
         ),
@@ -163,31 +163,31 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
           controller: groupNameController,
           autofocus: true,
           textCapitalization: TextCapitalization.sentences,
-          style: const TextStyle(color: TallyTapTheme.textLight),
+          style: TextStyle(color: TriplTheme.textLight),
           decoration: InputDecoration(
             hintText: 'e.g. Restaurant split, Weekend trip...',
-            hintStyle: const TextStyle(color: TallyTapTheme.textGray),
+            hintStyle: TextStyle(color: TriplTheme.textGray),
             filled: true,
-            fillColor: TallyTapTheme.obsidianBg,
+            fillColor: TriplTheme.obsidianBg,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+              borderSide: BorderSide(color: TriplTheme.borderGreen),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: TallyTapTheme.primaryMint),
+              borderSide: BorderSide(color: TriplTheme.primaryMint),
             ),
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+            child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -225,7 +225,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Group "$groupName" created successfully!'),
-          backgroundColor: TallyTapTheme.borderGreen,
+          backgroundColor: TriplTheme.borderGreen,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -239,10 +239,10 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: TallyTapTheme.obsidianCard,
+        backgroundColor: TriplTheme.obsidianCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+          side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
         ),
         title: Text(
           'Delete $count Transaction(s)?',
@@ -254,12 +254,12 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
         ),
         content: Text(
           'Are you sure you want to permanently delete the $count selected transaction(s)? This action cannot be undone.',
-          style: const TextStyle(color: TallyTapTheme.textLight),
+          style: TextStyle(color: TriplTheme.textLight),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+            child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -303,26 +303,26 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: TallyTapTheme.obsidianCard,
+        backgroundColor: TriplTheme.obsidianCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+          side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
         ),
-        title: const Text(
+        title: Text(
           'Ungroup Transactions?',
           style: TextStyle(
-            color: TallyTapTheme.primaryMint,
+            color: TriplTheme.primaryMint,
             fontWeight: FontWeight.bold,
           ),
         ),
-        content: const Text(
+        content: Text(
           'This will split this group back into individual transactions.',
-          style: TextStyle(color: TallyTapTheme.textLight),
+          style: TextStyle(color: TriplTheme.textLight),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+            child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -370,31 +370,31 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: TallyTapTheme.obsidianCard,
+        backgroundColor: TriplTheme.obsidianCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+          side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
         ),
         title: Text(
           'Add to $groupName?',
-          style: const TextStyle(
-            color: TallyTapTheme.primaryMint,
+          style: TextStyle(
+            color: TriplTheme.primaryMint,
             fontWeight: FontWeight.bold,
           ),
         ),
         content: Text(
           'Do you want to add the $count selected transaction(s) to this group?',
-          style: const TextStyle(color: TallyTapTheme.textLight),
+          style: TextStyle(color: TriplTheme.textLight),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+            child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -426,7 +426,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Added transaction(s) to "$groupName" successfully!'),
-          backgroundColor: TallyTapTheme.borderGreen,
+          backgroundColor: TriplTheme.borderGreen,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -444,12 +444,12 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianCard,
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: isNet
-              ? (isPositive ? TallyTapTheme.primaryMint.withOpacity(0.4) : Colors.redAccent.withOpacity(0.4))
-              : TallyTapTheme.borderGreen,
+              ? (isPositive ? TriplTheme.primaryMint.withOpacity(0.4) : Colors.redAccent.withOpacity(0.4))
+              : TriplTheme.borderGreen,
           width: 1.0,
         ),
       ),
@@ -466,7 +466,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                   label.toUpperCase(),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(fontSize: 8, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 0.8),
+                  style: TextStyle(fontSize: 8, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 0.8),
                 ),
               ),
             ],
@@ -479,7 +479,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
               style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.w900,
-                color: isNet ? (isPositive ? const Color(0xFF10B981) : Colors.redAccent) : TallyTapTheme.textLight,
+                color: isNet ? (isPositive ? const Color(0xFF10B981) : Colors.redAccent) : TriplTheme.textLight,
               ),
             ),
           ),
@@ -518,7 +518,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
       children: [
         Text(
           title,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: TallyTapTheme.textLight),
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w800, color: TriplTheme.textLight),
         ),
       ],
     );
@@ -718,12 +718,12 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
+                    Text(
                       'Timeline',
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.w900,
-                        color: TallyTapTheme.textLight,
+                        color: TriplTheme.textLight,
                         letterSpacing: -0.8,
                       ),
                     ),
@@ -734,11 +734,11 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: _isCalendarExpanded
-                              ? TallyTapTheme.primaryMint
-                              : TallyTapTheme.primaryMint.withOpacity(0.12),
+                              ? TriplTheme.primaryMint
+                              : TriplTheme.primaryMint.withOpacity(0.12),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: TallyTapTheme.primaryMint.withOpacity(0.4),
+                            color: TriplTheme.primaryMint.withOpacity(0.4),
                             width: 1.0,
                           ),
                         ),
@@ -748,13 +748,13 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                             Icon(
                               Icons.calendar_month_rounded,
                               size: 15,
-                              color: _isCalendarExpanded ? TallyTapTheme.obsidianBg : TallyTapTheme.primaryMint,
+                              color: _isCalendarExpanded ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
                             ),
                             const SizedBox(width: 4),
                             Icon(
                               _isCalendarExpanded ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
                               size: 16,
-                              color: _isCalendarExpanded ? TallyTapTheme.obsidianBg : TallyTapTheme.primaryMint,
+                              color: _isCalendarExpanded ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
                             ),
                             const SizedBox(width: 4),
                             Text(
@@ -763,7 +763,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                                 fontSize: 10,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: 0.5,
-                                color: _isCalendarExpanded ? TallyTapTheme.obsidianBg : TallyTapTheme.primaryMint,
+                                color: _isCalendarExpanded ? TriplTheme.obsidianBg : TriplTheme.primaryMint,
                               ),
                             ),
                           ],
@@ -796,28 +796,28 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                       _searchQuery = val;
                     });
                   },
-                  style: const TextStyle(fontSize: 14, color: TallyTapTheme.textLight),
+                  style: TextStyle(fontSize: 14, color: TriplTheme.textLight),
                   decoration: InputDecoration(
                     hintText: 'Search transactions...',
-                    hintStyle: const TextStyle(fontSize: 14, color: TallyTapTheme.textGray),
-                    prefixIcon: const Icon(Icons.search, color: TallyTapTheme.textGray, size: 20),
+                    hintStyle: TextStyle(fontSize: 14, color: TriplTheme.textGray),
+                    prefixIcon: Icon(Icons.search, color: TriplTheme.textGray, size: 20),
                     suffixIcon: IconButton(
                       icon: Icon(
                         Icons.tune,
-                        color: _filterCriteria.isActive ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+                        color: _filterCriteria.isActive ? TriplTheme.primaryMint : TriplTheme.textGray,
                       ),
                       onPressed: () => _showFilterMenu(context, maxAmount),
                     ),
                     filled: true,
-                    fillColor: TallyTapTheme.obsidianCard,
+                    fillColor: TriplTheme.obsidianCard,
                     contentPadding: const EdgeInsets.symmetric(vertical: 14),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                      borderSide: BorderSide(color: TriplTheme.borderGreen),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
-                      borderSide: const BorderSide(color: TallyTapTheme.primaryMint),
+                      borderSide: BorderSide(color: TriplTheme.primaryMint),
                     ),
                   ),
                 ),
@@ -843,10 +843,10 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                           margin: const EdgeInsets.only(right: 10),
                           padding: const EdgeInsets.symmetric(horizontal: 18),
                           decoration: BoxDecoration(
-                            color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+                            color: isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : TriplTheme.obsidianCard,
                             borderRadius: BorderRadius.circular(12),
                             border: Border.all(
-                              color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.5) : TallyTapTheme.borderGreen,
+                              color: isSelected ? TriplTheme.primaryMint.withOpacity(0.5) : TriplTheme.borderGreen,
                               width: isSelected ? 1.5 : 1.0,
                             ),
                           ),
@@ -856,7 +856,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                             style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
-                              color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+                              color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight,
                             ),
                           ),
                         ),
@@ -891,7 +891,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                       child: _buildSummaryPill(
                         label: 'Net Balance',
                         value: '${filteredNet >= 0 ? '+' : '-'}$currency${filteredNet.abs().toStringAsFixed(2)}',
-                        color: filteredNet >= 0 ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+                        color: filteredNet >= 0 ? TriplTheme.primaryMint : TriplTheme.textLight,
                         icon: Icons.account_balance_wallet_outlined,
                         isNet: true,
                         isPositive: filteredNet >= 0,
@@ -928,7 +928,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                           for (int i = 0; i < dayGroups[dayKey]!.length; i++) ...[
                             _buildTimelineItem(dayGroups[dayKey]![i], currency, showDate: false),
                             if (i < dayGroups[dayKey]!.length - 1)
-                              const Divider(color: TallyTapTheme.borderGreen, height: 1, thickness: 0.5),
+                              Divider(color: TriplTheme.borderGreen, height: 1, thickness: 0.5),
                           ],
                         ],
                       ),
@@ -938,10 +938,10 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                 ],
                 if (filteredItems.isEmpty) ...[
                   const SizedBox(height: 60),
-                  const Center(
+                  Center(
                     child: Text(
                       'No matching transactions found.',
-                      style: TextStyle(color: TallyTapTheme.textGray, fontSize: 14),
+                      style: TextStyle(color: TriplTheme.textGray, fontSize: 14),
                     ),
                   ),
                   const SizedBox(height: 60),
@@ -965,16 +965,16 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
       right: 16,
       child: Material(
         elevation: 10,
-        color: TallyTapTheme.obsidianCard,
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: TallyTapTheme.primaryMint, width: 1.5),
+            border: Border.all(color: TriplTheme.primaryMint, width: 1.5),
             boxShadow: [
               BoxShadow(
-                color: TallyTapTheme.primaryMint.withOpacity(0.12),
+                color: TriplTheme.primaryMint.withOpacity(0.12),
                 blurRadius: 16,
                 spreadRadius: 2,
               )
@@ -986,7 +986,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
               Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.close_rounded, color: TallyTapTheme.textGray, size: 20),
+                    icon: Icon(Icons.close_rounded, color: TriplTheme.textGray, size: 20),
                     onPressed: () {
                       setState(() {
                         _isSelectionMode = false;
@@ -996,8 +996,8 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                   ),
                   Text(
                     '${_selectedTransactionIds.length} Selected',
-                    style: const TextStyle(
-                      color: TallyTapTheme.textLight,
+                    style: TextStyle(
+                      color: TriplTheme.textLight,
                       fontWeight: FontWeight.w800,
                       fontSize: 15,
                     ),
@@ -1015,8 +1015,8 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
                   const SizedBox(width: 8),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: TallyTapTheme.primaryMint,
-                      foregroundColor: TallyTapTheme.obsidianBg,
+                      backgroundColor: TriplTheme.primaryMint,
+                      foregroundColor: TriplTheme.obsidianBg,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -1052,10 +1052,10 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
         margin: const EdgeInsets.only(right: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+          color: isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : TriplTheme.obsidianCard,
           borderRadius: BorderRadius.circular(100),
           border: Border.all(
-            color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.5) : TallyTapTheme.borderGreen,
+            color: isSelected ? TriplTheme.primaryMint.withOpacity(0.5) : TriplTheme.borderGreen,
             width: isSelected ? 1.5 : 1.0,
           ),
         ),
@@ -1065,7 +1065,7 @@ class _TimelineScreenState extends ConsumerState<TimelineScreen> with SingleTick
           style: TextStyle(
             fontSize: 12,
             fontWeight: isSelected ? FontWeight.w800 : FontWeight.w500,
-            color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+            color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight,
           ),
         ),
       ),
@@ -1214,15 +1214,15 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
       decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianCard,
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: TallyTapTheme.primaryMint.withOpacity(0.4),
+          color: TriplTheme.primaryMint.withOpacity(0.4),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: TallyTapTheme.primaryMint.withOpacity(0.05),
+            color: TriplTheme.primaryMint.withOpacity(0.05),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -1247,12 +1247,12 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
                     height: 42,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: TallyTapTheme.primaryMint.withOpacity(0.15),
-                      border: Border.all(color: TallyTapTheme.primaryMint, width: 1.0),
+                      color: TriplTheme.primaryMint.withOpacity(0.15),
+                      border: Border.all(color: TriplTheme.primaryMint, width: 1.0),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.group_work_rounded,
-                      color: TallyTapTheme.primaryMint,
+                      color: TriplTheme.primaryMint,
                       size: 20,
                     ),
                   ),
@@ -1266,10 +1266,10 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
                             Flexible(
                               child: Text(
                                 groupName,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w800,
-                                  color: TallyTapTheme.primaryMint,
+                                  color: TriplTheme.primaryMint,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -1279,15 +1279,15 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                color: TallyTapTheme.primaryMint.withOpacity(0.1),
+                                color: TriplTheme.primaryMint.withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
                                 '${widget.transactions.length} items',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 8,
                                   fontWeight: FontWeight.w800,
-                                  color: TallyTapTheme.primaryMint,
+                                  color: TriplTheme.primaryMint,
                                 ),
                               ),
                             ),
@@ -1296,7 +1296,7 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
                         const SizedBox(height: 4),
                         Text(
                           'Net ${isNetIncome ? 'Income' : 'Expense'} • Tap to ${_expanded ? 'collapse' : 'expand'}',
-                          style: const TextStyle(fontSize: 11, color: TallyTapTheme.textGray),
+                          style: TextStyle(fontSize: 11, color: TriplTheme.textGray),
                         ),
                       ],
                     ),
@@ -1310,13 +1310,13 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w900,
-                          color: isNetIncome ? const Color(0xFF10B981) : TallyTapTheme.textLight,
+                          color: isNetIncome ? const Color(0xFF10B981) : TriplTheme.textLight,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Icon(
                         _expanded ? Icons.expand_less_rounded : Icons.expand_more_rounded,
-                        color: TallyTapTheme.textGray,
+                        color: TriplTheme.textGray,
                         size: 16,
                       ),
                     ],
@@ -1326,10 +1326,10 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
             ),
           ),
           if (_expanded) ...[
-            const Divider(color: TallyTapTheme.borderGreen, height: 1),
+            Divider(color: TriplTheme.borderGreen, height: 1),
             Container(
               decoration: BoxDecoration(
-                color: TallyTapTheme.obsidianBg.withOpacity(0.5),
+                color: TriplTheme.obsidianBg.withOpacity(0.5),
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(16),
                   bottomRight: Radius.circular(16),
@@ -1344,15 +1344,15 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
                     padding: EdgeInsets.zero,
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: widget.transactions.length,
-                    separatorBuilder: (context, index) => const Divider(
-                      color: TallyTapTheme.borderGreen,
+                    separatorBuilder: (context, index) => Divider(
+                      color: TriplTheme.borderGreen,
                       height: 1,
                       thickness: 0.5,
                     ),
                     itemBuilder: (context, index) {
                       final tx = widget.transactions[index];
                       final isInc = tx.isIncome;
-                      final color = isInc ? const Color(0xFF10B981) : TallyTapTheme.textLight;
+                      final color = isInc ? const Color(0xFF10B981) : TriplTheme.textLight;
                       int hour = tx.date.hour;
                       final period = hour >= 12 ? 'PM' : 'AM';
                       if (hour > 12) hour -= 12;
@@ -1365,7 +1365,7 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
                           children: [
                             Icon(
                               isInc ? Icons.arrow_downward_rounded : Icons.arrow_upward_rounded,
-                              color: isInc ? const Color(0xFF10B981) : TallyTapTheme.textGray,
+                              color: isInc ? const Color(0xFF10B981) : TriplTheme.textGray,
                               size: 14,
                             ),
                             const SizedBox(width: 8),
@@ -1375,18 +1375,18 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
                                 children: [
                                   Text(
                                     tx.merchant,
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 13,
                                       fontWeight: FontWeight.bold,
-                                      color: TallyTapTheme.textLight,
+                                      color: TriplTheme.textLight,
                                     ),
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
                                     '$formattedTime • ${tx.category}',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                       fontSize: 10,
-                                      color: TallyTapTheme.textGray,
+                                      color: TriplTheme.textGray,
                                     ),
                                   ),
                                 ],
@@ -1418,8 +1418,8 @@ class _GroupTransactionCardState extends State<GroupTransactionCard> {
                         );
                       },
                       style: OutlinedButton.styleFrom(
-                        foregroundColor: TallyTapTheme.primaryMint,
-                        side: const BorderSide(color: TallyTapTheme.borderGreen),
+                        foregroundColor: TriplTheme.primaryMint,
+                        side: BorderSide(color: TriplTheme.borderGreen),
                         padding: const EdgeInsets.symmetric(vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

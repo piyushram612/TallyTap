@@ -65,11 +65,11 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
   }
 
   Future<void> _pickDate(BuildContext context) async {
-    final darkScheme = const ColorScheme.dark(
-      primary: TallyTapTheme.primaryMint,
-      onPrimary: TallyTapTheme.obsidianBg,
-      surface: TallyTapTheme.obsidianCard,
-      onSurface: TallyTapTheme.textLight,
+    final darkScheme = ColorScheme.dark(
+      primary: TriplTheme.primaryMint,
+      onPrimary: TriplTheme.obsidianBg,
+      surface: TriplTheme.obsidianCard,
+      onSurface: TriplTheme.textLight,
     );
     final picked = await showDatePicker(
       context: context,
@@ -130,9 +130,9 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
 
     setState(() => _isEditing = false);
 
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text('Transfer updated successfully'),
-      backgroundColor: TallyTapTheme.primaryMint,
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: const Text('Transfer updated successfully'),
+      backgroundColor: TriplTheme.primaryMint,
       behavior: SnackBarBehavior.floating,
     ));
   }
@@ -141,10 +141,10 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: TallyTapTheme.obsidianCard,
+        backgroundColor: TriplTheme.obsidianCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
-          side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+          side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
         ),
         title: const Text(
           'Delete Transfer?',
@@ -154,14 +154,14 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
             fontFamily: 'Outfit',
           ),
         ),
-        content: const Text(
+        content: Text(
           'Are you sure you want to permanently delete this transfer? This will restore balances on both accounts.',
-          style: TextStyle(color: TallyTapTheme.textLight),
+          style: TextStyle(color: TriplTheme.textLight),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+            child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -212,18 +212,18 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
     final timeLabel = DateFormat('h:mm a').format(_selectedDate);
 
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: TallyTapTheme.textLight),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: TriplTheme.textLight),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Transfer Details',
           style: TextStyle(
-            color: TallyTapTheme.textLight,
+            color: TriplTheme.textLight,
             fontWeight: FontWeight.bold,
             fontSize: 18,
             fontFamily: 'Outfit',
@@ -233,7 +233,7 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
         actions: [
           if (!_isEditing) ...[
             IconButton(
-              icon: const Icon(Icons.edit_rounded, color: TallyTapTheme.primaryMint),
+              icon: Icon(Icons.edit_rounded, color: TriplTheme.primaryMint),
               onPressed: () => setState(() => _isEditing = true),
             ),
             IconButton(
@@ -242,7 +242,7 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
             ),
           ] else ...[
             IconButton(
-              icon: const Icon(Icons.close_rounded, color: TallyTapTheme.textGray),
+              icon: Icon(Icons.close_rounded, color: TriplTheme.textGray),
               onPressed: () {
                 setState(() {
                   _isEditing = false;
@@ -296,23 +296,23 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                     Container(
                       padding: const EdgeInsets.all(24),
                       decoration: BoxDecoration(
-                        color: TallyTapTheme.obsidianCard,
+                        color: TriplTheme.obsidianCard,
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                          color: _isEditing ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen,
+                          color: _isEditing ? TriplTheme.primaryMint : TriplTheme.borderGreen,
                           width: _isEditing ? 1.5 : 1.0,
                         ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const Text(
+                          Text(
                             'AMOUNT',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 1.5,
-                              color: TallyTapTheme.textGray,
+                              color: TriplTheme.textGray,
                             ),
                           ),
                           const SizedBox(height: 12),
@@ -323,10 +323,10 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                             children: [
                               Text(
                                 currency,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 32,
                                   fontWeight: FontWeight.bold,
-                                  color: TallyTapTheme.primaryMint,
+                                  color: TriplTheme.primaryMint,
                                   fontFamily: 'Outfit',
                                 ),
                               ),
@@ -336,20 +336,20 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                                   controller: _amountController,
                                   enabled: _isEditing,
                                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 44,
                                     fontWeight: FontWeight.w900,
-                                    color: TallyTapTheme.textLight,
+                                    color: TriplTheme.textLight,
                                     fontFamily: 'Outfit',
                                   ),
                                   textAlign: TextAlign.center,
-                                  cursorColor: TallyTapTheme.primaryMint,
+                                  cursorColor: TriplTheme.primaryMint,
                                   inputFormatters: [
                                     FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
                                   ],
-                                  decoration: const InputDecoration(
+                                  decoration: InputDecoration(
                                     hintText: '0.00',
-                                    hintStyle: TextStyle(color: TallyTapTheme.textGray),
+                                    hintStyle: TextStyle(color: TriplTheme.textGray),
                                     border: InputBorder.none,
                                     contentPadding: EdgeInsets.zero,
                                     isCollapsed: true,
@@ -373,20 +373,20 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                     Container(
                       padding: const EdgeInsets.all(20),
                       decoration: BoxDecoration(
-                        color: TallyTapTheme.obsidianCard,
+                        color: TriplTheme.obsidianCard,
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: TallyTapTheme.borderGreen, width: 1.0),
+                        border: Border.all(color: TriplTheme.borderGreen, width: 1.0),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'ACCOUNTS',
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.w800,
                               letterSpacing: 1.5,
-                              color: TallyTapTheme.textGray,
+                              color: TriplTheme.textGray,
                             ),
                           ),
                           const SizedBox(height: 16),
@@ -397,27 +397,27 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'From',
-                                      style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                                      style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                                     ),
                                     const SizedBox(height: 8),
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 12),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF14221D),
+                                        color: TriplTheme.obsidianBg,
                                         borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(color: TallyTapTheme.borderGreen.withOpacity(0.5)),
+                                        border: Border.all(color: TriplTheme.borderGreen.withOpacity(0.5)),
                                       ),
                                       child: DropdownButtonHideUnderline(
                                         child: DropdownButton<String>(
                                           value: _sourceAccount,
-                                          dropdownColor: TallyTapTheme.obsidianBg,
+                                          dropdownColor: TriplTheme.obsidianBg,
                                           isExpanded: true,
                                           disabledHint: Text(_sourceAccount),
-                                          icon: _isEditing ? const Icon(Icons.arrow_drop_down, color: TallyTapTheme.primaryMint) : const SizedBox(),
-                                          style: const TextStyle(
-                                            color: TallyTapTheme.textLight,
+                                          icon: _isEditing ? Icon(Icons.arrow_drop_down, color: TriplTheme.primaryMint) : const SizedBox(),
+                                          style: TextStyle(
+                                            color: TriplTheme.textLight,
                                             fontWeight: FontWeight.w600,
                                             fontSize: 14,
                                           ),
@@ -442,36 +442,36 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                                   ],
                                 ),
                               ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 12.0),
-                                child: Icon(Icons.arrow_forward_rounded, color: TallyTapTheme.primaryMint, size: 20),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                child: Icon(Icons.arrow_forward_rounded, color: TriplTheme.primaryMint, size: 20),
                               ),
                               // Destination
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'To',
-                                      style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                                      style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                                     ),
                                     const SizedBox(height: 8),
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 12),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xFF14221D),
+                                        color: TriplTheme.obsidianBg,
                                         borderRadius: BorderRadius.circular(12),
-                                        border: Border.all(color: TallyTapTheme.borderGreen.withOpacity(0.5)),
+                                        border: Border.all(color: TriplTheme.borderGreen.withOpacity(0.5)),
                                       ),
                                       child: DropdownButtonHideUnderline(
                                         child: DropdownButton<String>(
                                           value: _destinationAccount,
-                                          dropdownColor: TallyTapTheme.obsidianBg,
+                                          dropdownColor: TriplTheme.obsidianBg,
                                           isExpanded: true,
                                           disabledHint: Text(_destinationAccount),
-                                          icon: _isEditing ? const Icon(Icons.arrow_drop_down, color: TallyTapTheme.primaryMint) : const SizedBox(),
-                                          style: const TextStyle(
-                                            color: TallyTapTheme.textLight,
+                                          icon: _isEditing ? Icon(Icons.arrow_drop_down, color: TriplTheme.primaryMint) : const SizedBox(),
+                                          style: TextStyle(
+                                            color: TriplTheme.textLight,
                                             fontWeight: FontWeight.w600,
                                             fontSize: 14,
                                           ),
@@ -510,9 +510,9 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                         decoration: BoxDecoration(
-                          color: TallyTapTheme.obsidianCard,
+                          color: TriplTheme.obsidianCard,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: TallyTapTheme.borderGreen, width: 1.0),
+                          border: Border.all(color: TriplTheme.borderGreen, width: 1.0),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -522,31 +522,31 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xFF14221D),
+                                    color: TriplTheme.obsidianBg,
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: const Icon(Icons.calendar_month_rounded, color: TallyTapTheme.primaryMint, size: 20),
+                                  child: Icon(Icons.calendar_month_rounded, color: TriplTheme.primaryMint, size: 20),
                                 ),
                                 const SizedBox(width: 16),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'DATE & TIME',
                                       style: TextStyle(
                                         fontSize: 9,
                                         fontWeight: FontWeight.w800,
                                         letterSpacing: 1.0,
-                                        color: TallyTapTheme.textGray,
+                                        color: TriplTheme.textGray,
                                       ),
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
                                       '$dateLabel @ $timeLabel',
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontSize: 14,
                                         fontWeight: FontWeight.bold,
-                                        color: TallyTapTheme.textLight,
+                                        color: TriplTheme.textLight,
                                       ),
                                     ),
                                   ],
@@ -554,7 +554,7 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                               ],
                             ),
                             if (_isEditing)
-                              const Icon(Icons.edit_calendar_rounded, color: TallyTapTheme.textGray, size: 18),
+                              Icon(Icons.edit_calendar_rounded, color: TriplTheme.textGray, size: 18),
                           ],
                         ),
                       ),
@@ -562,42 +562,42 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                     const SizedBox(height: 24),
 
                     // Notes
-                    const Text(
+                    Text(
                       'NOTES',
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 1.5,
-                        color: TallyTapTheme.textGray,
+                        color: TriplTheme.textGray,
                       ),
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: _notesController,
                       enabled: _isEditing,
-                      style: const TextStyle(
-                        color: TallyTapTheme.textLight,
+                      style: TextStyle(
+                        color: TriplTheme.textLight,
                         fontWeight: FontWeight.w600,
                       ),
                       textCapitalization: TextCapitalization.sentences,
                       maxLines: 3,
                       decoration: InputDecoration(
                         hintText: 'No notes provided.',
-                        hintStyle: const TextStyle(color: TallyTapTheme.textGray, fontSize: 13),
+                        hintStyle: TextStyle(color: TriplTheme.textGray, fontSize: 13),
                         filled: true,
-                        fillColor: TallyTapTheme.obsidianCard,
+                        fillColor: TriplTheme.obsidianCard,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
-                          borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                          borderSide: BorderSide(color: TriplTheme.borderGreen),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
-                          borderSide: const BorderSide(color: TallyTapTheme.primaryMint, width: 1.5),
+                          borderSide: BorderSide(color: TriplTheme.primaryMint, width: 1.5),
                         ),
                         disabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(16),
-                          borderSide: BorderSide(color: TallyTapTheme.borderGreen.withOpacity(0.4)),
+                          borderSide: BorderSide(color: TriplTheme.borderGreen.withOpacity(0.4)),
                         ),
                       ),
                     ),
@@ -613,8 +613,8 @@ class _TransferDetailsScreenState extends ConsumerState<TransferDetailsScreen> {
                 child: ElevatedButton(
                   onPressed: _saveChanges,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: TallyTapTheme.primaryMint,
-                    foregroundColor: TallyTapTheme.obsidianBg,
+                    backgroundColor: TriplTheme.primaryMint,
+                    foregroundColor: TriplTheme.obsidianBg,
                     minimumSize: const Size.fromHeight(56),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),

@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import com.waypointlattice.tripl.ui.components.core.ScrollableCategoryCapsule
 import com.waypointlattice.tripl.ui.components.core.SectionHeader
 import com.waypointlattice.tripl.ui.components.core.CustomInputField
+import com.waypointlattice.tripl.ui.theme.LocalTriplColors
 import com.waypointlattice.tripl.utils.TransactionManager
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -71,15 +72,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-// Obsidian Green Theme tokens for native compose
-val GreenPrimary = Color(0xFF4EDEA3)
-val GreenBgDark = Color(0xFF08100E)
-val CardBgDark = Color(0xFF0D1612)
-val BorderDark = Color(0xFF1D2F28)
-val InactivePill = Color(0xFF1A2823)
-
 fun Modifier.outerGlow(
-    color: Color = GreenPrimary,
+    color: Color,
     radius: Dp = 16.dp,
     alpha: Float = 0.35f,
     cornerRadius: Dp = 100.dp
@@ -102,7 +96,16 @@ fun PopupCard(
     onClose: () -> Unit
 ) {
     val context = LocalContext.current
+    val theme = LocalTriplColors.current
     
+    val greenPrimary = theme.primaryAccent
+    val cardBgDark = theme.cardBg
+    val borderDark = theme.cardBorder
+    val textPrimary = theme.textPrimary
+    val textMuted = theme.textMuted
+    val inactivePill = if (theme.isLight) borderDark.copy(alpha = 0.4f) else borderDark.copy(alpha = 0.3f)
+    val ctaTextColor = if (theme.isLight) Color.White else theme.bgBase
+
     val currency = remember(context) { TransactionManager.getGlobalCurrency(context) }
     val categories = remember(context) { TransactionManager.getCustomCategories(context) }
     val sources = remember(context) { TransactionManager.getCustomSources(context) }
@@ -174,7 +177,7 @@ fun PopupCard(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
             ) { onClose() },
-        contentAlignment = Alignment.TopCenter // Aligns popup card at the Top of the screen!
+        contentAlignment = Alignment.TopCenter
     ) {
         AnimatedVisibility(
             visible = visible,
@@ -182,8 +185,8 @@ fun PopupCard(
         ) {
             Card(
                 modifier = Modifier
-                    .padding(top = 56.dp) // Shifted a tiny bit lower for premium gap
-                    .then(if (isExpanded) Modifier.fillMaxWidth() else Modifier.fillMaxWidth(0.96f)) // Made a bit wider
+                    .padding(top = 56.dp)
+                    .then(if (isExpanded) Modifier.fillMaxWidth() else Modifier.fillMaxWidth(0.96f))
                     .wrapContentHeight()
                     .animateContentSize()
                     .clickable(
@@ -199,11 +202,11 @@ fun PopupCard(
                     ),
                 shape = RoundedCornerShape(32.dp),
                 colors = CardDefaults.cardColors(
-                    containerColor = CardBgDark
+                    containerColor = cardBgDark
                 ),
                 border = BorderStroke(
                     width = 1.5.dp,
-                    color = BorderDark
+                    color = borderDark
                 )
             ) {
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -211,7 +214,7 @@ fun PopupCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .verticalScroll(rememberScrollState())
-                            .padding(top = 36.dp, bottom = 48.dp), // Added extra top padding to give title clearance
+                            .padding(top = 36.dp, bottom = 48.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         // 1. TITLE INPUT FIELD
@@ -221,7 +224,7 @@ fun PopupCard(
                             textStyle = TextStyle(
                                 fontSize = 18.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.White,
+                                color = textPrimary,
                                 textAlign = TextAlign.Center
                             ),
                             decorationBox = { innerTextField ->
@@ -235,7 +238,7 @@ fun PopupCard(
                                             style = TextStyle(
                                                 fontSize = 18.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color.White.copy(alpha = 0.6f),
+                                                color = textMuted,
                                                 textAlign = TextAlign.Center
                                             )
                                         )
@@ -265,7 +268,7 @@ fun PopupCard(
                             textStyle = TextStyle(
                                 fontSize = 48.sp,
                                 fontWeight = FontWeight.W900,
-                                color = Color.White.copy(alpha = 0.9f),
+                                color = textPrimary,
                                 textAlign = TextAlign.Center
                             ),
                             decorationBox = { innerTextField ->
@@ -279,7 +282,7 @@ fun PopupCard(
                                             style = TextStyle(
                                                 fontSize = 48.sp,
                                                 fontWeight = FontWeight.W900,
-                                                color = Color.White.copy(alpha = 0.4f),
+                                                color = textMuted,
                                                 textAlign = TextAlign.Center
                                             )
                                         )
@@ -290,7 +293,7 @@ fun PopupCard(
                                                 style = TextStyle(
                                                     fontSize = 48.sp,
                                                     fontWeight = FontWeight.W900,
-                                                    color = Color.White.copy(alpha = 0.9f)
+                                                    color = textPrimary
                                                 )
                                             )
                                             innerTextField()
@@ -330,7 +333,7 @@ fun PopupCard(
                                         label = cat,
                                         isSelected = (selectedCategory == cat),
                                         onClick = { selectedCategory = cat },
-                                        accentColor = categoryColors[cat]?.let { Color(it) } ?: GreenPrimary
+                                        accentColor = categoryColors[cat]?.let { Color(it) } ?: greenPrimary
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(14.dp))
@@ -344,7 +347,7 @@ fun PopupCard(
                                     .width(24.dp)
                                     .background(
                                         brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
-                                            colors = listOf(CardBgDark, Color.Transparent)
+                                            colors = listOf(cardBgDark, Color.Transparent)
                                         )
                                     )
                                 )
@@ -357,7 +360,7 @@ fun PopupCard(
                                     .width(24.dp)
                                     .background(
                                         brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
-                                            colors = listOf(Color.Transparent, CardBgDark)
+                                            colors = listOf(Color.Transparent, cardBgDark)
                                         )
                                     )
                             )
@@ -381,7 +384,7 @@ fun PopupCard(
                                         label = src,
                                         isSelected = (selectedSource == src),
                                         onClick = { selectedSource = src },
-                                        accentColor = sourceColors[src]?.let { Color(it) } ?: GreenPrimary
+                                        accentColor = sourceColors[src]?.let { Color(it) } ?: greenPrimary
                                     )
                                 }
                                 Spacer(modifier = Modifier.width(14.dp))
@@ -395,7 +398,7 @@ fun PopupCard(
                                     .width(24.dp)
                                     .background(
                                         brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
-                                            colors = listOf(CardBgDark, Color.Transparent)
+                                            colors = listOf(cardBgDark, Color.Transparent)
                                         )
                                     )
                             )
@@ -408,7 +411,7 @@ fun PopupCard(
                                     .width(24.dp)
                                     .background(
                                         brush = androidx.compose.ui.graphics.Brush.horizontalGradient(
-                                            colors = listOf(Color.Transparent, CardBgDark)
+                                            colors = listOf(Color.Transparent, cardBgDark)
                                         )
                                     )
                             )
@@ -419,14 +422,14 @@ fun PopupCard(
                             Column(modifier = Modifier.fillMaxWidth()) {
                                 Spacer(modifier = Modifier.height(16.dp))
                                 
-                                // TYPE Segmented Button (now below SOURCE)
+                                // TYPE Segmented Button
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .padding(horizontal = 24.dp)
                                         .height(48.dp)
-                                        .background(InactivePill, RoundedCornerShape(24.dp))
-                                        .border(1.dp, BorderDark, RoundedCornerShape(24.dp))
+                                        .background(inactivePill, RoundedCornerShape(24.dp))
+                                        .border(1.dp, borderDark, RoundedCornerShape(24.dp))
                                         .padding(4.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
@@ -441,7 +444,7 @@ fun PopupCard(
                                                 .clip(RoundedCornerShape(20.dp))
                                                 .background(
                                                     if (isSelected) {
-                                                        if (isExpense) GreenPrimary else Color(0xFF10B981)
+                                                        if (isExpense) greenPrimary else Color(0xFF10B981)
                                                     } else {
                                                         Color.Transparent
                                                     }
@@ -460,7 +463,7 @@ fun PopupCard(
                                                     fontSize = 13.sp,
                                                     fontWeight = FontWeight.W900,
                                                     letterSpacing = 0.5.sp,
-                                                    color = if (isSelected) GreenBgDark else Color.White.copy(alpha = 0.6f)
+                                                    color = if (isSelected) ctaTextColor else textMuted
                                                 )
                                             )
                                         }
@@ -523,18 +526,18 @@ fun PopupCard(
                                     Box(
                                         modifier = Modifier
                                             .size(24.dp)
-                                            .background(if (finishLater) GreenPrimary else InactivePill, RoundedCornerShape(6.dp))
-                                            .border(1.dp, if (finishLater) GreenPrimary else Color.Transparent, RoundedCornerShape(6.dp)),
+                                            .background(if (finishLater) greenPrimary else inactivePill, RoundedCornerShape(6.dp))
+                                            .border(1.dp, if (finishLater) greenPrimary else Color.Transparent, RoundedCornerShape(6.dp)),
                                         contentAlignment = Alignment.Center
                                     ) {
                                         if (finishLater) {
-                                            Icon(Icons.Outlined.Check, contentDescription = null, tint = GreenBgDark, modifier = Modifier.size(16.dp))
+                                            Icon(Icons.Outlined.Check, contentDescription = null, tint = ctaTextColor, modifier = Modifier.size(16.dp))
                                         }
                                     }
                                     Spacer(modifier = Modifier.width(14.dp))
                                     Text(
                                         text = if (isIncome) "Verify Receipt" else "Finish later",
-                                        style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600, color = Color.White)
+                                        style = TextStyle(fontSize = 14.sp, fontWeight = FontWeight.W600, color = textPrimary)
                                     )
                                 }
 
@@ -577,8 +580,8 @@ fun PopupCard(
                                 .fillMaxWidth()
                                 .padding(horizontal = 24.dp)
                                 .height(56.dp)
-                                .outerGlow(color = GreenPrimary, radius = 24.dp, alpha = 0.45f, cornerRadius = 100.dp)
-                                .background(GreenPrimary, RoundedCornerShape(100.dp))
+                                .outerGlow(color = greenPrimary, radius = 24.dp, alpha = 0.45f, cornerRadius = 100.dp)
+                                .background(greenPrimary, RoundedCornerShape(100.dp))
                                 .clickable {
                                     if (amount.text.isBlank()) {
                                         Toast.makeText(context, "Please enter an amount", Toast.LENGTH_SHORT).show()
@@ -634,7 +637,7 @@ fun PopupCard(
                                     fontSize = 15.sp,
                                     fontWeight = FontWeight.W900,
                                     letterSpacing = 0.5.sp,
-                                    color = GreenBgDark
+                                    color = ctaTextColor
                                 )
                             )
                         }
@@ -662,7 +665,7 @@ fun PopupCard(
                                 .padding(bottom = 8.dp)
                                 .width(40.dp)
                                 .height(5.dp)
-                                .background(Color.White.copy(alpha = 0.25f), CircleShape)
+                                .background(textMuted.copy(alpha = 0.4f), CircleShape)
                         )
                     }
 
@@ -672,7 +675,7 @@ fun PopupCard(
                             .align(Alignment.TopEnd)
                             .padding(top = 16.dp, end = 16.dp)
                             .clip(RoundedCornerShape(10.dp))
-                            .background(BorderDark)
+                            .background(borderDark)
                             .clickable {
                                 val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
                                     flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
@@ -686,7 +689,7 @@ fun PopupCard(
                         Icon(
                             imageVector = Icons.Default.OpenInNew,
                             contentDescription = "Open in app",
-                            tint = GreenPrimary,
+                            tint = greenPrimary,
                             modifier = Modifier.size(16.dp)
                         )
                     }
@@ -706,29 +709,29 @@ fun PopupCard(
                         dateText = SimpleDateFormat("dd MMM yyyy", Locale.US).format(Date(it))
                     }
                     showDatePicker = false
-                }) { Text("OK", color = GreenPrimary) }
+                }) { Text("OK", color = greenPrimary) }
             },
             dismissButton = {
-                TextButton(onClick = { showDatePicker = false }) { Text("Cancel", color = Color.White) }
+                TextButton(onClick = { showDatePicker = false }) { Text("Cancel", color = textPrimary) }
             },
-            colors = DatePickerDefaults.colors(containerColor = CardBgDark)
+            colors = DatePickerDefaults.colors(containerColor = cardBgDark)
         ) {
             DatePicker(state = datePickerState, colors = DatePickerDefaults.colors(
-                titleContentColor = GreenPrimary,
-                headlineContentColor = Color.White,
-                weekdayContentColor = Color.White,
-                dayContentColor = Color.White,
-                selectedDayContainerColor = GreenPrimary,
-                selectedDayContentColor = GreenBgDark,
-                todayContentColor = GreenPrimary,
-                todayDateBorderColor = GreenPrimary
+                titleContentColor = greenPrimary,
+                headlineContentColor = textPrimary,
+                weekdayContentColor = textMuted,
+                dayContentColor = textPrimary,
+                selectedDayContainerColor = greenPrimary,
+                selectedDayContentColor = ctaTextColor,
+                todayContentColor = greenPrimary,
+                todayDateBorderColor = greenPrimary
             ))
         }
     }
     
     if (showTimePicker) {
         val timePickerState = rememberTimePickerState()
-        DatePickerDialog( // Using DatePickerDialog as a container for TimePicker
+        DatePickerDialog(
             onDismissRequest = { showTimePicker = false },
             confirmButton = {
                 TextButton(onClick = {
@@ -738,25 +741,25 @@ fun PopupCard(
                     }
                     timeText = SimpleDateFormat("hh:mm a", Locale.US).format(cal.time)
                     showTimePicker = false
-                }) { Text("OK", color = GreenPrimary) }
+                }) { Text("OK", color = greenPrimary) }
             },
             dismissButton = {
-                TextButton(onClick = { showTimePicker = false }) { Text("Cancel", color = Color.White) }
+                TextButton(onClick = { showTimePicker = false }) { Text("Cancel", color = textPrimary) }
             },
-            colors = DatePickerDefaults.colors(containerColor = CardBgDark)
+            colors = DatePickerDefaults.colors(containerColor = cardBgDark)
         ) {
             TimePicker(
                 state = timePickerState,
                 modifier = Modifier.padding(24.dp).align(Alignment.CenterHorizontally),
                 colors = TimePickerDefaults.colors(
-                    clockDialColor = InactivePill,
-                    selectorColor = GreenPrimary,
-                    clockDialSelectedContentColor = GreenBgDark,
-                    clockDialUnselectedContentColor = Color.White,
-                    timeSelectorSelectedContainerColor = GreenPrimary.copy(alpha = 0.2f),
-                    timeSelectorSelectedContentColor = GreenPrimary,
-                    timeSelectorUnselectedContainerColor = InactivePill,
-                    timeSelectorUnselectedContentColor = Color.White
+                    clockDialColor = inactivePill,
+                    selectorColor = greenPrimary,
+                    clockDialSelectedContentColor = ctaTextColor,
+                    clockDialUnselectedContentColor = textPrimary,
+                    timeSelectorSelectedContainerColor = greenPrimary.copy(alpha = 0.2f),
+                    timeSelectorSelectedContentColor = greenPrimary,
+                    timeSelectorUnselectedContainerColor = inactivePill,
+                    timeSelectorUnselectedContentColor = textPrimary
                 )
             )
         }
@@ -772,22 +775,22 @@ fun PopupCard(
                         reminderDate = SimpleDateFormat("dd.MM.yyyy", Locale.US).format(Date(it))
                     }
                     showReminderDatePicker = false
-                }) { Text("OK", color = GreenPrimary) }
+                }) { Text("OK", color = greenPrimary) }
             },
             dismissButton = {
-                TextButton(onClick = { showReminderDatePicker = false }) { Text("Cancel", color = Color.White) }
+                TextButton(onClick = { showReminderDatePicker = false }) { Text("Cancel", color = textPrimary) }
             },
-            colors = DatePickerDefaults.colors(containerColor = CardBgDark)
+            colors = DatePickerDefaults.colors(containerColor = cardBgDark)
         ) {
             DatePicker(state = datePickerState, colors = DatePickerDefaults.colors(
-                titleContentColor = GreenPrimary,
-                headlineContentColor = Color.White,
-                weekdayContentColor = Color.White,
-                dayContentColor = Color.White,
-                selectedDayContainerColor = GreenPrimary,
-                selectedDayContentColor = GreenBgDark,
-                todayContentColor = GreenPrimary,
-                todayDateBorderColor = GreenPrimary
+                titleContentColor = greenPrimary,
+                headlineContentColor = textPrimary,
+                weekdayContentColor = textMuted,
+                dayContentColor = textPrimary,
+                selectedDayContainerColor = greenPrimary,
+                selectedDayContentColor = ctaTextColor,
+                todayContentColor = greenPrimary,
+                todayDateBorderColor = greenPrimary
             ))
         }
     }
@@ -804,25 +807,25 @@ fun PopupCard(
                     }
                     reminderTime = SimpleDateFormat("hh:mm a", Locale.US).format(cal.time)
                     showReminderTimePicker = false
-                }) { Text("OK", color = GreenPrimary) }
+                }) { Text("OK", color = greenPrimary) }
             },
             dismissButton = {
-                TextButton(onClick = { showReminderTimePicker = false }) { Text("Cancel", color = Color.White) }
+                TextButton(onClick = { showReminderTimePicker = false }) { Text("Cancel", color = textPrimary) }
             },
-            colors = DatePickerDefaults.colors(containerColor = CardBgDark)
+            colors = DatePickerDefaults.colors(containerColor = cardBgDark)
         ) {
             TimePicker(
                 state = timePickerState,
                 modifier = Modifier.padding(24.dp).align(Alignment.CenterHorizontally),
                 colors = TimePickerDefaults.colors(
-                    clockDialColor = InactivePill,
-                    selectorColor = GreenPrimary,
-                    clockDialSelectedContentColor = GreenBgDark,
-                    clockDialUnselectedContentColor = Color.White,
-                    timeSelectorSelectedContainerColor = GreenPrimary.copy(alpha = 0.2f),
-                    timeSelectorSelectedContentColor = GreenPrimary,
-                    timeSelectorUnselectedContainerColor = InactivePill,
-                    timeSelectorUnselectedContentColor = Color.White
+                    clockDialColor = inactivePill,
+                    selectorColor = greenPrimary,
+                    clockDialSelectedContentColor = ctaTextColor,
+                    clockDialUnselectedContentColor = textPrimary,
+                    timeSelectorSelectedContainerColor = greenPrimary.copy(alpha = 0.2f),
+                    timeSelectorSelectedContentColor = greenPrimary,
+                    timeSelectorUnselectedContainerColor = inactivePill,
+                    timeSelectorUnselectedContentColor = textPrimary
                 )
             )
         }

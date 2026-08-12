@@ -19,7 +19,7 @@
 
 
     <!-- Translucent Dialog Overlay Theme for Jetpack Compose popup -->
-    <style name="Theme.TallyTap.Transparent" parent="@android:style/Theme.Translucent.NoTitleBar">
+    <style name="Theme.Tripl.Transparent" parent="@android:style/Theme.Translucent.NoTitleBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowContentOverlay">@null</item>

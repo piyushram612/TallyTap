@@ -21,7 +21,7 @@ Tripl features a state-of-the-art custom design system:
   - `WeeklyTrendPainter`: Smooth bezier curves and gradients showing daily spend momentum.
   - `DonutChartPainter`: Dynamic radial distribution breakdown for categories.
   - `BudgetRingPainter` & `IntentRingPainter`: Clean circular progress trackers for budget margins.
-- **Unified Style Tokens**: Harmonized neon mints, warm ambers, obsidian fields, and premium gradients defined under `TallyTapTheme`.
+- **Unified Style Tokens**: Harmonized neon mints, warm ambers, obsidian fields, and dynamic theme presets defined under `TriplTheme` / `AppThemeConfig`.
 
 ---
 

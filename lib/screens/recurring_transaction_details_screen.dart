@@ -40,30 +40,30 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: TallyTapTheme.obsidianCard,
+        backgroundColor: TriplTheme.obsidianCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: TallyTapTheme.borderGreen),
+          side: BorderSide(color: TriplTheme.borderGreen),
         ),
-        title: const Text(
+        title: Text(
           'Delete Recurring Payment?',
           style: TextStyle(
             fontWeight: FontWeight.w900,
-            color: TallyTapTheme.textLight,
+            color: TriplTheme.textLight,
             fontSize: 20,
             fontFamily: 'Outfit',
           ),
         ),
-        content: const Text(
+        content: Text(
           'Are you sure you want to permanently delete this recurring payment? This action cannot be undone.',
-          style: TextStyle(color: TallyTapTheme.textGray, fontSize: 14),
+          style: TextStyle(color: TriplTheme.textGray, fontSize: 14),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel',
+            child: Text('Cancel',
                 style: TextStyle(
-                    color: TallyTapTheme.primaryMint,
+                    color: TriplTheme.primaryMint,
                     fontWeight: FontWeight.w700)),
           ),
           ElevatedButton(
@@ -122,22 +122,22 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
     final currency = ref.watch(currencyProvider);
     final isIncome = tx.type == TransactionType.income;
     final activeColor =
-        isIncome ? const Color(0xFF10B981) : TallyTapTheme.primaryMint;
+        isIncome ? const Color(0xFF10B981) : TriplTheme.primaryMint;
 
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: TallyTapTheme.textLight, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded,
+              color: TriplTheme.textLight, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Payment Details',
           style: TextStyle(
-            color: TallyTapTheme.textLight,
+            color: TriplTheme.textLight,
             fontSize: 18,
             fontWeight: FontWeight.w900,
             fontFamily: 'Outfit',
@@ -145,8 +145,8 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_note_rounded,
-                color: TallyTapTheme.primaryMint, size: 28),
+            icon: Icon(Icons.edit_note_rounded,
+                color: TriplTheme.primaryMint, size: 28),
             onPressed: _navigateToEdit,
           ),
           IconButton(
@@ -215,7 +215,7 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
 
   Widget _buildHeaderCard(RecurringTransaction tx, String currency, Color activeColor) {
     String statusText = tx.status.name.toUpperCase();
-    Color statusColor = TallyTapTheme.textGray;
+    Color statusColor = TriplTheme.textGray;
     if (tx.status == RecurringStatus.active) statusColor = activeColor;
     if (tx.status == RecurringStatus.paused) statusColor = Colors.orange;
     if (tx.status == RecurringStatus.completed) statusColor = Colors.blue;
@@ -223,9 +223,9 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianCard,
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: TallyTapTheme.borderGreen),
+        border: Border.all(color: TriplTheme.borderGreen),
         boxShadow: [
           BoxShadow(
             color: activeColor.withOpacity(0.05),
@@ -256,10 +256,10 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
           const SizedBox(height: 16),
           Text(
             '$currency${tx.amount.toStringAsFixed(2)}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 48,
               fontWeight: FontWeight.w900,
-              color: TallyTapTheme.textLight,
+              color: TriplTheme.textLight,
               letterSpacing: -1,
             ),
           ),
@@ -267,10 +267,10 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
           Text(
             tx.title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w600,
-              color: TallyTapTheme.textLight,
+              color: TriplTheme.textLight,
             ),
           ),
           if (tx.merchant != null && tx.merchant!.isNotEmpty) ...[
@@ -278,9 +278,9 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
             Text(
               tx.merchant!,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 14,
-                color: TallyTapTheme.textGray,
+                color: TriplTheme.textGray,
               ),
             ),
           ],
@@ -301,9 +301,9 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianCard,
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: TallyTapTheme.borderGreen),
+        border: Border.all(color: TriplTheme.borderGreen),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -313,7 +313,7 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
             title: 'Start Date',
             date: tx.startDate,
             isCompleted: true,
-            color: TallyTapTheme.textGray,
+            color: TriplTheme.textGray,
             isLast: false,
           ),
           
@@ -323,7 +323,7 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
               title: 'Last Processed',
               date: tx.lastProcessedDate!,
               isCompleted: true,
-              color: TallyTapTheme.textGray,
+              color: TriplTheme.textGray,
               isLast: false,
             ),
           
@@ -346,7 +346,7 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
               title: 'Following Due',
               date: nextAfterDue,
               isCompleted: false,
-              color: TallyTapTheme.textGray.withOpacity(0.5),
+              color: TriplTheme.textGray.withOpacity(0.5),
               isLast: true,
             ),
         ],
@@ -358,9 +358,9 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianCard,
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: TallyTapTheme.borderGreen),
+        border: Border.all(color: TriplTheme.borderGreen),
       ),
       child: Column(
         children: [
@@ -369,28 +369,28 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
             label: 'Frequency',
             value: _getFrequencyText(tx),
           ),
-          const Divider(color: TallyTapTheme.borderGreen, height: 24),
+          Divider(color: TriplTheme.borderGreen, height: 24),
           _DetailRow(
-            icon: TallyTapTheme.getIconForCategory(tx.category, false),
+            icon: TriplTheme.getIconForCategory(tx.category, false),
             label: 'Category',
             value: tx.category,
-            valueColor: TallyTapTheme.getColorForCategory(tx.category),
+            valueColor: TriplTheme.getColorForCategory(tx.category),
           ),
-          const Divider(color: TallyTapTheme.borderGreen, height: 24),
+          Divider(color: TriplTheme.borderGreen, height: 24),
           _DetailRow(
-            icon: TallyTapTheme.getIconForSource(tx.paymentMethod),
+            icon: TriplTheme.getIconForSource(tx.paymentMethod),
             label: 'Payment Method',
             value: tx.paymentMethod,
-            valueColor: TallyTapTheme.getColorForSource(tx.paymentMethod),
+            valueColor: TriplTheme.getColorForSource(tx.paymentMethod),
           ),
-          const Divider(color: TallyTapTheme.borderGreen, height: 24),
+          Divider(color: TriplTheme.borderGreen, height: 24),
           _DetailRow(
             icon: Icons.auto_mode_rounded,
             label: 'Automation',
             value: tx.autoCreate ? 'Auto-log payment' : 'Manual verification',
           ),
           if (tx.reminderEnabled && tx.reminderTiming != null) ...[
-            const Divider(color: TallyTapTheme.borderGreen, height: 24),
+            Divider(color: TriplTheme.borderGreen, height: 24),
             _DetailRow(
               icon: Icons.notifications_active_outlined,
               label: 'Reminder',
@@ -398,7 +398,7 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
             ),
           ],
           if (tx.endCondition != EndConditionType.never) ...[
-            const Divider(color: TallyTapTheme.borderGreen, height: 24),
+            Divider(color: TriplTheme.borderGreen, height: 24),
             _DetailRow(
               icon: Icons.flag_circle_outlined,
               label: 'End Condition',
@@ -415,14 +415,14 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianCard,
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: TallyTapTheme.borderGreen),
+        border: Border.all(color: TriplTheme.borderGreen),
       ),
       child: Text(
         tx.notes!,
-        style: const TextStyle(
-          color: TallyTapTheme.textLight,
+        style: TextStyle(
+          color: TriplTheme.textLight,
           fontSize: 14,
           height: 1.5,
         ),
@@ -440,8 +440,8 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       decoration: BoxDecoration(
-        color: TallyTapTheme.obsidianBg,
-        border: Border(top: BorderSide(color: TallyTapTheme.borderGreen.withOpacity(0.5))),
+        color: TriplTheme.obsidianBg,
+        border: Border(top: BorderSide(color: TriplTheme.borderGreen.withOpacity(0.5))),
       ),
       child: Row(
         children: [
@@ -487,13 +487,13 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
           Expanded(
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: canMarkPaid ? activeColor : TallyTapTheme.obsidianCard,
-                foregroundColor: canMarkPaid ? TallyTapTheme.obsidianBg : TallyTapTheme.textLight,
+                backgroundColor: canMarkPaid ? activeColor : TriplTheme.obsidianCard,
+                foregroundColor: canMarkPaid ? TriplTheme.obsidianBg : TriplTheme.textLight,
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
                   side: BorderSide(
-                    color: canMarkPaid ? Colors.transparent : TallyTapTheme.borderGreen,
+                    color: canMarkPaid ? Colors.transparent : TriplTheme.borderGreen,
                   ),
                 ),
                 elevation: canMarkPaid ? 8 : 0,
@@ -526,20 +526,20 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: TallyTapTheme.obsidianCard,
+        backgroundColor: TriplTheme.obsidianCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
-          side: const BorderSide(color: TallyTapTheme.borderGreen),
+          side: BorderSide(color: TriplTheme.borderGreen),
         ),
-        title: const Text('Skip Next Payment?',
-            style: TextStyle(color: TallyTapTheme.textLight, fontFamily: 'Outfit')),
+        title: Text('Skip Next Payment?',
+            style: TextStyle(color: TriplTheme.textLight, fontFamily: 'Outfit')),
         content: Text(
             'This will skip the payment due on ${DateFormat('MMM d, y').format(tx.nextDueDate)}. This action cannot be undone.',
-            style: const TextStyle(color: TallyTapTheme.textGray)),
+            style: TextStyle(color: TriplTheme.textGray)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.primaryMint)),
+            child: Text('Cancel', style: TextStyle(color: TriplTheme.primaryMint)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -658,8 +658,8 @@ class _RecurringTransactionDetailsScreenState extends ConsumerState<RecurringTra
           child: ElevatedButton(
             onPressed: () => controller.next(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: Text(nextText),
@@ -711,10 +711,10 @@ class _SectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 13,
           fontWeight: FontWeight.w700,
-          color: TallyTapTheme.textGray,
+          color: TriplTheme.textGray,
           letterSpacing: 0.5,
         ),
       );
@@ -737,14 +737,14 @@ class _DetailRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: TallyTapTheme.textGray, size: 20),
+        Icon(icon, color: TriplTheme.textGray, size: 20),
         const SizedBox(width: 12),
-        Text(label, style: const TextStyle(color: TallyTapTheme.textGray, fontSize: 14)),
+        Text(label, style: TextStyle(color: TriplTheme.textGray, fontSize: 14)),
         const Spacer(),
         Text(
           value,
           style: TextStyle(
-            color: valueColor ?? TallyTapTheme.textLight,
+            color: valueColor ?? TriplTheme.textLight,
             fontSize: 14,
             fontWeight: FontWeight.w600,
           ),
@@ -786,7 +786,7 @@ class _TimelineStep extends StatelessWidget {
                 width: 16,
                 height: 16,
                 decoration: BoxDecoration(
-                  color: isCompleted ? color : TallyTapTheme.obsidianBg,
+                  color: isCompleted ? color : TriplTheme.obsidianBg,
                   shape: BoxShape.circle,
                   border: Border.all(
                     color: color,
@@ -820,7 +820,7 @@ class _TimelineStep extends StatelessWidget {
                       Text(
                         title,
                         style: TextStyle(
-                          color: isActive ? TallyTapTheme.textLight : TallyTapTheme.textGray,
+                          color: isActive ? TriplTheme.textLight : TriplTheme.textGray,
                           fontSize: isActive ? 15 : 14,
                           fontWeight: isActive ? FontWeight.w800 : FontWeight.w600,
                         ),
@@ -847,7 +847,7 @@ class _TimelineStep extends StatelessWidget {
                   Text(
                     DateFormat('EEEE, MMM d, y').format(date),
                     style: TextStyle(
-                      color: isActive ? color : TallyTapTheme.textGray,
+                      color: isActive ? color : TriplTheme.textGray,
                       fontSize: 13,
                       fontWeight: isActive ? FontWeight.w600 : FontWeight.w400,
                     ),

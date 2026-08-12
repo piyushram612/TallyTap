@@ -182,7 +182,7 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         child: Text(
           'No custom ${widget.itemLabel.toLowerCase()}s active. Add one below!',
-          style: const TextStyle(color: TallyTapTheme.textGray, fontSize: 13),
+          style: TextStyle(color: TriplTheme.textGray, fontSize: 13),
         ),
       );
     }
@@ -200,22 +200,22 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
               key: ValueKey(widget.items[index]),
               dense: true,
               contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
-              tileColor: TallyTapTheme.obsidianCard,
+              tileColor: TriplTheme.obsidianCard,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
-                side: const BorderSide(color: TallyTapTheme.borderGreen, width: 0.5),
+                side: BorderSide(color: TriplTheme.borderGreen, width: 0.5),
               ),
-              leading: const Icon(Icons.drag_handle_rounded, color: TallyTapTheme.primaryMint, size: 20),
+              leading: Icon(Icons.drag_handle_rounded, color: TriplTheme.primaryMint, size: 20),
               title: Text(
                 widget.items[index],
-                style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13),
+                style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13),
               ),
               trailing: Container(
                 margin: const EdgeInsets.only(bottom: 2),
                 height: 24,
                 child: Text(
                   '${index + 1}',
-                  style: const TextStyle(color: TallyTapTheme.textGray, fontSize: 11, fontWeight: FontWeight.w900),
+                  style: TextStyle(color: TriplTheme.textGray, fontSize: 11, fontWeight: FontWeight.w900),
                 ),
               ),
             ),
@@ -228,10 +228,10 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
       runSpacing: 8.0,
       children: widget.items.map((item) {
         final color = widget.itemLabel == 'Category'
-            ? TallyTapTheme.getColorForCategory(item)
-            : TallyTapTheme.getColorForSource(item);
+            ? TriplTheme.getColorForCategory(item)
+            : TriplTheme.getColorForSource(item);
         final icon = widget.itemLabel == 'Category'
-            ? TallyTapTheme.getIconForCategory(item)
+            ? TriplTheme.getIconForCategory(item)
             : null;
         return InputChip(
           avatar: icon != null
@@ -250,21 +250,21 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
                 ),
           label: Text(
             item,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,
-              color: TallyTapTheme.textLight,
+              color: TriplTheme.textLight,
             ),
           ),
-          backgroundColor: TallyTapTheme.obsidianCard,
-          selectedColor: TallyTapTheme.primaryMint,
-          checkmarkColor: TallyTapTheme.obsidianBg,
+          backgroundColor: TriplTheme.obsidianCard,
+          selectedColor: TriplTheme.primaryMint,
+          checkmarkColor: TriplTheme.obsidianBg,
           onPressed: () {
             _showEditSheet(context, item);
           },
-          deleteIcon: const Icon(
+          deleteIcon: Icon(
             Icons.close_rounded,
-            color: TallyTapTheme.primaryMint,
+            color: TriplTheme.primaryMint,
             size: 14,
           ),
           onDeleted: () async {
@@ -318,10 +318,10 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
             Expanded(
               child: Text(
                 widget.title,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
-                  color: TallyTapTheme.primaryMint,
+                  color: TriplTheme.primaryMint,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -331,7 +331,7 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
                 IconButton(
                   icon: Icon(
                     _isReordering ? Icons.grid_view_rounded : Icons.swap_vert_rounded,
-                    color: _isReordering ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+                    color: _isReordering ? TriplTheme.primaryMint : TriplTheme.textGray,
                     size: 22,
                   ),
                   onPressed: () {
@@ -344,7 +344,7 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
                   tooltip: _isReordering ? 'Grid View' : 'Reorder Items',
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close_rounded, color: TallyTapTheme.textGray),
+                  icon: Icon(Icons.close_rounded, color: TriplTheme.textGray),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -356,11 +356,11 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
           _isReordering
               ? 'REORDER ${widget.itemLabel.toUpperCase()}S (DRAG TO SORT)'
               : 'ACTIVE ${widget.itemLabel.toUpperCase()}S (TAP TO EDIT, \'X\' TO DELETE)',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w800,
             letterSpacing: 1.5,
-            color: TallyTapTheme.textGray,
+            color: TriplTheme.textGray,
           ),
         ),
         const SizedBox(height: 12),
@@ -373,11 +373,11 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
         const SizedBox(height: 24),
         Text(
           'ADD NEW ${widget.itemLabel.toUpperCase()}',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 10,
             fontWeight: FontWeight.w800,
             letterSpacing: 1.5,
-            color: TallyTapTheme.textGray,
+            color: TriplTheme.textGray,
           ),
         ),
         const SizedBox(height: 12),
@@ -388,23 +388,23 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
                 controller: _controller,
                 focusNode: _focusNode,
                 textCapitalization: TextCapitalization.sentences,
-                style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13),
+                style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13),
                 decoration: InputDecoration(
                   hintText: widget.hintText,
-                  hintStyle: const TextStyle(color: TallyTapTheme.textGray, fontSize: 13),
+                  hintStyle: TextStyle(color: TriplTheme.textGray, fontSize: 13),
                   filled: true,
-                  fillColor: TallyTapTheme.obsidianCard,
+                  fillColor: TriplTheme.obsidianCard,
                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   errorText: _errorText,
                   errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 11),
                   errorMaxLines: 2,
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                    borderSide: BorderSide(color: TriplTheme.borderGreen),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(color: TallyTapTheme.primaryMint, width: 1.0),
+                    borderSide: BorderSide(color: TriplTheme.primaryMint, width: 1.0),
                   ),
                   errorBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
@@ -441,9 +441,9 @@ class _ManageItemsSheetState extends ConsumerState<ManageItemsSheet> {
                   );
                 }
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.add_circle_rounded,
-                color: TallyTapTheme.primaryMint,
+                color: TriplTheme.primaryMint,
                 size: 36,
               ),
               padding: EdgeInsets.zero,
@@ -559,16 +559,16 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
     
     final isCategory = widget.itemLabel == 'Category';
     final currentColor = isCategory
-        ? TallyTapTheme.getColorForCategory(_currentItemName)
-        : TallyTapTheme.getColorForSource(_currentItemName);
+        ? TriplTheme.getColorForCategory(_currentItemName)
+        : TriplTheme.getColorForSource(_currentItemName);
         
     final currentIcon = isCategory
-        ? TallyTapTheme.getIconForCategory(_currentItemName)
+        ? TriplTheme.getIconForCategory(_currentItemName)
         : null;
 
     return Container(
-      decoration: const BoxDecoration(
-        color: TallyTapTheme.obsidianBg,
+      decoration: BoxDecoration(
+        color: TriplTheme.obsidianBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       padding: EdgeInsets.only(
@@ -590,7 +590,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                 width: 36,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: TallyTapTheme.borderGreen,
+                  color: TriplTheme.borderGreen,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -601,17 +601,17 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                 Expanded(
                   child: Text(
                     'Configure $_currentItemName',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w900,
-                      color: TallyTapTheme.primaryMint,
+                      color: TriplTheme.primaryMint,
                       letterSpacing: -0.5,
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.close_rounded, color: TallyTapTheme.textGray),
+                  icon: Icon(Icons.close_rounded, color: TriplTheme.textGray),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],
@@ -619,13 +619,13 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
             const SizedBox(height: 16),
             
             // Rename input row
-            const Text(
+            Text(
               'RENAME ITEM',
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.5,
-                color: TallyTapTheme.textGray,
+                color: TriplTheme.textGray,
               ),
             ),
             const SizedBox(height: 12),
@@ -636,23 +636,23 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                     controller: _controller,
                     focusNode: _focusNode,
                     textCapitalization: TextCapitalization.sentences,
-                    style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13),
+                    style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold, fontSize: 13),
                     decoration: InputDecoration(
                       hintText: 'Enter new name',
-                      hintStyle: const TextStyle(color: TallyTapTheme.textGray, fontSize: 13),
+                      hintStyle: TextStyle(color: TriplTheme.textGray, fontSize: 13),
                       filled: true,
-                      fillColor: TallyTapTheme.obsidianCard,
+                      fillColor: TriplTheme.obsidianCard,
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                       errorText: _errorText,
                       errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 11),
                       errorMaxLines: 2,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                        borderSide: BorderSide(color: TriplTheme.borderGreen),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(color: TallyTapTheme.primaryMint, width: 1.0),
+                        borderSide: BorderSide(color: TriplTheme.primaryMint, width: 1.0),
                       ),
                       errorBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
@@ -693,9 +693,9 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                       );
                     }
                   },
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.check_circle_rounded,
-                    color: TallyTapTheme.primaryMint,
+                    color: TriplTheme.primaryMint,
                     size: 36,
                   ),
                   padding: EdgeInsets.zero,
@@ -706,13 +706,13 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
             const SizedBox(height: 24),
             
             // Color customizer
-            const Text(
+            Text(
               'CUSTOMIZE COLOR',
               style: TextStyle(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
                 letterSpacing: 1.5,
-                color: TallyTapTheme.textGray,
+                color: TriplTheme.textGray,
               ),
             ),
             const SizedBox(height: 12),
@@ -751,7 +751,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                           BoxShadow(color: color.withOpacity(0.4), blurRadius: 6, spreadRadius: 1),
                         ] : null,
                       ),
-                      child: isSelected ? const Icon(Icons.check_rounded, color: TallyTapTheme.obsidianBg, size: 16) : null,
+                      child: isSelected ? Icon(Icons.check_rounded, color: TriplTheme.obsidianBg, size: 16) : null,
                     ),
                   );
                 },
@@ -762,13 +762,13 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
               const SizedBox(height: 24),
               
               // Icon customizer
-              const Text(
+              Text(
                 'CUSTOMIZE ICON',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1.5,
-                  color: TallyTapTheme.textGray,
+                  color: TriplTheme.textGray,
                 ),
               ),
               const SizedBox(height: 12),
@@ -794,15 +794,15 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                       child: Container(
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.obsidianCard,
+                          color: isSelected ? TriplTheme.primaryMint : TriplTheme.obsidianCard,
                           border: Border.all(
-                            color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen,
+                            color: isSelected ? TriplTheme.primaryMint : TriplTheme.borderGreen,
                             width: 1.0,
                           ),
                         ),
                         child: Icon(
                           icon,
-                          color: isSelected ? TallyTapTheme.obsidianBg : TallyTapTheme.textLight,
+                          color: isSelected ? TriplTheme.obsidianBg : TriplTheme.textLight,
                           size: 18,
                         ),
                       ),
@@ -813,13 +813,13 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
               const SizedBox(height: 24),
               
               // Intent customizer
-              const Text(
+              Text(
                 'CUSTOMIZE SPENDING INTENT',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1.5,
-                  color: TallyTapTheme.textGray,
+                  color: TriplTheme.textGray,
                 ),
               ),
               const SizedBox(height: 12),
@@ -829,7 +829,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                   final currentIntent = intents[_currentItemName] ?? CategoryIntent.essential;
                   final isSelected = currentIntent == intent;
                   
-                  final color = widget.intentColors[intent] ?? TallyTapTheme.primaryMint;
+                  final color = widget.intentColors[intent] ?? TriplTheme.primaryMint;
                   final icon = widget.intentIcons[intent] ?? Icons.shield_outlined;
                   
                   return Expanded(
@@ -843,10 +843,10 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: BoxDecoration(
-                          color: isSelected ? color.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+                          color: isSelected ? color.withOpacity(0.15) : TriplTheme.obsidianCard,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: isSelected ? color.withOpacity(0.5) : TallyTapTheme.borderGreen,
+                            color: isSelected ? color.withOpacity(0.5) : TriplTheme.borderGreen,
                             width: isSelected ? 1.5 : 1.0,
                           ),
                         ),
@@ -855,7 +855,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                           children: [
                             Icon(
                               icon,
-                              color: isSelected ? color : TallyTapTheme.textGray,
+                              color: isSelected ? color : TriplTheme.textGray,
                               size: 16,
                             ),
                             const SizedBox(height: 4),
@@ -866,7 +866,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                                color: isSelected ? color : TallyTapTheme.textLight,
+                                color: isSelected ? color : TriplTheme.textLight,
                               ),
                             ),
                           ],
@@ -880,13 +880,13 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
               const SizedBox(height: 24),
               
               // Visibility customizer
-              const Text(
+              Text(
                 'CUSTOMIZE VISIBILITY',
                 style: TextStyle(
                   fontSize: 10,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 1.5,
-                  color: TallyTapTheme.textGray,
+                  color: TriplTheme.textGray,
                 ),
               ),
               const SizedBox(height: 12),
@@ -896,7 +896,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                   final currentVis = visibilities[_currentItemName] ?? CategoryVisibility.expense;
                   final isSelected = currentVis == vis;
                   
-                  final color = isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight;
+                  final color = isSelected ? TriplTheme.primaryMint : TriplTheme.textLight;
                   final icon = vis == CategoryVisibility.expense 
                       ? Icons.arrow_upward_rounded 
                       : (vis == CategoryVisibility.income ? Icons.arrow_downward_rounded : Icons.swap_vert_rounded);
@@ -914,10 +914,10 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                         margin: const EdgeInsets.symmetric(horizontal: 4),
                         padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: BoxDecoration(
-                          color: isSelected ? color.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+                          color: isSelected ? color.withOpacity(0.15) : TriplTheme.obsidianCard,
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
-                            color: isSelected ? color.withOpacity(0.5) : TallyTapTheme.borderGreen,
+                            color: isSelected ? color.withOpacity(0.5) : TriplTheme.borderGreen,
                             width: isSelected ? 1.5 : 1.0,
                           ),
                         ),
@@ -926,7 +926,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                           children: [
                             Icon(
                               icon,
-                              color: isSelected ? color : TallyTapTheme.textGray,
+                              color: isSelected ? color : TriplTheme.textGray,
                               size: 16,
                             ),
                             const SizedBox(height: 4),
@@ -937,7 +937,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                               style: TextStyle(
                                 fontSize: 10,
                                 fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
-                                color: isSelected ? color : TallyTapTheme.textLight,
+                                color: isSelected ? color : TriplTheme.textLight,
                               ),
                             ),
                           ],
@@ -950,7 +950,7 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
             ],
             
             const SizedBox(height: 32),
-            const Divider(color: TallyTapTheme.borderGreen, height: 1, thickness: 0.5),
+            Divider(color: TriplTheme.borderGreen, height: 1, thickness: 0.5),
             const SizedBox(height: 20),
             
             // Action buttons
@@ -986,8 +986,8 @@ class _EditItemSheetState extends ConsumerState<_EditItemSheet> {
                 Expanded(
                   child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: TallyTapTheme.primaryMint,
-                      foregroundColor: TallyTapTheme.obsidianBg,
+                      backgroundColor: TriplTheme.primaryMint,
+                      foregroundColor: TriplTheme.obsidianBg,
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       elevation: 0,

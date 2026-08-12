@@ -462,7 +462,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
           content: Text(widget.initialGroupId != null
               ? 'Updated "$groupName" split successfully!'
               : 'Logged "$groupName" split directly into timeline!'),
-          backgroundColor: TallyTapTheme.borderGreen,
+          backgroundColor: TriplTheme.borderGreen,
           behavior: SnackBarBehavior.floating,
         ),
       );
@@ -488,20 +488,20 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
     }
 
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: TallyTapTheme.textLight),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: TriplTheme.textLight),
           onPressed: () => Navigator.pop(context),
         ),
         title: Text(
           _isEditingGroup ? 'Edit Expense Split' : 'Expense Splitter',
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w900,
-            color: TallyTapTheme.textLight,
+            color: TriplTheme.textLight,
             fontFamily: 'Outfit',
           ),
         ),
@@ -523,23 +523,23 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        TallyTapTheme.primaryMint.withOpacity(0.12),
-                        TallyTapTheme.primaryMint.withOpacity(0.02),
+                        TriplTheme.primaryMint.withOpacity(0.12),
+                        TriplTheme.primaryMint.withOpacity(0.02),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(color: TallyTapTheme.primaryMint.withOpacity(0.4), width: 1.5),
+                    border: Border.all(color: TriplTheme.primaryMint.withOpacity(0.4), width: 1.5),
                   ),
                   child: Column(
                     children: [
-                      const Text(
+                      Text(
                         'YOU GET BACK',
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.w800,
-                          color: TallyTapTheme.primaryMint,
+                          color: TriplTheme.primaryMint,
                           letterSpacing: 1.5,
                         ),
                       ),
@@ -548,21 +548,21 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             '₹',
                             style: TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: TallyTapTheme.primaryMint,
+                              color: TriplTheme.primaryMint,
                               height: 1.2,
                             ),
                           ),
                           Text(
                             youGetBack.toStringAsFixed(2),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 48,
                               fontWeight: FontWeight.w900,
-                              color: TallyTapTheme.textLight,
+                              color: TriplTheme.textLight,
                               height: 1.0,
                               letterSpacing: -1.0,
                             ),
@@ -572,7 +572,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                       const SizedBox(height: 20),
                       Text(
                         'You paid ₹${_totalAmount.toStringAsFixed(2)} • Your share is ₹${_finalAmounts[0].toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 11, color: TallyTapTheme.textGray, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 11, color: TriplTheme.textGray, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -580,12 +580,12 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                 const SizedBox(height: 28),
 
                 // Details Configuration
-                const Text(
+                Text(
                   'SPLIT PARAMETERS',
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
-                    color: TallyTapTheme.textGray,
+                    color: TriplTheme.textGray,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -597,9 +597,9 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
                     child: Row(
                       children: [
-                        const Text(
+                        Text(
                           'Description',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -607,14 +607,14 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                             controller: _descController,
                             textAlign: TextAlign.end,
                             textCapitalization: TextCapitalization.sentences,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
-                              color: TallyTapTheme.textLight,
+                              color: TriplTheme.textLight,
                             ),
-                            decoration: const InputDecoration(
+                            decoration: InputDecoration(
                               hintText: 'e.g. Restaurant split',
-                              hintStyle: TextStyle(color: TallyTapTheme.textGray),
+                              hintStyle: TextStyle(color: TriplTheme.textGray),
                               border: InputBorder.none,
                             ),
                           ),
@@ -632,9 +632,9 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
                     child: Row(
                       children: [
-                        const Text(
+                        Text(
                           'You Paid Total',
-                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                          style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
@@ -642,16 +642,16 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                             controller: _amountController,
                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
                             textAlign: TextAlign.end,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.w900,
-                              color: TallyTapTheme.primaryMint,
+                              color: TriplTheme.primaryMint,
                             ),
                             decoration: InputDecoration(
                               hintText: '0.00',
-                              hintStyle: TextStyle(color: TallyTapTheme.primaryMint.withOpacity(0.5)),
+                              hintStyle: TextStyle(color: TriplTheme.primaryMint.withOpacity(0.5)),
                               prefixText: '₹ ',
-                              prefixStyle: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+                              prefixStyle: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
                               border: InputBorder.none,
                             ),
                             onChanged: (val) {
@@ -672,16 +672,16 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0),
                     child: Row(
                       children: [
-                        const Expanded(
+                        Expanded(
                           child: Text(
                             'Total People',
-                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                           ),
                         ),
                         Row(
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.remove_circle_outline_rounded, color: TallyTapTheme.textGray),
+                              icon: Icon(Icons.remove_circle_outline_rounded, color: TriplTheme.textGray),
                               onPressed: _peopleCount <= 2
                                   ? null
                                   : () {
@@ -696,15 +696,15 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                               padding: const EdgeInsets.symmetric(horizontal: 16),
                               child: Text(
                                 '$_peopleCount',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w900,
-                                  color: TallyTapTheme.textLight,
+                                  color: TriplTheme.textLight,
                                 ),
                               ),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.add_circle_outline_rounded, color: TallyTapTheme.primaryMint),
+                              icon: Icon(Icons.add_circle_outline_rounded, color: TriplTheme.primaryMint),
                               onPressed: () {
                                 HapticFeedback.lightImpact();
                                 setState(() {
@@ -722,12 +722,12 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                 const SizedBox(height: 24),
                 
                 // SPLIT MODE SELECTOR
-                const Text(
+                Text(
                   'SPLIT MODE',
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
-                    color: TallyTapTheme.textGray,
+                    color: TriplTheme.textGray,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -736,7 +736,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                 Container(
                   key: TutorialService.splitterModesKey,
                   decoration: BoxDecoration(
-                    color: TallyTapTheme.obsidianCard,
+                    color: TriplTheme.obsidianCard,
                     borderRadius: BorderRadius.circular(16),
                   ),
                   padding: const EdgeInsets.all(4),
@@ -757,12 +757,12 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                 if (_currentSplitMode != SplitMode.equal) const SizedBox(height: 24),
 
                 // Friends Names customizer
-                const Text(
+                Text(
                   'PARTICIPANTS & VERIFICATION',
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.w800,
-                    color: TallyTapTheme.textGray,
+                    color: TriplTheme.textGray,
                     letterSpacing: 1.5,
                   ),
                 ),
@@ -778,20 +778,20 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Card(
-                          color: TallyTapTheme.obsidianCard.withOpacity(0.5),
+                          color: TriplTheme.obsidianCard.withOpacity(0.5),
                           child: ListTile(
-                            leading: const CircleAvatar(
-                              backgroundColor: TallyTapTheme.primaryMint,
+                            leading: CircleAvatar(
+                              backgroundColor: TriplTheme.primaryMint,
                               radius: 14,
-                              child: Icon(Icons.person, color: TallyTapTheme.obsidianBg, size: 16),
+                              child: Icon(Icons.person, color: TriplTheme.obsidianBg, size: 16),
                             ),
-                            title: const Text(
+                            title: Text(
                               'You (Payee)',
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: TallyTapTheme.primaryMint),
+                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: TriplTheme.primaryMint),
                             ),
                             trailing: Text(
                               '₹ ${amt.toStringAsFixed(2)}',
-                              style: const TextStyle(fontSize: 13, color: TallyTapTheme.textGray),
+                              style: TextStyle(fontSize: 13, color: TriplTheme.textGray),
                             ),
                           ),
                         ),
@@ -809,11 +809,11 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                               Row(
                                 children: [
                                   CircleAvatar(
-                                    backgroundColor: TallyTapTheme.borderGreen,
+                                    backgroundColor: TriplTheme.borderGreen,
                                     radius: 14,
                                     child: Text(
                                       'F$index',
-                                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: TallyTapTheme.textGray),
+                                      style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: TriplTheme.textGray),
                                     ),
                                   ),
                                   const SizedBox(width: 12),
@@ -821,7 +821,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                     child: TextField(
                                       controller: _friendControllers[friendIdx],
                                       textCapitalization: TextCapitalization.sentences,
-                                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                                       decoration: const InputDecoration(
                                         border: InputBorder.none,
                                         hintText: 'Friend Name'
@@ -830,11 +830,11 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                   ),
                                   Text(
                                     '₹${amt.toStringAsFixed(2)}',
-                                    style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TallyTapTheme.textLight),
+                                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: TriplTheme.textLight),
                                   ),
                                 ],
                               ),
-                              const Divider(color: TallyTapTheme.borderGreen, height: 16),
+                              Divider(color: TriplTheme.borderGreen, height: 16),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -843,7 +843,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                       Icon(
                                         Icons.pending_actions_rounded,
                                         size: 16,
-                                        color: _friendVerificationFlags[friendIdx] ? const Color(0xFFF59E0B) : TallyTapTheme.textGray,
+                                        color: _friendVerificationFlags[friendIdx] ? const Color(0xFFF59E0B) : TriplTheme.textGray,
                                       ),
                                       const SizedBox(width: 8),
                                       Text(
@@ -851,7 +851,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                         style: TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.w600,
-                                          color: _friendVerificationFlags[friendIdx] ? const Color(0xFFF59E0B) : TallyTapTheme.textGray,
+                                          color: _friendVerificationFlags[friendIdx] ? const Color(0xFFF59E0B) : TriplTheme.textGray,
                                         ),
                                       ),
                                     ],
@@ -859,7 +859,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                   Switch(
                                     value: _friendVerificationFlags[friendIdx],
                                     activeColor: const Color(0xFFF59E0B),
-                                    inactiveTrackColor: TallyTapTheme.obsidianBg,
+                                    inactiveTrackColor: TriplTheme.obsidianBg,
                                     onChanged: (val) {
                                       HapticFeedback.selectionClick();
                                       setState(() {
@@ -873,16 +873,16 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  const Text(
+                                  Text(
                                     'Receipt Source',
-                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: TallyTapTheme.textGray),
+                                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: TriplTheme.textGray),
                                   ),
                                   DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: _friendReceiptSources[friendIdx] ?? _globalReceiptSource,
-                                      dropdownColor: TallyTapTheme.obsidianCard,
-                                      style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: TallyTapTheme.primaryMint),
-                                      icon: const Icon(Icons.arrow_drop_down_rounded, color: TallyTapTheme.primaryMint, size: 20),
+                                      dropdownColor: TriplTheme.obsidianCard,
+                                      style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: TriplTheme.primaryMint),
+                                      icon: Icon(Icons.arrow_drop_down_rounded, color: TriplTheme.primaryMint, size: 20),
                                       isDense: true,
                                       items: sources.map((String source) {
                                         return DropdownMenuItem<String>(
@@ -937,9 +937,9 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                 ElevatedButton.icon(
                   onPressed: _isValidSplit ? _logGroupSplit : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: TallyTapTheme.primaryMint,
-                    disabledBackgroundColor: TallyTapTheme.primaryMint.withOpacity(0.3),
-                    foregroundColor: TallyTapTheme.obsidianBg,
+                    backgroundColor: TriplTheme.primaryMint,
+                    disabledBackgroundColor: TriplTheme.primaryMint.withOpacity(0.3),
+                    foregroundColor: TriplTheme.obsidianBg,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   ),
@@ -997,18 +997,18 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
            duration: const Duration(milliseconds: 200),
            padding: const EdgeInsets.symmetric(vertical: 12),
            decoration: BoxDecoration(
-              color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : Colors.transparent,
+              color: isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : Colors.transparent,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.5) : Colors.transparent)
+              border: Border.all(color: isSelected ? TriplTheme.primaryMint.withOpacity(0.5) : Colors.transparent)
            ),
            child: Column(
               children: [
-                 Icon(icon, size: 20, color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textGray),
+                 Icon(icon, size: 20, color: isSelected ? TriplTheme.primaryMint : TriplTheme.textGray),
                  const SizedBox(height: 4),
                  Text(title, style: TextStyle(
                     fontSize: 12, 
                     fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textGray
+                    color: isSelected ? TriplTheme.primaryMint : TriplTheme.textGray
                  ))
               ]
            )
@@ -1024,18 +1024,18 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
         Row(
            mainAxisAlignment: MainAxisAlignment.spaceBetween,
            children: [
-              const Text(
+              Text(
                  'CUSTOM SLIDERS',
-                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 1.5),
+                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.5),
               ),
               Row(
                  children: [
-                     Text("Amount", style: TextStyle(fontSize: 12, color: !_isPercentageMode ? TallyTapTheme.textLight : TallyTapTheme.textGray)),
+                     Text("Amount", style: TextStyle(fontSize: 12, color: !_isPercentageMode ? TriplTheme.textLight : TriplTheme.textGray)),
                      Switch(
                         value: _isPercentageMode,
-                        activeColor: TallyTapTheme.primaryMint,
-                        inactiveThumbColor: TallyTapTheme.primaryMint,
-                        inactiveTrackColor: TallyTapTheme.obsidianCard,
+                        activeColor: TriplTheme.primaryMint,
+                        inactiveThumbColor: TriplTheme.primaryMint,
+                        inactiveTrackColor: TriplTheme.obsidianCard,
                         onChanged: (v) {
                            HapticFeedback.selectionClick();
                            setState(() {
@@ -1044,7 +1044,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                            });
                         }
                      ),
-                     Text("Percent", style: TextStyle(fontSize: 12, color: _isPercentageMode ? TallyTapTheme.textLight : TallyTapTheme.textGray)),
+                     Text("Percent", style: TextStyle(fontSize: 12, color: _isPercentageMode ? TriplTheme.textLight : TriplTheme.textGray)),
                  ]
               )
            ]
@@ -1064,14 +1064,14 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                             Row(
                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                children: [
-                                   Text(name, style: const TextStyle(fontWeight: FontWeight.bold, color: TallyTapTheme.textLight)),
+                                   Text(name, style: TextStyle(fontWeight: FontWeight.bold, color: TriplTheme.textLight)),
                                    Row(
                                       children: [
                                          Container(
                                             width: 80,
                                             height: 36,
                                             decoration: BoxDecoration(
-                                               color: TallyTapTheme.obsidianBg,
+                                               color: TriplTheme.obsidianBg,
                                                borderRadius: BorderRadius.circular(8)
                                             ),
                                             alignment: Alignment.centerRight,
@@ -1089,13 +1089,13 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                                   controller: _customValueControllers[index],
                                                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                                                   textAlign: TextAlign.right,
-                                                  style: const TextStyle(fontWeight: FontWeight.w900, color: TallyTapTheme.primaryMint, fontSize: 16),
+                                                  style: TextStyle(fontWeight: FontWeight.w900, color: TriplTheme.primaryMint, fontSize: 16),
                                                   decoration: InputDecoration(
                                                      border: InputBorder.none,
                                                      suffixText: _isPercentageMode ? "%" : "",
                                                      prefixText: !_isPercentageMode ? "₹" : "",
-                                                     prefixStyle: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
-                                                     suffixStyle: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+                                                     prefixStyle: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
+                                                     suffixStyle: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
                                                   ),
                                                   onSubmitted: (val) {
                                                       double numVal = double.tryParse(val) ?? 0.0;
@@ -1112,7 +1112,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                                 setState(() => _customLocks[index] = !_customLocks[index]);
                                             },
                                             child: Icon(_customLocks[index] ? Icons.lock_rounded : Icons.lock_open_rounded, 
-                                              color: _customLocks[index] ? TallyTapTheme.primaryMint : TallyTapTheme.textGray, size: 24),
+                                              color: _customLocks[index] ? TriplTheme.primaryMint : TriplTheme.textGray, size: 24),
                                          )
                                       ]
                                    )
@@ -1131,8 +1131,8 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                        },
                                        child: Container(
                                           padding: const EdgeInsets.all(4),
-                                          decoration: BoxDecoration(shape: BoxShape.circle, color: TallyTapTheme.obsidianBg),
-                                          child: const Icon(Icons.remove, size: 16, color: TallyTapTheme.textGray)
+                                          decoration: BoxDecoration(shape: BoxShape.circle, color: TriplTheme.obsidianBg),
+                                          child: Icon(Icons.remove, size: 16, color: TriplTheme.textGray)
                                        )
                                    ),
                                    Expanded(
@@ -1146,8 +1146,8 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                              value: _customValues[index],
                                              min: 0,
                                              max: 100,
-                                             activeColor: _customLocks[index] ? TallyTapTheme.primaryMint.withOpacity(0.5) : TallyTapTheme.primaryMint,
-                                             inactiveColor: TallyTapTheme.borderGreen,
+                                             activeColor: _customLocks[index] ? TriplTheme.primaryMint.withOpacity(0.5) : TriplTheme.primaryMint,
+                                             inactiveColor: TriplTheme.borderGreen,
                                              onChanged: (newVal) => _onCustomValueChanged(index, newVal),
                                           )
                                        )
@@ -1163,8 +1163,8 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                        },
                                        child: Container(
                                           padding: const EdgeInsets.all(4),
-                                          decoration: BoxDecoration(shape: BoxShape.circle, color: TallyTapTheme.obsidianBg),
-                                          child: const Icon(Icons.add, size: 16, color: TallyTapTheme.textGray)
+                                          decoration: BoxDecoration(shape: BoxShape.circle, color: TriplTheme.obsidianBg),
+                                          child: Icon(Icons.add, size: 16, color: TriplTheme.textGray)
                                        )
                                    ),
                                ]
@@ -1187,14 +1187,14 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
         Row(
            mainAxisAlignment: MainAxisAlignment.spaceBetween,
            children: [
-              const Text(
+              Text(
                  'ITEMIZED LIST',
-                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 1.5),
+                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.5),
               ),
               TextButton.icon(
                  icon: const Icon(Icons.add_circle_outline, size: 16),
                  label: const Text("Add Item"),
-                 style: TextButton.styleFrom(foregroundColor: TallyTapTheme.primaryMint),
+                 style: TextButton.styleFrom(foregroundColor: TriplTheme.primaryMint),
                  onPressed: () {
                      HapticFeedback.lightImpact();
                      setState(() => _items.add(SplitItem(name: "", price: 0.0, assignedParticipants: [])));
@@ -1207,7 +1207,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
            Container(
               padding: const EdgeInsets.all(24),
               alignment: Alignment.center,
-              child: const Text("No items added. Tap 'Add Item' to start.", style: TextStyle(color: TallyTapTheme.textGray))
+              child: Text("No items added. Tap 'Add Item' to start.", style: TextStyle(color: TriplTheme.textGray))
            ),
         ..._items.asMap().entries.map((entry) {
           int itemIdx = entry.key;
@@ -1224,10 +1224,10 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                             Expanded(child: TextField(
                                controller: item.nameController,
                                textCapitalization: TextCapitalization.sentences,
-                               style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
-                               decoration: const InputDecoration(
+                               style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
+                               decoration: InputDecoration(
                                    hintText: 'Item Name (e.g. Pizza)',
-                                   hintStyle: TextStyle(color: TallyTapTheme.textGray),
+                                   hintStyle: TextStyle(color: TriplTheme.textGray),
                                    border: InputBorder.none,
                                ),
                                onChanged: (v) => setState((){}),
@@ -1236,16 +1236,16 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                width: 100,
                                padding: const EdgeInsets.symmetric(horizontal: 8),
                                decoration: BoxDecoration(
-                                  color: TallyTapTheme.obsidianBg,
+                                  color: TriplTheme.obsidianBg,
                                   borderRadius: BorderRadius.circular(8)
                                ),
                                child: TextField(
                                    controller: item.priceController,
                                    keyboardType: const TextInputType.numberWithOptions(decimal:true),
-                                   style: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
-                                   decoration: const InputDecoration(
+                                   style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
+                                   decoration: InputDecoration(
                                       prefixText: '₹ ',
-                                      prefixStyle: TextStyle(color: TallyTapTheme.primaryMint),
+                                      prefixStyle: TextStyle(color: TriplTheme.primaryMint),
                                       border: InputBorder.none,
                                    ),
                                    onChanged: (v) => setState((){}),
@@ -1263,9 +1263,9 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                             )
                          ]
                        ),
-                       const Divider(color: TallyTapTheme.borderGreen),
+                       Divider(color: TriplTheme.borderGreen),
                        const SizedBox(height: 8),
-                       const Text("Shared by:", style: TextStyle(fontSize: 12, color: TallyTapTheme.textGray)),
+                       Text("Shared by:", style: TextStyle(fontSize: 12, color: TriplTheme.textGray)),
                        const SizedBox(height: 8),
                        Wrap(
                           spacing: 8,
@@ -1277,13 +1277,13 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                               return ChoiceChip(
                                   label: Text(name),
                                   selected: isSelected,
-                                  selectedColor: TallyTapTheme.primaryMint.withOpacity(0.2),
-                                  backgroundColor: TallyTapTheme.obsidianBg,
+                                  selectedColor: TriplTheme.primaryMint.withOpacity(0.2),
+                                  backgroundColor: TriplTheme.obsidianBg,
                                   labelStyle: TextStyle(
-                                     color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textGray,
+                                     color: isSelected ? TriplTheme.primaryMint : TriplTheme.textGray,
                                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal
                                   ),
-                                  side: BorderSide(color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.borderGreen),
+                                  side: BorderSide(color: isSelected ? TriplTheme.primaryMint : TriplTheme.borderGreen),
                                   onSelected: (val) {
                                       HapticFeedback.selectionClick();
                                       setState((){
@@ -1377,10 +1377,10 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
       children: [
         Text(
           title,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
-            color: TallyTapTheme.textGray,
+            color: TriplTheme.textGray,
             letterSpacing: 1.5,
           ),
         ),
@@ -1395,7 +1395,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
             itemBuilder: (ctx, i) {
               final src = sources[i];
               final selected = src == selectedSource;
-              final srcColor = TallyTapTheme.getColorForSource(src);
+              final srcColor = TriplTheme.getColorForSource(src);
               final startBal = startingBalances[src] ?? 0.0;
               final balance = _balanceForSource(allTx, src, startBal);
 
@@ -1411,12 +1411,12 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                   decoration: BoxDecoration(
                     color: selected
                         ? srcColor.withOpacity(0.12)
-                        : TallyTapTheme.obsidianCard,
+                        : TriplTheme.obsidianCard,
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
                       color: selected
                           ? srcColor
-                          : TallyTapTheme.borderGreen,
+                          : TriplTheme.borderGreen,
                       width: selected ? 1.8 : 1.0,
                     ),
                     boxShadow: selected
@@ -1440,7 +1440,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Icon(
-                          TallyTapTheme.getIconForSource(src),
+                          TriplTheme.getIconForSource(src),
                           color: srcColor,
                           size: 18,
                         ),
@@ -1457,8 +1457,8 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
                               color: selected
-                                  ? TallyTapTheme.textLight
-                                  : TallyTapTheme.textGray,
+                                  ? TriplTheme.textLight
+                                  : TriplTheme.textGray,
                             ),
                           ),
                           Text.rich(
@@ -1477,7 +1477,7 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
                                   style: TextStyle(
                                     color: selected
                                         ? srcColor
-                                        : TallyTapTheme.textGray.withOpacity(0.6),
+                                        : TriplTheme.textGray.withOpacity(0.6),
                                   ),
                                 ),
                               ],
@@ -1514,8 +1514,8 @@ class _ExpenseSplitterScreenState extends ConsumerState<ExpenseSplitterScreen> {
           child: ElevatedButton(
             onPressed: () => controller.next(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: Text(nextText),

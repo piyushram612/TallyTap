@@ -17,8 +17,8 @@ class RecentTransactionsSettingsSheet extends ConsumerWidget {
 
     return Container(
       padding: const EdgeInsets.all(24.0),
-      decoration: const BoxDecoration(
-        color: TallyTapTheme.obsidianBg,
+      decoration: BoxDecoration(
+        color: TriplTheme.obsidianBg,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
       ),
       child: SafeArea(
@@ -33,18 +33,18 @@ class RecentTransactionsSettingsSheet extends ConsumerWidget {
                   width: 40,
                   height: 4,
                   decoration: BoxDecoration(
-                    color: TallyTapTheme.textGray.withOpacity(0.3),
+                    color: TriplTheme.textGray.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
               ),
               const SizedBox(height: 24),
-              const Text(
+              Text(
                 'Recent Reflections Settings',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w900,
-                  color: TallyTapTheme.textLight,
+                  color: TriplTheme.textLight,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -137,10 +137,10 @@ class RecentTransactionsSettingsSheet extends ConsumerWidget {
       children: [
         Text(
           title.toUpperCase(),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
             fontWeight: FontWeight.w800,
-            color: TallyTapTheme.textGray,
+            color: TriplTheme.textGray,
             letterSpacing: 1.2,
           ),
         ),
@@ -157,10 +157,10 @@ class RecentTransactionsSettingsSheet extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.15) : TallyTapTheme.obsidianCard,
+          color: isSelected ? TriplTheme.primaryMint.withOpacity(0.15) : TriplTheme.obsidianCard,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? TallyTapTheme.primaryMint.withOpacity(0.5) : TallyTapTheme.borderGreen,
+            color: isSelected ? TriplTheme.primaryMint.withOpacity(0.5) : TriplTheme.borderGreen,
             width: isSelected ? 1.5 : 1.0,
           ),
         ),
@@ -169,7 +169,7 @@ class RecentTransactionsSettingsSheet extends ConsumerWidget {
           style: TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.w600,
-            color: isSelected ? TallyTapTheme.primaryMint : TallyTapTheme.textLight,
+            color: isSelected ? TriplTheme.primaryMint : TriplTheme.textLight,
           ),
         ),
       ),
@@ -181,21 +181,21 @@ class RecentTransactionsSettingsSheet extends ConsumerWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          backgroundColor: TallyTapTheme.obsidianCard,
-          title: const Text('Custom Limit', style: TextStyle(color: TallyTapTheme.textLight)),
+          backgroundColor: TriplTheme.obsidianCard,
+          title: Text('Custom Limit', style: TextStyle(color: TriplTheme.textLight)),
           content: TextField(
             controller: controller,
             keyboardType: TextInputType.number,
-            style: const TextStyle(color: TallyTapTheme.textLight),
+            style: TextStyle(color: TriplTheme.textLight),
             decoration: InputDecoration(
               hintText: 'Enter number of items',
-              hintStyle: const TextStyle(color: TallyTapTheme.textGray),
+              hintStyle: TextStyle(color: TriplTheme.textGray),
               enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                borderSide: BorderSide(color: TriplTheme.borderGreen),
                 borderRadius: BorderRadius.circular(12),
               ),
               focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: TallyTapTheme.primaryMint),
+                borderSide: BorderSide(color: TriplTheme.primaryMint),
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
@@ -203,7 +203,7 @@ class RecentTransactionsSettingsSheet extends ConsumerWidget {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+              child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
             ),
             TextButton(
               onPressed: () {
@@ -213,7 +213,7 @@ class RecentTransactionsSettingsSheet extends ConsumerWidget {
                 }
                 Navigator.pop(context);
               },
-              child: const Text('Save', style: TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold)),
+              child: Text('Save', style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold)),
             ),
           ],
         );

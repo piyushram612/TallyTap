@@ -98,20 +98,20 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
       });
 
     return Scaffold(
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: TallyTapTheme.textLight),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, color: TriplTheme.textLight),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Outstanding Ledger',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w900,
-            color: TallyTapTheme.textLight,
+            color: TriplTheme.textLight,
             fontFamily: 'Outfit',
           ),
         ),
@@ -125,13 +125,9 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF0C1915), TallyTapTheme.obsidianCard],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
+                  color: TriplTheme.obsidianCard,
                   borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: TallyTapTheme.borderGreen),
+                  border: Border.all(color: TriplTheme.borderGreen),
                 ),
                 child: Column(
                   children: [
@@ -142,22 +138,22 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'THEY OWE ME',
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w800,
-                                  color: TallyTapTheme.textGray,
+                                  color: TriplTheme.textGray,
                                   letterSpacing: 1.0,
                                 ),
                               ),
                               const SizedBox(height: 6),
                               Text(
                                 '$currency${theyOweMe.toStringAsFixed(0)}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.w900,
-                                  color: TallyTapTheme.primaryMint,
+                                  color: TriplTheme.primaryMint,
                                 ),
                               ),
                             ],
@@ -166,7 +162,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                         Container(
                           width: 1,
                           height: 40,
-                          color: TallyTapTheme.borderGreen,
+                          color: TriplTheme.borderGreen,
                         ),
                         const SizedBox(width: 20),
                         Expanded(
@@ -174,12 +170,12 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'I OWE THEM',
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.w800,
-                                  color: TallyTapTheme.textGray,
+                                  color: TriplTheme.textGray,
                                   letterSpacing: 1.0,
                                 ),
                               ),
@@ -198,17 +194,17 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                       ],
                     ),
                     const SizedBox(height: 20),
-                    const Divider(color: TallyTapTheme.borderGreen, height: 1),
+                    Divider(color: TriplTheme.borderGreen, height: 1),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'NET OUTSTANDING',
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w900,
-                            color: TallyTapTheme.textGray,
+                            color: TriplTheme.textGray,
                             letterSpacing: 1.0,
                           ),
                         ),
@@ -219,7 +215,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w900,
-                            color: netBalance >= 0 ? TallyTapTheme.primaryMint : const Color(0xFFF59E0B),
+                            color: netBalance >= 0 ? TriplTheme.primaryMint : const Color(0xFFF59E0B),
                           ),
                         ),
                       ],
@@ -236,9 +232,9 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                 height: 46,
                 padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF091210),
+                  color: TriplTheme.obsidianCard,
                   borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: TallyTapTheme.borderGreen),
+                  border: Border.all(color: TriplTheme.borderGreen),
                 ),
                 child: Row(
                   children: ['Active', 'Settled', 'All'].map((tab) {
@@ -254,7 +250,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                         child: Container(
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: isSel ? TallyTapTheme.primaryMint : Colors.transparent,
+                            color: isSel ? TriplTheme.primaryMint : Colors.transparent,
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -262,7 +258,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w900,
-                              color: isSel ? TallyTapTheme.obsidianBg : TallyTapTheme.textGray,
+                              color: isSel ? TriplTheme.obsidianBg : TriplTheme.textGray,
                               letterSpacing: 0.5,
                             ),
                           ),
@@ -284,13 +280,13 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                           Icon(
                             Icons.receipt_long_outlined,
                             size: 48,
-                            color: TallyTapTheme.textGray.withOpacity(0.3),
+                            color: TriplTheme.textGray.withOpacity(0.3),
                           ),
                           const SizedBox(height: 16),
                           Text(
                             'No $_activeFilter Records Found',
-                            style: const TextStyle(
-                              color: TallyTapTheme.textGray,
+                            style: TextStyle(
+                              color: TriplTheme.textGray,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
@@ -327,12 +323,12 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                 leading: CircleAvatar(
                                   radius: 20,
                                   backgroundColor: netPerson >= 0
-                                      ? TallyTapTheme.primaryMint.withOpacity(0.12)
+                                      ? TriplTheme.primaryMint.withOpacity(0.12)
                                       : const Color(0xFFF59E0B).withOpacity(0.12),
                                   child: Text(
                                     person.isNotEmpty ? person[0].toUpperCase() : '?',
                                     style: TextStyle(
-                                      color: netPerson >= 0 ? TallyTapTheme.primaryMint : const Color(0xFFF59E0B),
+                                      color: netPerson >= 0 ? TriplTheme.primaryMint : const Color(0xFFF59E0B),
                                       fontWeight: FontWeight.w900,
                                       fontSize: 16,
                                     ),
@@ -340,17 +336,17 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                 ),
                                 title: Text(
                                   person,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.w900,
                                     fontSize: 16,
-                                    color: TallyTapTheme.textLight,
+                                    color: TriplTheme.textLight,
                                   ),
                                 ),
                                 subtitle: Text(
                                   activeCount == 0
                                       ? 'All settled up'
                                       : '$activeCount active logs',
-                                  style: const TextStyle(fontSize: 12, color: TallyTapTheme.textGray),
+                                  style: TextStyle(fontSize: 12, color: TriplTheme.textGray),
                                 ),
                                 trailing: Row(
                                   mainAxisSize: MainAxisSize.min,
@@ -365,7 +361,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                               : netPerson > 0
                                                   ? 'Owes you'
                                                   : 'You owe',
-                                          style: const TextStyle(fontSize: 9, color: TallyTapTheme.textGray, fontWeight: FontWeight.bold),
+                                          style: TextStyle(fontSize: 9, color: TriplTheme.textGray, fontWeight: FontWeight.bold),
                                         ),
                                         const SizedBox(height: 2),
                                         Text(
@@ -376,9 +372,9 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                             fontSize: 14,
                                             fontWeight: FontWeight.w900,
                                             color: netPerson == 0
-                                                ? TallyTapTheme.textGray
+                                                ? TriplTheme.textGray
                                                 : netPerson > 0
-                                                    ? TallyTapTheme.primaryMint
+                                                    ? TriplTheme.primaryMint
                                                     : const Color(0xFFF59E0B),
                                           ),
                                         ),
@@ -387,7 +383,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                     const SizedBox(width: 8),
                                     Icon(
                                       isExp ? Icons.keyboard_arrow_up_rounded : Icons.keyboard_arrow_down_rounded,
-                                      color: TallyTapTheme.textGray,
+                                      color: TriplTheme.textGray,
                                     ),
                                   ],
                                 ),
@@ -395,7 +391,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
 
                               // Expanded nested details log
                               if (isExp) ...[
-                                const Divider(color: TallyTapTheme.borderGreen, height: 1),
+                                Divider(color: TriplTheme.borderGreen, height: 1),
                                 Container(
                                   color: Colors.black.withOpacity(0.12),
                                   padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -413,9 +409,9 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                                         ? Icons.arrow_upward_rounded
                                                         : Icons.arrow_downward_rounded,
                                                 color: r.isSettled
-                                                    ? TallyTapTheme.textGray
+                                                    ? TriplTheme.textGray
                                                     : r.isLent
-                                                        ? TallyTapTheme.primaryMint
+                                                        ? TriplTheme.primaryMint
                                                         : const Color(0xFFF59E0B),
                                                 size: 16,
                                               ),
@@ -429,14 +425,14 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                                       style: TextStyle(
                                                         fontSize: 13,
                                                         fontWeight: FontWeight.bold,
-                                                        color: r.isSettled ? TallyTapTheme.textGray : TallyTapTheme.textLight,
+                                                        color: r.isSettled ? TriplTheme.textGray : TriplTheme.textLight,
                                                         decoration: r.isSettled ? TextDecoration.lineThrough : null,
                                                       ),
                                                     ),
                                                     const SizedBox(height: 2),
                                                     Text(
                                                       '${r.date.day}/${r.date.month}/${r.date.year}',
-                                                      style: const TextStyle(fontSize: 10, color: TallyTapTheme.textGray),
+                                                      style: TextStyle(fontSize: 10, color: TriplTheme.textGray),
                                                     ),
                                                   ],
                                                 ),
@@ -449,9 +445,9 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                                       fontSize: 13,
                                                       fontWeight: FontWeight.w900,
                                                       color: r.isSettled
-                                                          ? TallyTapTheme.textGray
+                                                          ? TriplTheme.textGray
                                                           : r.isLent
-                                                              ? TallyTapTheme.primaryMint
+                                                              ? TriplTheme.primaryMint
                                                               : const Color(0xFFF59E0B),
                                                       decoration: r.isSettled ? TextDecoration.lineThrough : null,
                                                     ),
@@ -459,7 +455,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                                   const SizedBox(width: 8),
                                                   if (!r.isSettled)
                                                     IconButton(
-                                                      icon: const Icon(Icons.check_rounded, color: TallyTapTheme.primaryMint, size: 18),
+                                                      icon: Icon(Icons.check_rounded, color: TriplTheme.primaryMint, size: 18),
                                                       padding: EdgeInsets.zero,
                                                       constraints: const BoxConstraints(),
                                                       onPressed: () {
@@ -511,8 +507,8 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                         const SizedBox(height: 12),
                                         ElevatedButton.icon(
                                           style: ElevatedButton.styleFrom(
-                                            backgroundColor: netPerson > 0 ? TallyTapTheme.primaryMint : const Color(0xFFF59E0B),
-                                            foregroundColor: TallyTapTheme.obsidianBg,
+                                            backgroundColor: netPerson > 0 ? TriplTheme.primaryMint : const Color(0xFFF59E0B),
+                                            foregroundColor: TriplTheme.obsidianBg,
                                             minimumSize: const Size.fromHeight(40),
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(10),
@@ -544,8 +540,8 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: TallyTapTheme.primaryMint,
-        foregroundColor: TallyTapTheme.obsidianBg,
+        backgroundColor: TriplTheme.primaryMint,
+        foregroundColor: TriplTheme.obsidianBg,
         shape: const CircleBorder(),
         onPressed: () {
           HapticFeedback.mediumImpact();
@@ -578,14 +574,14 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setStateDialog) => AlertDialog(
-          backgroundColor: TallyTapTheme.obsidianCard,
+          backgroundColor: TriplTheme.obsidianCard,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+            side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
           ),
           title: Text(
             record.isLent ? 'Settle Lent Balance' : 'Settle Owed Balance',
-            style: const TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+            style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -599,14 +595,14 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                     : 'Confirm you paid Rahul back the amount of ${record.amount} INR.'
                         .replaceAll('Rahul', record.personName)
                         .replaceAll('1,200', record.amount.toStringAsFixed(0)),
-                style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 13, height: 1.4),
+                style: TextStyle(color: TriplTheme.textLight, fontSize: 13, height: 1.4),
               ),
               const SizedBox(height: 20),
               Row(
                 children: [
                   Checkbox(
                     value: recordTimelineTx,
-                    activeColor: TallyTapTheme.primaryMint,
+                    activeColor: TriplTheme.primaryMint,
                     onChanged: (val) {
                       setStateDialog(() {
                         recordTimelineTx = val ?? true;
@@ -616,31 +612,31 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                   Expanded(
                     child: Text(
                       isSynth ? 'Complete transaction in timeline' : 'Record Settlement in Timeline',
-                      style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
               ),
               if (recordTimelineTx) ...[
                 const SizedBox(height: 12),
-                const Text(
+                Text(
                   'SELECT PAYMENT SOURCE',
-                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 1.0),
+                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
                 ),
                 const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: TallyTapTheme.obsidianBg,
+                    color: TriplTheme.obsidianBg,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: TallyTapTheme.borderGreen),
+                    border: Border.all(color: TriplTheme.borderGreen),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: selectedSource,
-                      dropdownColor: TallyTapTheme.obsidianCard,
+                      dropdownColor: TriplTheme.obsidianCard,
                       isExpanded: true,
-                      style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                       items: ref.read(sourcesListProvider).map((s) {
                         return DropdownMenuItem<String>(
                           value: s,
@@ -663,12 +659,12 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+              child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: TallyTapTheme.primaryMint,
-                foregroundColor: TallyTapTheme.obsidianBg,
+                backgroundColor: TriplTheme.primaryMint,
+                foregroundColor: TriplTheme.obsidianBg,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
               onPressed: () async {
@@ -785,14 +781,14 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setStateDialog) => AlertDialog(
-          backgroundColor: TallyTapTheme.obsidianCard,
+          backgroundColor: TriplTheme.obsidianCard,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
-            side: const BorderSide(color: TallyTapTheme.borderGreen, width: 1.5),
+            side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
           ),
-          title: const Text(
+          title: Text(
             'Settle Net Account',
-            style: TextStyle(color: TallyTapTheme.primaryMint, fontWeight: FontWeight.bold),
+            style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -804,14 +800,14 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                         .replaceAll('Rahul', person)
                     : 'Confirm you paid Rahul the net outstanding balance of ${netAmount.abs().toStringAsFixed(0)} INR.'
                         .replaceAll('Rahul', person),
-                style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 13, height: 1.4),
+                style: TextStyle(color: TriplTheme.textLight, fontSize: 13, height: 1.4),
               ),
               const SizedBox(height: 20),
               Row(
                 children: [
                   Checkbox(
                     value: recordTimelineTx,
-                    activeColor: TallyTapTheme.primaryMint,
+                    activeColor: TriplTheme.primaryMint,
                     onChanged: (val) {
                       setStateDialog(() {
                         recordTimelineTx = val ?? true;
@@ -825,31 +821,31 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                           : mixed 
                               ? 'Record manual settlement & complete pending'
                               : 'Record Settlement in Timeline',
-                      style: const TextStyle(color: TallyTapTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
               ),
               if (recordTimelineTx) ...[
                 const SizedBox(height: 12),
-                const Text(
+                Text(
                   'SELECT PAYMENT SOURCE',
-                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 1.0),
+                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
                 ),
                 const SizedBox(height: 8),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   decoration: BoxDecoration(
-                    color: TallyTapTheme.obsidianBg,
+                    color: TriplTheme.obsidianBg,
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: TallyTapTheme.borderGreen),
+                    border: Border.all(color: TriplTheme.borderGreen),
                   ),
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       value: selectedSource,
-                      dropdownColor: TallyTapTheme.obsidianCard,
+                      dropdownColor: TriplTheme.obsidianCard,
                       isExpanded: true,
-                      style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                       items: ref.read(sourcesListProvider).map((s) {
                         return DropdownMenuItem<String>(
                           value: s,
@@ -872,12 +868,12 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancel', style: TextStyle(color: TallyTapTheme.textGray)),
+              child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: TallyTapTheme.primaryMint,
-                foregroundColor: TallyTapTheme.obsidianBg,
+                backgroundColor: TriplTheme.primaryMint,
+                foregroundColor: TriplTheme.obsidianBg,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
               ),
               onPressed: () async {
@@ -991,7 +987,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: TallyTapTheme.obsidianBg,
+      backgroundColor: TriplTheme.obsidianBg,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -1014,15 +1010,15 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                     width: 40,
                     height: 4,
                     decoration: BoxDecoration(
-                      color: TallyTapTheme.borderGreen,
+                      color: TriplTheme.borderGreen,
                       borderRadius: BorderRadius.circular(2),
                     ),
                   ),
                 ),
                 const SizedBox(height: 20),
-                const Text(
+                Text(
                   'Add IOU Record',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: TallyTapTheme.textLight, fontFamily: 'Outfit'),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900, color: TriplTheme.textLight, fontFamily: 'Outfit'),
                 ),
                 const SizedBox(height: 20),
 
@@ -1031,9 +1027,9 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                   height: 46,
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF091210),
+                    color: TriplTheme.obsidianCard,
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: TallyTapTheme.borderGreen),
+                    border: Border.all(color: TriplTheme.borderGreen),
                   ),
                   child: Row(
                     children: [
@@ -1048,7 +1044,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                           child: Container(
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                              color: isLent ? TallyTapTheme.primaryMint : Colors.transparent,
+                              color: isLent ? TriplTheme.primaryMint : Colors.transparent,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: FittedBox(
@@ -1061,7 +1057,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
-                                    color: isLent ? TallyTapTheme.obsidianBg : TallyTapTheme.textGray,
+                                    color: isLent ? TriplTheme.obsidianBg : TriplTheme.textGray,
                                   ),
                                 ),
                               ),
@@ -1093,7 +1089,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                   style: TextStyle(
                                     fontSize: 10,
                                     fontWeight: FontWeight.bold,
-                                    color: !isLent ? TallyTapTheme.obsidianBg : TallyTapTheme.textGray,
+                                    color: !isLent ? TriplTheme.obsidianBg : TriplTheme.textGray,
                                   ),
                                 ),
                               ),
@@ -1107,9 +1103,9 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                 const SizedBox(height: 20),
 
                 // Friend's Name Field
-                const Text(
+                Text(
                   'FRIEND\'S NAME',
-                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 1.0),
+                  style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
                 ),
                 const SizedBox(height: 8),
                 Autocomplete<String>(
@@ -1130,19 +1126,19 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                       controller: controller,
                       focusNode: focusNode,
                       textCapitalization: TextCapitalization.sentences,
-                      style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                       decoration: InputDecoration(
                         hintText: 'Who is this with?',
-                        hintStyle: const TextStyle(color: TallyTapTheme.textGray),
+                        hintStyle: TextStyle(color: TriplTheme.textGray),
                         filled: true,
-                        fillColor: TallyTapTheme.obsidianCard,
+                        fillColor: TriplTheme.obsidianCard,
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                          borderSide: BorderSide(color: TriplTheme.borderGreen),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide(color: isLent ? TallyTapTheme.primaryMint : const Color(0xFFF59E0B)),
+                          borderSide: BorderSide(color: isLent ? TriplTheme.primaryMint : const Color(0xFFF59E0B)),
                         ),
                       ),
                     );
@@ -1161,27 +1157,27 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'AMOUNT',
-                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 1.0),
+                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
                           ),
                           const SizedBox(height: 8),
                           TextField(
                             controller: amountController,
                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                            style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                             decoration: InputDecoration(
                               hintText: '0.00',
-                              hintStyle: const TextStyle(color: TallyTapTheme.textGray),
+                              hintStyle: TextStyle(color: TriplTheme.textGray),
                               filled: true,
-                              fillColor: TallyTapTheme.obsidianCard,
+                              fillColor: TriplTheme.obsidianCard,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
-                                borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                                borderSide: BorderSide(color: TriplTheme.borderGreen),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
-                                borderSide: BorderSide(color: isLent ? TallyTapTheme.primaryMint : const Color(0xFFF59E0B)),
+                                borderSide: BorderSide(color: isLent ? TriplTheme.primaryMint : const Color(0xFFF59E0B)),
                               ),
                             ),
                           ),
@@ -1194,27 +1190,27 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
+                          Text(
                             'NOTES / DESCRIPTION',
-                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 1.0),
+                            style: TextStyle(fontSize: 10, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
                           ),
                           const SizedBox(height: 8),
                           TextField(
                             controller: notesController,
                             textCapitalization: TextCapitalization.sentences,
-                            style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                            style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                             decoration: InputDecoration(
                               hintText: 'e.g. Dinner, Rent split...',
-                              hintStyle: const TextStyle(color: TallyTapTheme.textGray),
+                              hintStyle: TextStyle(color: TriplTheme.textGray),
                               filled: true,
-                              fillColor: TallyTapTheme.obsidianCard,
+                              fillColor: TriplTheme.obsidianCard,
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
-                                borderSide: const BorderSide(color: TallyTapTheme.borderGreen),
+                                borderSide: BorderSide(color: TriplTheme.borderGreen),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
-                                borderSide: BorderSide(color: isLent ? TallyTapTheme.primaryMint : const Color(0xFFF59E0B)),
+                                borderSide: BorderSide(color: isLent ? TriplTheme.primaryMint : const Color(0xFFF59E0B)),
                               ),
                             ),
                           ),
@@ -1230,41 +1226,41 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                   children: [
                     Checkbox(
                       value: recordTimelineTx,
-                      activeColor: isLent ? TallyTapTheme.primaryMint : const Color(0xFFF59E0B),
+                      activeColor: isLent ? TriplTheme.primaryMint : const Color(0xFFF59E0B),
                       onChanged: (val) {
                         setSheetState(() {
                           recordTimelineTx = val ?? false;
                         });
                       },
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Text(
                         'Record in Wallet Timeline',
-                        style: TextStyle(color: TallyTapTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ],
                 ),
                 if (recordTimelineTx) ...[
                   const SizedBox(height: 12),
-                  const Text(
+                  Text(
                     'SELECT PAYMENT SOURCE',
-                    style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TallyTapTheme.textGray, letterSpacing: 1.0),
+                    style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
                   ),
                   const SizedBox(height: 8),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     decoration: BoxDecoration(
-                      color: TallyTapTheme.obsidianCard,
+                      color: TriplTheme.obsidianCard,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: TallyTapTheme.borderGreen),
+                      border: Border.all(color: TriplTheme.borderGreen),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: selectedSource,
-                        dropdownColor: TallyTapTheme.obsidianCard,
+                        dropdownColor: TriplTheme.obsidianCard,
                         isExpanded: true,
-                        style: const TextStyle(color: TallyTapTheme.textLight, fontWeight: FontWeight.bold),
+                        style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                         items: availableSources.map((s) {
                           return DropdownMenuItem<String>(
                             value: s,
@@ -1287,8 +1283,8 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                 // Save Action Button
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: isLent ? TallyTapTheme.primaryMint : const Color(0xFFF59E0B),
-                    foregroundColor: TallyTapTheme.obsidianBg,
+                    backgroundColor: isLent ? TriplTheme.primaryMint : const Color(0xFFF59E0B),
+                    foregroundColor: TriplTheme.obsidianBg,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14),
@@ -1402,8 +1398,8 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
           child: ElevatedButton(
             onPressed: () => controller.next(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: TallyTapTheme.primaryMint,
-              foregroundColor: TallyTapTheme.obsidianBg,
+              backgroundColor: TriplTheme.primaryMint,
+              foregroundColor: TriplTheme.obsidianBg,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
             child: Text(nextText),

@@ -113,20 +113,20 @@ class _DonutChartState extends ConsumerState<DonutChart> with SingleTickerProvid
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     'Total',
                     style: TextStyle(
                       fontSize: 12,
-                      color: TallyTapTheme.textGray,
+                      color: TriplTheme.textGray,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '${widget.currency}${animatedTotal.toStringAsFixed(0).replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
-                      color: TallyTapTheme.textLight,
+                      color: TriplTheme.textLight,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.5,
                     ),
@@ -172,12 +172,12 @@ class _DonutChartPainter extends CustomPainter {
 
     if (total == 0) {
       final Paint emptyPaint = Paint()
-        ..color = const Color(0xFF13221E)
+        ..color = TriplTheme.borderGreen.withOpacity(0.3)
         ..style = PaintingStyle.fill;
       canvas.drawPath(getOctagonPath(size), emptyPaint);
 
       final Paint holePaint = Paint()
-        ..color = const Color(0xFF08100E)
+        ..color = TriplTheme.obsidianBg
         ..style = PaintingStyle.fill;
       canvas.drawCircle(Offset(size.width / 2, size.height / 2), size.width * 0.35, holePaint);
       return;
@@ -224,7 +224,7 @@ class _DonutChartPainter extends CustomPainter {
     canvas.restore();
 
     final Paint holePaint = Paint()
-      ..color = const Color(0xFF08100E)
+      ..color = TriplTheme.obsidianBg
       ..style = PaintingStyle.fill;
     canvas.drawCircle(Offset(size.width / 2, size.height / 2), size.width * 0.35, holePaint);
   }
