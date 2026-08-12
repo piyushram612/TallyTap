@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme.dart';
+import '../../core/math_evaluator.dart';
 import '../../models/transaction_model.dart';
 import '../../providers/currency_provider.dart';
 import '../../providers/source_provider.dart';
@@ -76,7 +77,7 @@ class _TransferFundsScreenState extends ConsumerState<TransferFundsScreen> {
 
   void _submitTransfer() {
     if (!_formKey.currentState!.validate()) return;
-    final amount = double.tryParse(_amountController.text);
+    final amount = MathEvaluator.tryParseAmount(_amountController.text);
     if (amount == null || amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Please enter a valid amount'),
@@ -225,7 +226,7 @@ class _TransferFundsScreenState extends ConsumerState<TransferFundsScreen> {
                               IntrinsicWidth(
                                 child: TextFormField(
                                   controller: _amountController,
-                                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                                  keyboardType: TextInputType.text,
                                   style: TextStyle(
                                     fontSize: 44,
                                     fontWeight: FontWeight.w900,
@@ -235,7 +236,7 @@ class _TransferFundsScreenState extends ConsumerState<TransferFundsScreen> {
                                   textAlign: TextAlign.center,
                                   cursorColor: TriplTheme.primaryMint,
                                   inputFormatters: [
-                                    FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d{0,2}')),
+                                    FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\+\-\*\/\×\÷\%\ \(\)]')),
                                   ],
                                   decoration: InputDecoration(
                                     hintText: '0.00',
@@ -244,10 +245,13 @@ class _TransferFundsScreenState extends ConsumerState<TransferFundsScreen> {
                                     contentPadding: EdgeInsets.zero,
                                     isCollapsed: true,
                                   ),
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) return 'Required';
-                                    final val = double.tryParse(value);
-                                    if (val == null || val <= 0) return 'Invalid';
+                                  validator: (val) {
+                                    if (val == null || val.trim().isEmpty) {
+                                      return 'Required';
+                                    }
+                                    if (MathEvaluator.tryParseAmount(val) == null) {
+                                      return 'Invalid';
+                                    }
                                     return null;
                                   },
                                 ),

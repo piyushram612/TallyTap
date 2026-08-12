@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/theme.dart';
+import '../../core/math_evaluator.dart';
 import '../../models/outstanding_model.dart';
 import '../../models/transaction_model.dart';
 import '../../services/transaction_service.dart';
@@ -1164,7 +1165,10 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                           const SizedBox(height: 8),
                           TextField(
                             controller: amountController,
-                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            keyboardType: TextInputType.text,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\+\-\*\/\×\÷\%\ \(\)]')),
+                            ],
                             style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
                             decoration: InputDecoration(
                               hintText: '0.00',
@@ -1293,7 +1297,7 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                   onPressed: () async {
                     final name = nameController.text.trim();
                     final notes = notesController.text.trim();
-                    final amt = double.tryParse(amountController.text) ?? 0.0;
+                    final amt = MathEvaluator.tryParseAmount(amountController.text) ?? 0.0;
 
                     if (name.isEmpty || amt <= 0) {
                       ScaffoldMessenger.of(context).showSnackBar(

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../core/theme.dart';
+import '../core/math_evaluator.dart';
 import '../models/recurring_transaction_model.dart';
 import '../providers/recurring_transaction_provider.dart';
 import '../providers/category_provider.dart';
@@ -196,7 +197,7 @@ class _CreateRecurringTransactionScreenState extends ConsumerState<CreateRecurri
 
   void _saveTransaction() {
     if (_formKey.currentState!.validate()) {
-      final amount = double.tryParse(_amountController.text) ?? 0.0;
+      final amount = MathEvaluator.tryParseAmount(_amountController.text) ?? 0.0;
       if (amount <= 0) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Please enter a valid amount'), backgroundColor: Colors.red),

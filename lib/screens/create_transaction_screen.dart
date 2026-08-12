@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../core/theme.dart';
+import '../core/math_evaluator.dart';
 import '../models/transaction_model.dart';
 import '../providers/budget_alerts_provider.dart';
 import '../providers/budget_provider.dart';
@@ -152,7 +153,7 @@ class _CreateTransactionScreenState
 
   void _saveTransaction() {
     if (!_formKey.currentState!.validate()) return;
-    final amount = double.tryParse(_amountController.text);
+    final amount = MathEvaluator.tryParseAmount(_amountController.text);
     if (amount == null || amount <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Please enter a valid amount'),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/theme.dart';
+import '../../core/math_evaluator.dart';
 
 class SectionLabel extends StatelessWidget {
   const SectionLabel({super.key, required this.label});
@@ -91,91 +92,393 @@ class AmountCard extends StatelessWidget {
   final Color activeColor;
   final Color catColor;
 
+  Future<void> _openCalculatorSheet(BuildContext context) async {
+    HapticFeedback.mediumImpact();
+
+    final currentFocus = FocusScope.of(context);
+    final bool isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+
+    if (isKeyboardVisible || currentFocus.focusedChild != null) {
+      // 1. Explicitly unfocus active text field and request OS keyboard hide
+      currentFocus.unfocus();
+      FocusManager.instance.primaryFocus?.unfocus();
+      await SystemChannels.textInput.invokeMethod('TextInput.hide');
+
+      // 2. Wait 220ms for OS soft keyboard collapse animation to complete smoothly
+      // This prevents double layout animation collisions between OS keyboard and bottom sheet route
+      await Future.delayed(const Duration(milliseconds: 220));
+    }
+
+    if (!context.mounted) return;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      enableDrag: true,
+      builder: (ctx) => _CalculatorKeyboardSheet(
+        controller: controller,
+        currency: currency,
+        activeColor: activeColor,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => _openCalculatorSheet(context),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        decoration: BoxDecoration(
+          color: TriplTheme.obsidianCard,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: TriplTheme.borderGreen),
+          boxShadow: [
+            BoxShadow(
+              color: activeColor.withOpacity(0.06),
+              blurRadius: 20,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'TRANSACTION AMOUNT',
+                  style: TextStyle(
+                    fontSize: 10,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 1.8,
+                    color: TriplTheme.textGray,
+                  ),
+                ),
+                Icon(
+                  Icons.calculate_rounded,
+                  color: activeColor,
+                  size: 20,
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  currency,
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.w900,
+                    color: activeColor,
+                    fontFamily: 'Outfit',
+                  ),
+                ),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: IntrinsicWidth(
+                    child: TextFormField(
+                      controller: controller,
+                      readOnly: true,
+                      onTap: () => _openCalculatorSheet(context),
+                      style: TextStyle(
+                        fontSize: 44,
+                        fontWeight: FontWeight.w900,
+                        color: TriplTheme.textLight,
+                        fontFamily: 'Outfit',
+                        letterSpacing: -1,
+                      ),
+                      textAlign: TextAlign.left,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\+\-\*\/\×\÷\%\ \(\)]')),
+                      ],
+                      decoration: InputDecoration(
+                        hintText: '0.00',
+                        hintStyle: TextStyle(
+                          fontSize: 44,
+                          fontWeight: FontWeight.w900,
+                          color: TriplTheme.textGray.withOpacity(0.25),
+                          fontFamily: 'Outfit',
+                          letterSpacing: -1,
+                        ),
+                        border: InputBorder.none,
+                        contentPadding: EdgeInsets.zero,
+                        isDense: true,
+                      ),
+                      validator: (val) {
+                        if (val == null || val.trim().isEmpty) {
+                          return 'Required';
+                        }
+                        final parsed = MathEvaluator.tryParseAmount(val);
+                        if (parsed == null || parsed <= 0) {
+                          return 'Invalid calculation';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Custom Bottom Sheet Calculator Keyboard using Obsidian glassmorphic card styling
+class _CalculatorKeyboardSheet extends StatefulWidget {
+  const _CalculatorKeyboardSheet({
+    required this.controller,
+    required this.currency,
+    required this.activeColor,
+  });
+
+  final TextEditingController controller;
+  final String currency;
+  final Color activeColor;
+
+  @override
+  State<_CalculatorKeyboardSheet> createState() => _CalculatorKeyboardSheetState();
+}
+
+class _CalculatorKeyboardSheetState extends State<_CalculatorKeyboardSheet> {
+  late String _expr;
+
+  @override
+  void initState() {
+    super.initState();
+    _expr = widget.controller.text.trim();
+  }
+
+  void _onKeyPress(String key) {
+    HapticFeedback.selectionClick();
+    final evaluated = MathEvaluator.evaluate(_expr);
+
+    setState(() {
+      if (key == 'C') {
+        _expr = '';
+      } else if (key == '⌫') {
+        if (_expr.isNotEmpty) {
+          _expr = _expr.substring(0, _expr.length - 1).trimRight();
+        }
+      } else if (key == '=') {
+        if (evaluated != null) {
+          _expr = MathEvaluator.formatResult(evaluated);
+        }
+      } else if (key == '+' || key == '-' || key == '×' || key == '÷') {
+        if (_expr.isNotEmpty && !_expr.endsWith(' ')) {
+          _expr = '$_expr $key ';
+        }
+      } else {
+        _expr += key;
+      }
+    });
+  }
+
+  void _onSetAmount() {
+    HapticFeedback.mediumImpact();
+    String finalAmountStr = _expr.trim();
+
+    if (MathEvaluator.hasOperator(finalAmountStr)) {
+      final evaluated = MathEvaluator.evaluate(finalAmountStr);
+      if (evaluated != null) {
+        finalAmountStr = MathEvaluator.formatResult(evaluated);
+      }
+    }
+
+    widget.controller.text = finalAmountStr;
+    Navigator.of(context).pop();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final double? evaluated = MathEvaluator.hasOperator(_expr) ? MathEvaluator.evaluate(_expr) : null;
+    final String? evaluatedStr = evaluated != null ? MathEvaluator.formatResult(evaluated) : null;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
       decoration: BoxDecoration(
-        color: TriplTheme.obsidianCard,
-        borderRadius: BorderRadius.circular(24),
+        color: TriplTheme.obsidianBg,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
         border: Border.all(color: TriplTheme.borderGreen),
-        boxShadow: [
-          BoxShadow(
-            color: activeColor.withOpacity(0.06),
-            blurRadius: 20,
-            offset: const Offset(0, 6),
-          ),
+        boxShadow: const [
+          BoxShadow(color: Colors.black54, blurRadius: 30, offset: Offset(0, -6)),
         ],
       ),
+      padding: EdgeInsets.fromLTRB(20, 16, 20, MediaQuery.of(context).padding.bottom + 20),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            'TRANSACTION AMOUNT',
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w800,
-              letterSpacing: 1.8,
-              color: TriplTheme.textGray,
+          // Drag handle
+          Center(
+            child: Container(
+              width: 36,
+              height: 4,
+              decoration: BoxDecoration(
+                color: TriplTheme.textGray.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(2),
+              ),
             ),
           ),
           const SizedBox(height: 16),
+
+          // Header Row: "Enter Amount" & Live Display
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                currency,
+                'Enter Amount',
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 20,
                   fontWeight: FontWeight.w900,
-                  color: activeColor,
+                  color: TriplTheme.textLight,
                   fontFamily: 'Outfit',
                 ),
               ),
-              const SizedBox(width: 6),
-              Flexible(
-                child: IntrinsicWidth(
-                  child: TextFormField(
-                    controller: controller,
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.w900,
-                      color: TriplTheme.textLight,
-                      fontFamily: 'Outfit',
-                      letterSpacing: -2,
-                    ),
-                    textAlign: TextAlign.left,
-                    keyboardType: const TextInputType.numberWithOptions(
-                        decimal: true),
-                    decoration: InputDecoration(
-                      hintText: '0.00',
-                      hintStyle: TextStyle(
-                        fontSize: 48,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      _expr.isEmpty ? '${widget.currency}0' : '${widget.currency}$_expr',
+                      style: TextStyle(
+                        fontSize: 26,
                         fontWeight: FontWeight.w900,
-                        color: TriplTheme.textGray.withOpacity(0.25),
+                        color: TriplTheme.textLight,
                         fontFamily: 'Outfit',
-                        letterSpacing: -2,
                       ),
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.zero,
-                      isDense: true,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    validator: (val) {
-                      if (val == null || val.trim().isEmpty) {
-                        return 'Required';
-                      }
-                      if (double.tryParse(val) == null) {
-                        return 'Invalid number';
-                      }
-                      return null;
-                    },
-                  ),
+                    if (evaluatedStr != null) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        '= ${widget.currency}$evaluatedStr',
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: widget.activeColor,
+                          fontFamily: 'Outfit',
+                        ),
+                      ),
+                    ],
+                  ],
                 ),
               ),
             ],
           ),
+          const SizedBox(height: 18),
+
+          // Obsidian Keypad Container Card (Matching User's Screenshot UI)
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: TriplTheme.obsidianCard,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: TriplTheme.borderGreen),
+            ),
+            child: Column(
+              children: [
+                _buildRow(['C', '(', ')', '÷']),
+                const SizedBox(height: 10),
+                _buildRow(['7', '8', '9', '×']),
+                const SizedBox(height: 10),
+                _buildRow(['4', '5', '6', '-']),
+                const SizedBox(height: 10),
+                _buildRow(['1', '2', '3', '+']),
+                const SizedBox(height: 10),
+                _buildRow(['0', '.', '⌫', '=']),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Set Amount Action Button
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: ElevatedButton(
+              onPressed: _onSetAmount,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: widget.activeColor,
+                foregroundColor: TriplTheme.obsidianBg,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                evaluatedStr != null ? 'SET AMOUNT (= $evaluatedStr)' : 'SET AMOUNT',
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w900,
+                  fontFamily: 'Outfit',
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildRow(List<String> keys) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: keys.map((k) => Expanded(child: _buildKey(k))).toList(),
+    );
+  }
+
+  Widget _buildKey(String label) {
+    final bool isOperator = label == '+' || label == '-' || label == '×' || label == '÷' || label == '=';
+    final bool isBack = label == '⌫';
+    final bool isClear = label == 'C';
+    final Color color = isClear
+        ? Colors.redAccent
+        : (isOperator ? widget.activeColor : TriplTheme.textLight);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: () => _onKeyPress(label),
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            height: 52,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              color: isClear
+                  ? Colors.redAccent.withOpacity(0.12)
+                  : (isOperator ? widget.activeColor.withOpacity(0.15) : TriplTheme.obsidianCard),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(
+                color: isClear
+                    ? Colors.redAccent.withOpacity(0.4)
+                    : (isOperator ? widget.activeColor.withOpacity(0.4) : TriplTheme.borderGreen),
+              ),
+            ),
+            child: isBack
+                ? Icon(Icons.backspace_outlined, color: TriplTheme.textGray, size: 20)
+                : Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                      fontFamily: 'Outfit',
+                    ),
+                  ),
+          ),
+        ),
       ),
     );
   }
