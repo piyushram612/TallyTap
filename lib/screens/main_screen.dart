@@ -10,6 +10,7 @@ import '../providers/category_provider.dart';
 import '../providers/currency_provider.dart';
 import '../providers/source_provider.dart';
 import '../providers/recurring_transaction_provider.dart';
+import '../providers/theme_provider.dart';
 import '../services/transaction_service.dart';
 
 import 'home_screen.dart';
@@ -173,6 +174,9 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
 
   Widget _buildBottomNavBar(BuildContext context) {
     final currentIndex = ref.watch(activeTabProvider);
+    final appTheme = ref.watch(themeProvider);
+    final bool isLight = appTheme.baseMode.brightness == Brightness.light;
+
     final double screenWidth = MediaQuery.of(context).size.width;
     
     final double horizontalMargin = 12.0;
@@ -191,6 +195,10 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
       pillLeftPosition -= 1.0;
     }
 
+    final Color activeAccent = isLight
+        ? TriplTheme.ensureLegibleTextColor(TriplTheme.primaryMint, isDark: false)
+        : TriplTheme.primaryMint;
+
     return SafeArea(
       top: false,
       child: Container(
@@ -204,23 +212,40 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
           borderRadius: BorderRadius.circular(28),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
+              color: isLight
+                  ? const Color(0xFF0F172A).withOpacity(0.04)
+                  : Colors.black.withOpacity(0.30),
+              blurRadius: isLight ? 14 : 16,
+              spreadRadius: 0,
+              offset: Offset(0, isLight ? 4 : 6),
             ),
           ],
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(28),
           child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
+            filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: paddingHorizontal),
               decoration: BoxDecoration(
-                color: TriplTheme.obsidianCard.withOpacity(0.10),
                 borderRadius: BorderRadius.circular(28),
+                gradient: LinearGradient(
+                  colors: isLight
+                      ? [
+                          Colors.white.withOpacity(0.38),
+                          Colors.white.withOpacity(0.18),
+                        ]
+                      : [
+                          TriplTheme.obsidianCard.withOpacity(0.40),
+                          TriplTheme.obsidianCard.withOpacity(0.20),
+                        ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
                 border: Border.all(
-                  color: TriplTheme.borderGreen.withOpacity(0.8),
+                  color: isLight
+                      ? Colors.white.withOpacity(0.70)
+                      : TriplTheme.borderGreen.withOpacity(0.50),
                   width: 1.2,
                 ),
               ),
@@ -237,21 +262,30 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16),
                         gradient: LinearGradient(
-                          colors: [
-                            TriplTheme.primaryMint.withOpacity(0.24),
-                            TriplTheme.primaryMint.withOpacity(0.04),
-                          ],
+                          colors: isLight
+                              ? [
+                                  activeAccent.withOpacity(0.18),
+                                  activeAccent.withOpacity(0.05),
+                                ]
+                              : [
+                                  TriplTheme.primaryMint.withOpacity(0.22),
+                                  TriplTheme.primaryMint.withOpacity(0.05),
+                                ],
                           begin: Alignment.topLeft,
                           end: Alignment.bottomRight,
                         ),
                         border: Border.all(
-                          color: TriplTheme.primaryMint.withOpacity(0.25),
+                          color: isLight
+                              ? activeAccent.withOpacity(0.35)
+                              : TriplTheme.primaryMint.withOpacity(0.25),
                           width: 1.0,
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: TriplTheme.primaryMint.withOpacity(0.12),
-                            blurRadius: 10,
+                            color: isLight
+                                ? activeAccent.withOpacity(0.12)
+                                : TriplTheme.primaryMint.withOpacity(0.10),
+                            blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
                         ],
@@ -262,11 +296,11 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildNavBarItem(0, Icons.home_filled, 'Home', currentIndex == 0),
-                        _buildNavBarItem(1, Icons.account_balance_wallet, 'Budgets', currentIndex == 1),
-                        _buildNavBarItem(2, Icons.analytics_outlined, 'Insights', currentIndex == 2),
-                        _buildNavBarItem(3, Icons.history_toggle_off, 'Timeline', currentIndex == 3),
-                        _buildNavBarItem(4, Icons.handyman_rounded, 'Toolkit', currentIndex == 4),
+                        _buildNavBarItem(0, Icons.home_filled, 'Home', currentIndex == 0, isLight, activeAccent),
+                        _buildNavBarItem(1, Icons.account_balance_wallet, 'Budgets', currentIndex == 1, isLight, activeAccent),
+                        _buildNavBarItem(2, Icons.analytics_outlined, 'Insights', currentIndex == 2, isLight, activeAccent),
+                        _buildNavBarItem(3, Icons.history_toggle_off, 'Timeline', currentIndex == 3, isLight, activeAccent),
+                        _buildNavBarItem(4, Icons.handyman_rounded, 'Toolkit', currentIndex == 4, isLight, activeAccent),
                       ],
                     ),
                   ),
@@ -279,13 +313,16 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
     );
   }
 
-  Widget _buildNavBarItem(int index, IconData icon, String label, bool isActive) {
+  Widget _buildNavBarItem(int index, IconData icon, String label, bool isActive, bool isLight, Color activeAccent) {
     GlobalKey? key;
     if (index == 0) key = TutorialService.mainNavHomeKey;
     if (index == 1) key = TutorialService.mainNavBudgetsKey;
     if (index == 2) key = TutorialService.mainNavInsightsKey;
     if (index == 3) key = TutorialService.mainNavTimelineKey;
     if (index == 4) key = TutorialService.mainNavToolkitKey;
+
+    final Color unselectedColor = isLight ? const Color(0xFF64748B) : TriplTheme.textGray;
+    final Color itemColor = isActive ? activeAccent : unselectedColor;
 
     return Expanded(
       key: key,
@@ -305,7 +342,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
               top: isActive ? 13 : 25,
               child: Icon(
                 icon,
-                color: isActive ? TriplTheme.primaryMint : TriplTheme.textGray,
+                color: itemColor,
                 size: 22,
               ),
             ),
@@ -321,7 +358,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                   style: TextStyle(
                     fontSize: 9,
                     fontWeight: isActive ? FontWeight.w900 : FontWeight.w500,
-                    color: isActive ? TriplTheme.primaryMint : TriplTheme.textGray,
+                    color: itemColor,
                     letterSpacing: 0.2,
                   ),
                 ),
