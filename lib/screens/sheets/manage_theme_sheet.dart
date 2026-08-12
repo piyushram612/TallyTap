@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/app_theme.dart';
 import '../../core/theme.dart';
 import '../../providers/theme_provider.dart';
+import '../../providers/currency_provider.dart';
 import '../../widgets/tripl_badge.dart';
 import '../../widgets/tripl_button.dart';
 import '../../widgets/tripl_card.dart';
@@ -135,6 +136,7 @@ class _ManageThemeSheetState extends ConsumerState<ManageThemeSheet> {
   @override
   Widget build(BuildContext context) {
     final activeConfig = ref.watch(themeProvider);
+    final currency = ref.watch(currencyProvider);
 
     return DraggableScrollableSheet(
       initialChildSize: 0.85,
@@ -192,7 +194,7 @@ class _ManageThemeSheetState extends ConsumerState<ManageThemeSheet> {
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         Text(
-                          '\$1,240.50',
+                          '$currency 1,240.50',
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w900,
@@ -202,7 +204,7 @@ class _ManageThemeSheetState extends ConsumerState<ManageThemeSheet> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'of \$2,000.00 spent',
+                          'of $currency 2,000.00 spent',
                           style: TextStyle(fontSize: 12, color: activeConfig.textMuted),
                         ),
                       ],
@@ -263,7 +265,7 @@ class _ManageThemeSheetState extends ConsumerState<ManageThemeSheet> {
                                   ),
                                 ),
                                 Text(
-                                  '-\$4.50',
+                                  '-$currency 4.50',
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.bold,

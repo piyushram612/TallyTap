@@ -5,6 +5,7 @@ import '../core/theme.dart';
 import '../providers/app_state_provider.dart';
 import '../providers/category_provider.dart';
 import '../providers/source_provider.dart';
+import '../providers/currency_provider.dart';
 import '../services/platform_service.dart';
 import '../services/notification_service.dart';
 import '../services/csv_service.dart';
@@ -1047,7 +1048,7 @@ class ToolkitScreen extends ConsumerWidget {
                   children: [
                     _buildPreviewRow('Transactions Found', '${importedTransactions.length} items'),
                     const SizedBox(height: 8),
-                    _buildPreviewRow('Total Value', '\$${totalAmount.toStringAsFixed(2)}'),
+                    _buildPreviewRow('Total Value', '${ref.read(currencyProvider)}${totalAmount.toStringAsFixed(2)}'),
                     const SizedBox(height: 8),
                     _buildPreviewRow('Date Range', dateRangeStr),
                   ],
