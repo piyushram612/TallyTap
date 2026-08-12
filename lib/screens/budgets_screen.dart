@@ -92,17 +92,7 @@ class _BudgetsScreenState extends ConsumerState<BudgetsScreen> with SingleTicker
   }
 
   IconData _getIconForCategory(String category) {
-    final lower = category.toLowerCase();
-    if (lower.contains('din') || lower.contains('food')) return Icons.local_dining_rounded;
-    if (lower.contains('commute') || lower.contains('trans')) return Icons.directions_transit_rounded;
-    if (lower.contains('sub')) return Icons.subscriptions_rounded;
-    if (lower.contains('util')) return Icons.bolt_rounded;
-    if (lower.contains('groc')) return Icons.shopping_basket_rounded;
-    if (lower.contains('shop')) return Icons.shopping_bag_rounded;
-    if (lower.contains('health')) return Icons.favorite_rounded;
-    if (lower.contains('house') || lower.contains('home')) return Icons.home_rounded;
-    if (lower.contains('travel')) return Icons.flight_rounded;
-    return Icons.category_rounded;
+    return TriplTheme.getIconForCategory(category);
   }
 
   Color _getColorForCategory(String category, int index) {
