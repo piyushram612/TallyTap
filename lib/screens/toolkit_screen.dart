@@ -1644,6 +1644,7 @@ class ToolkitScreen extends ConsumerWidget {
                     ),
                   ),
                 ),
+            const SizedBox(height: 20),
 
             // Card B2: Notifications
             Card(

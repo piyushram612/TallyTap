@@ -7,6 +7,7 @@ import '../../providers/currency_provider.dart';
 import '../../widgets/tripl_badge.dart';
 import '../../widgets/tripl_button.dart';
 import '../../widgets/tripl_card.dart';
+import '../../widgets/tripl_color_wheel.dart';
 import '../../widgets/tripl_section_header.dart';
 import '../../widgets/tripl_sheet.dart';
 
@@ -36,99 +37,12 @@ class _ManageThemeSheetState extends ConsumerState<ManageThemeSheet> {
   ];
 
   void _showCustomColorPicker(BuildContext context, AppThemeConfig currentConfig) {
-    Color selectedColor = currentConfig.primaryAccent;
-    final controller = TextEditingController(
-      text: selectedColor.value.toRadixString(16).substring(2).toUpperCase(),
-    );
-
-    showDialog(
-      context: context,
-      builder: (ctx) {
-        return StatefulBuilder(
-          builder: (dialogCtx, setDialogState) {
-            return AlertDialog(
-              backgroundColor: currentConfig.cardBg,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                side: BorderSide(color: currentConfig.cardBorder),
-              ),
-              title: Text(
-                'Custom Accent Color',
-                style: TextStyle(
-                  color: currentConfig.textPrimary,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Outfit',
-                ),
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    height: 50,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: selectedColor,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: currentConfig.cardBorder),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '#${selectedColor.value.toRadixString(16).substring(2).toUpperCase()}',
-                      style: TextStyle(
-                        color: selectedColor.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: controller,
-                    style: TextStyle(color: currentConfig.textPrimary),
-                    maxLength: 6,
-                    decoration: InputDecoration(
-                      prefixText: '# ',
-                      prefixStyle: TextStyle(color: currentConfig.primaryAccent, fontWeight: FontWeight.bold),
-                      labelText: 'Enter Hex Color',
-                      labelStyle: TextStyle(color: currentConfig.textMuted),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: currentConfig.cardBorder),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide(color: currentConfig.primaryAccent),
-                      ),
-                    ),
-                    onChanged: (val) {
-                      if (val.length == 6) {
-                        final hex = int.tryParse('FF$val', radix: 16);
-                        if (hex != null) {
-                          setDialogState(() {
-                            selectedColor = Color(hex);
-                          });
-                        }
-                      }
-                    },
-                  ),
-                ],
-              ),
-              actions: [
-                TriplButton.ghost(
-                  label: 'Cancel',
-                  onPressed: () => Navigator.pop(dialogCtx),
-                ),
-                TriplButton.primary(
-                  label: 'Apply Accent',
-                  color: selectedColor,
-                  onPressed: () {
-                    ref.read(themeProvider.notifier).setPrimaryAccent(selectedColor);
-                    Navigator.pop(dialogCtx);
-                  },
-                ),
-              ],
-            );
-          },
-        );
+    TriplColorPickerDialog.show(
+      context,
+      initialColor: currentConfig.primaryAccent,
+      themeConfig: currentConfig,
+      onApply: (selectedColor) {
+        ref.read(themeProvider.notifier).setPrimaryAccent(selectedColor);
       },
     );
   }
@@ -496,7 +410,7 @@ class _ManageThemeSheetState extends ConsumerState<ManageThemeSheet> {
                 runSpacing: 10,
                 children: [
                   ..._accentSwatches.map((color) {
-                    final isSelected = activeConfig.primaryAccent.value == color.value;
+                    final isSelected = activeConfig.primaryAccent.toARGB32() == color.toARGB32();
 
                     return GestureDetector(
                       onTap: () {
@@ -516,7 +430,7 @@ class _ManageThemeSheetState extends ConsumerState<ManageThemeSheet> {
                           boxShadow: isSelected
                               ? [
                                   BoxShadow(
-                                    color: color.withOpacity(0.4),
+                                    color: color.withValues(alpha: 0.4),
                                     blurRadius: 8,
                                     spreadRadius: 1,
                                   ),

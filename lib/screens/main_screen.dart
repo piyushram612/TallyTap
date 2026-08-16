@@ -797,7 +797,7 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
       radius: 12,
       contents: [
         TargetContent(
-          align: ContentAlign.top,
+          align: ContentAlign.bottom,
           builder: (context, controller) => _buildTutorialContent(controller, "Category Envelopes", "Track specific categories here. Tap to manage or create new envelope budgets for things like Groceries or Entertainment."),
         ),
       ],
@@ -829,10 +829,16 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
       alignSkip: Alignment.topRight,
       shape: ShapeLightFocus.RRect,
       radius: 12,
+      paddingFocus: 6,
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
-          builder: (context, controller) => _buildTutorialContent(controller, "Spend Intentionality", "See your spending categorized by intent. This ring summarizes your financial behavior at a glance."),
+          padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 16),
+          builder: (context, controller) => _buildTutorialContent(
+            controller, 
+            "Spend Intentionality", 
+            "See your spending categorized by intent. This ring summarizes your financial behavior at a glance.",
+          ),
         ),
       ],
     ));
@@ -843,11 +849,16 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
       alignSkip: Alignment.topRight,
       shape: ShapeLightFocus.RRect,
       radius: 12,
-      paddingFocus: 20,
+      paddingFocus: 6,
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
-          builder: (context, controller) => _buildTutorialContent(controller, "Intent Categories", "We categorize spending into Essential, Joyful, Avoidable, and Investments to help you understand your habits better."),
+          padding: const EdgeInsets.only(top: 12, left: 16, right: 16, bottom: 16),
+          builder: (context, controller) => _buildTutorialContent(
+            controller, 
+            "Intent Categories", 
+            "We categorize spending into Essential, Joyful, Avoidable, and Investments to help you understand your habits better.",
+          ),
         ),
       ],
     ));
