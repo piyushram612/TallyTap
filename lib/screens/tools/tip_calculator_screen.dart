@@ -492,7 +492,7 @@ class _TipCalculatorScreenState extends ConsumerState<TipCalculatorScreen> {
       radius: 12,
       contents: [
         TargetContent(
-          align: ContentAlign.bottom,
+          align: ContentAlign.top,
           builder: (context, controller) => _buildTutorialContent(controller, "Tip Adjuster", "Use the slider or quick buttons to set the tip percentage."),
         ),
       ],
