@@ -17,7 +17,10 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -41,6 +44,8 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.unit.sp
+import com.waypointlattice.tripl.ui.components.core.CalculatorKeypadSheet
+import com.waypointlattice.tripl.utils.MathEvaluator
 import com.waypointlattice.tripl.ui.components.core.ScrollableCategoryCapsule
 import com.waypointlattice.tripl.ui.components.core.SectionHeader
 import com.waypointlattice.tripl.ui.components.core.CustomInputField
@@ -69,6 +74,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
@@ -158,6 +164,7 @@ fun PopupCard(
     var showTimePicker by remember { mutableStateOf(false) }
     var showReminderDatePicker by remember { mutableStateOf(false) }
     var showReminderTimePicker by remember { mutableStateOf(false) }
+    var showCalculatorSheet by remember { mutableStateOf(true) }
 
     LaunchedEffect(Unit) {
         visible = true
@@ -165,8 +172,6 @@ fun PopupCard(
             targetValue = 1.0f,
             animationSpec = tween(durationMillis = 280)
         )
-        // Request autofocus on Amount field first to reduce logging friction
-        focusRequester.requestFocus()
     }
 
     Box(
@@ -258,62 +263,30 @@ fun PopupCard(
 
                         Spacer(modifier = Modifier.height(6.dp))
 
-                        // 2. AMOUNT INPUT FIELD
-                        BasicTextField(
-                            value = amount,
-                            onValueChange = { newVal ->
-                                val cleanText = newVal.text.filter { it.isDigit() || it == '.' }
-                                amount = TextFieldValue(cleanText, selection = TextRange(cleanText.length))
-                            },
-                            textStyle = TextStyle(
-                                fontSize = 48.sp,
-                                fontWeight = FontWeight.W900,
-                                color = textPrimary,
-                                textAlign = TextAlign.Center
-                            ),
-                            decorationBox = { innerTextField ->
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier.fillMaxWidth()
-                                ) {
-                                    if (amount.text.isEmpty()) {
-                                        Text(
-                                            text = "$currency 0",
-                                            style = TextStyle(
-                                                fontSize = 48.sp,
-                                                fontWeight = FontWeight.W900,
-                                                color = textMuted,
-                                                textAlign = TextAlign.Center
-                                            )
-                                        )
-                                    } else {
-                                        Row(verticalAlignment = Alignment.CenterVertically) {
-                                            Text(
-                                                text = "$currency ",
-                                                style = TextStyle(
-                                                    fontSize = 48.sp,
-                                                    fontWeight = FontWeight.W900,
-                                                    color = textPrimary
-                                                )
-                                            )
-                                            innerTextField()
-                                        }
-                                    }
-                                }
-                            },
-                            keyboardOptions = KeyboardOptions(
-                                keyboardType = KeyboardType.Decimal,
-                                imeAction = ImeAction.Done
-                            ),
-                            keyboardActions = KeyboardActions(
-                                onDone = { focusManager.clearFocus() }
-                            ),
-                            singleLine = true,
+                        // 2. DIRECT CLICKABLE AMOUNT DISPLAY (Triggers Custom Calculator Keypad)
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 24.dp)
-                                .focusRequester(focusRequester)
-                        )
+                                .padding(horizontal = 24.dp, vertical = 4.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .clickable {
+                                    focusManager.clearFocus()
+                                    showCalculatorSheet = true
+                                },
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = if (amount.text.isEmpty()) "$currency 0" else "$currency ${amount.text}",
+                                style = TextStyle(
+                                    fontSize = 48.sp,
+                                    fontWeight = FontWeight.W900,
+                                    color = if (amount.text.isEmpty()) textMuted else textPrimary,
+                                    textAlign = TextAlign.Center
+                                ),
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
 
                         Spacer(modifier = Modifier.height(24.dp))
 
@@ -583,10 +556,12 @@ fun PopupCard(
                                 .outerGlow(color = greenPrimary, radius = 24.dp, alpha = 0.45f, cornerRadius = 100.dp)
                                 .background(greenPrimary, RoundedCornerShape(100.dp))
                                 .clickable {
-                                    if (amount.text.isBlank()) {
-                                        Toast.makeText(context, "Please enter an amount", Toast.LENGTH_SHORT).show()
+                                    val evaluatedVal = MathEvaluator.tryParseAmount(amount.text)
+                                    if (evaluatedVal == null || evaluatedVal <= 0.0) {
+                                        Toast.makeText(context, "Please enter a valid amount", Toast.LENGTH_SHORT).show()
                                         return@clickable
                                     }
+                                    val formattedAmount = MathEvaluator.formatResult(evaluatedVal)
 
                                     val cat = selectedCategory
                                     val src = selectedSource
@@ -618,7 +593,7 @@ fun PopupCard(
                                     TransactionManager.saveTransactionToPrefs(
                                         context = context,
                                         titleText = if (title.isNotBlank()) title else (if (transactionType == "INCOME") "Quick Income" else "Quick Expense"),
-                                        amountText = amount.text,
+                                        amountText = formattedAmount,
                                         category = cat,
                                         source = src,
                                         paidTo = paidTo,
@@ -626,7 +601,7 @@ fun PopupCard(
                                         reminderDate = isoReminderDate,
                                         dateString = isoDate
                                     )
-                                    Toast.makeText(context, "Logged: $currency${amount.text} to $cat", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Logged: $currency$formattedAmount to $cat", Toast.LENGTH_SHORT).show()
                                     onClose()
                                 },
                             contentAlignment = Alignment.Center
@@ -698,7 +673,22 @@ fun PopupCard(
         }
     }
     
-    // Pickers
+    // Pickers & Keypad Sheet
+    AnimatedVisibility(
+        visible = showCalculatorSheet,
+        enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+        exit = slideOutVertically(targetOffsetY = { it }) + fadeOut()
+    ) {
+        CalculatorKeypadSheet(
+            initialExpression = amount.text,
+            currency = currency,
+            onDismiss = { showCalculatorSheet = false },
+            onSetAmount = { newAmount ->
+                amount = TextFieldValue(newAmount, selection = TextRange(newAmount.length))
+            }
+        )
+    }
+
     if (showDatePicker) {
         val datePickerState = rememberDatePickerState()
         DatePickerDialog(
