@@ -21,7 +21,8 @@ object TransactionManager {
         paidTo: String = "",
         needsVerification: Boolean = false,
         reminderDate: String? = null,
-        dateString: String? = null
+        dateString: String? = null,
+        isIncome: Boolean = false
     ) {
         try {
             val prefs = context.getSharedPreferences("FlutterSharedPreferences", Context.MODE_PRIVATE)
@@ -34,6 +35,7 @@ object TransactionManager {
                 put("merchant", titleText)
                 put("paidTo", paidTo)
                 put("needsVerification", needsVerification)
+                put("isIncome", isIncome)
                 if (reminderDate != null) {
                     put("reminderDate", reminderDate)
                 }
