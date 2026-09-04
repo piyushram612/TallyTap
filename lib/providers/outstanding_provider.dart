@@ -12,9 +12,19 @@ final outstandingListProvider = StateNotifierProvider<OutstandingListNotifier, L
 class OutstandingListNotifier extends StateNotifier<List<OutstandingRecord>> {
   final Ref _ref;
   static const String _storageKey = 'outstanding_ledger_json';
+  Future<void>? _loadFuture;
 
   OutstandingListNotifier(this._ref) : super([]) {
-    loadRecords();
+    _loadFuture = loadRecords();
+  }
+
+  Future<void> ensureLoaded() async {
+    if (_loadFuture != null) {
+      await _loadFuture;
+    } else {
+      _loadFuture = loadRecords();
+      await _loadFuture;
+    }
   }
 
   Future<void> loadRecords() async {
@@ -36,6 +46,7 @@ class OutstandingListNotifier extends StateNotifier<List<OutstandingRecord>> {
   }
 
   Future<void> addRecord(OutstandingRecord record, {bool recordTimelineTx = false, String? paymentMethod}) async {
+    await ensureLoaded();
     String? linkedTxId;
 
     if (recordTimelineTx && paymentMethod != null) {
@@ -69,6 +80,7 @@ class OutstandingListNotifier extends StateNotifier<List<OutstandingRecord>> {
   }
 
   Future<void> settleRecord(String id, {bool recordTimelineTx = false, String? paymentMethod}) async {
+    await ensureLoaded();
     final index = state.indexWhere((r) => r.id == id);
     if (index == -1) return;
 
@@ -116,7 +128,142 @@ class OutstandingListNotifier extends StateNotifier<List<OutstandingRecord>> {
     await _saveToDisk();
   }
 
+  Future<void> settleRecordPartial(
+    String id,
+    double settleAmount, {
+    bool recordTimelineTx = false,
+    String? paymentMethod,
+  }) async {
+    await ensureLoaded();
+    final index = state.indexWhere((r) => r.id == id);
+    if (index == -1) return;
+
+    final record = state[index];
+    if (record.isSettled) return;
+
+    if (settleAmount >= record.amount) {
+      await settleRecord(id, recordTimelineTx: recordTimelineTx, paymentMethod: paymentMethod);
+      return;
+    }
+
+    if (settleAmount <= 0) return;
+
+    String? settleTxId;
+
+    if (recordTimelineTx && paymentMethod != null) {
+      final txId = DateTime.now().millisecondsSinceEpoch.toString();
+      settleTxId = txId;
+
+      final isIncome = record.isLent; // Getting paid back = inflow (Income), Paying back = outflow (Expense)
+
+      final timelineTx = ExpenseTransaction(
+        id: txId,
+        amount: settleAmount,
+        merchant: record.personName,
+        date: DateTime.now(),
+        paymentMethod: paymentMethod,
+        category: isIncome ? 'Income' : 'Other',
+        notes: record.isLent
+            ? 'Partial settlement: Rahul paid back for "${record.notes}"'.replaceAll('Rahul', record.personName)
+            : 'Partial settlement: Paid back Rahul for "${record.notes}"'.replaceAll('Rahul', record.personName),
+        paidTo: !record.isLent ? record.personName : '',
+        isIncome: isIncome,
+      );
+
+      await _ref.read(transactionListProvider.notifier).addTransaction(timelineTx);
+    }
+
+    final remainingRecord = record.copyWith(
+      amount: record.amount - settleAmount,
+    );
+
+    final settledRecord = OutstandingRecord(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      personName: record.personName,
+      amount: settleAmount,
+      notes: record.notes.isNotEmpty
+          ? '${record.notes} (Partial settlement)'
+          : 'Partial settlement',
+      date: record.date,
+      isLent: record.isLent,
+      isSettled: true,
+      settledDate: DateTime.now(),
+      linkedTransactionId: settleTxId,
+    );
+
+    state = [
+      for (int i = 0; i < state.length; i++)
+        if (i == index) remainingRecord else state[i],
+      settledRecord,
+    ]..sort((a, b) => b.date.compareTo(a.date));
+
+    await _saveToDisk();
+  }
+
+  Future<void> settlePersonAmount(
+    String personName,
+    double settleAmount,
+    bool isLentDirection, {
+    String? linkedTimelineTxId,
+  }) async {
+    await ensureLoaded();
+    if (settleAmount <= 0) return;
+
+    double remainingToSettle = settleAmount;
+
+    final activeForPerson = state.where((r) => !r.isSettled && r.personName == personName).toList();
+    activeForPerson.sort((a, b) {
+      if (a.isLent == isLentDirection && b.isLent != isLentDirection) return -1;
+      if (a.isLent != isLentDirection && b.isLent == isLentDirection) return 1;
+      return a.date.compareTo(b.date);
+    });
+
+    final Map<String, OutstandingRecord> modifiedActive = {};
+    final List<OutstandingRecord> newSettled = [];
+
+    for (final r in activeForPerson) {
+      if (remainingToSettle <= 0) break;
+
+      if (r.amount <= remainingToSettle + 0.0001) {
+        remainingToSettle -= r.amount;
+        modifiedActive[r.id] = r.copyWith(
+          isSettled: true,
+          settledDate: DateTime.now(),
+          linkedTransactionId: linkedTimelineTxId ?? r.linkedTransactionId,
+        );
+      } else {
+        final portion = remainingToSettle;
+        remainingToSettle = 0;
+
+        modifiedActive[r.id] = r.copyWith(
+          amount: r.amount - portion,
+        );
+
+        newSettled.add(OutstandingRecord(
+          id: '${DateTime.now().millisecondsSinceEpoch}_${newSettled.length}',
+          personName: r.personName,
+          amount: portion,
+          notes: r.notes.isNotEmpty ? '${r.notes} (Partial settlement)' : 'Partial settlement',
+          date: r.date,
+          isLent: r.isLent,
+          isSettled: true,
+          settledDate: DateTime.now(),
+          linkedTransactionId: linkedTimelineTxId,
+        ));
+      }
+    }
+
+    state = [
+      for (final r in state)
+        if (modifiedActive.containsKey(r.id)) modifiedActive[r.id]! else r,
+      ...newSettled,
+    ]..sort((a, b) => b.date.compareTo(a.date));
+
+    await _saveToDisk();
+  }
+
   Future<void> deleteRecord(String id) async {
+    await ensureLoaded();
     state = state.where((r) => r.id != id).toList();
     await _saveToDisk();
   }

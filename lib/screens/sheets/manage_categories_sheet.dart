@@ -73,14 +73,7 @@ class _ManageCategoriesSheetState extends ConsumerState<ManageCategoriesSheet> {
                 final transactions = ref.read(transactionListProvider);
                 for (var tx in transactions) {
                   if (tx.category == oldName) {
-                    final updatedTx = ExpenseTransaction(
-                      id: tx.id,
-                      amount: tx.amount,
-                      merchant: tx.merchant,
-                      date: tx.date,
-                      paymentMethod: tx.paymentMethod,
-                      category: newName,
-                    );
+                    final updatedTx = tx.copyWith(category: newName);
                     await txListNotifier.updateTransaction(updatedTx);
                   }
                 }

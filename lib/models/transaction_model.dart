@@ -89,11 +89,15 @@ class ExpenseTransaction {
   factory ExpenseTransaction.fromMap(Map<String, dynamic> map) {
     final cat = (map['category'] ?? 'Other').toString();
     final lowerCat = cat.toLowerCase();
-    // Guess isIncome based on default exclusive income categories or 'income' category
-    final guessedIsIncome = lowerCat == 'income' ||
+    final bool resolvedIsIncome;
+    if (lowerCat == 'income' ||
         lowerCat == 'salary' ||
         lowerCat == 'bonus' ||
-        lowerCat == 'dividends';
+        lowerCat == 'dividends') {
+      resolvedIsIncome = true;
+    } else {
+      resolvedIsIncome = map['isIncome'] ?? false;
+    }
 
     return ExpenseTransaction(
       id: map['id'] ?? '',
@@ -109,7 +113,7 @@ class ExpenseTransaction {
       wasFinishLater: map['wasFinishLater'] ?? (map['needsVerification'] ?? false), // Backwards compat: if needsVerification was true, it wasFinishLater.
       hideFromLedger: map['hideFromLedger'] ?? false,
       groupId: map['groupId'],
-      isIncome: map['isIncome'] ?? guessedIsIncome,
+      isIncome: resolvedIsIncome,
     );
   }
 
