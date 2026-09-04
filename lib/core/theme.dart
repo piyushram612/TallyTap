@@ -54,7 +54,12 @@ class TriplTheme {
           }
           return null;
         }),
-        todayForegroundColor: WidgetStateProperty.all(primaryMint),
+        todayForegroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return obsidianBg;
+          }
+          return primaryMint;
+        }),
         todayBorder: BorderSide(color: primaryMint, width: 1.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),

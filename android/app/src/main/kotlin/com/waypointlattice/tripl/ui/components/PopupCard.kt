@@ -17,7 +17,12 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.Spring
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -115,6 +120,7 @@ fun PopupCard(
 
     var visible by remember { mutableStateOf(false) }
     var isExpanded by remember { mutableStateOf(false) }
+    var showActionDialog by remember { mutableStateOf(false) }
     val scale = remember { Animatable(0.85f) }
 
     // Input States
@@ -176,7 +182,9 @@ fun PopupCard(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null
-            ) { onClose() },
+            ) { 
+                if (showActionDialog) showActionDialog = false else onClose()
+            },
         contentAlignment = Alignment.TopCenter
     ) {
         AnimatedVisibility(
@@ -678,22 +686,166 @@ fun PopupCard(
                             .clip(RoundedCornerShape(10.dp))
                             .background(borderDark)
                             .clickable {
-                                val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
-                                    flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
-                                    putExtra("navigate", "create_transaction")
-                                }
-                                context.startActivity(launchIntent)
-                                onClose()
+                                showActionDialog = true
                             }
                             .padding(10.dp)
                     ) {
                         Icon(
                             imageVector = Icons.Default.OpenInNew,
-                            contentDescription = "Open in app",
+                            contentDescription = "Open in app options",
                             tint = greenPrimary,
                             modifier = Modifier.size(16.dp)
                         )
                     }
+                }
+            }
+        }
+
+        // ACTION SELECTION DIALOG OVERLAY (Originating from top-right button)
+        AnimatedVisibility(
+            visible = showActionDialog,
+            enter = fadeIn(animationSpec = tween(200)) + scaleIn(
+                initialScale = 0.1f,
+                transformOrigin = TransformOrigin(0.88f, 0.08f),
+                animationSpec = spring(stiffness = Spring.StiffnessLow, dampingRatio = Spring.DampingRatioMediumBouncy)
+            ),
+            exit = fadeOut(animationSpec = tween(150)) + scaleOut(
+                targetScale = 0.1f,
+                transformOrigin = TransformOrigin(0.88f, 0.08f),
+                animationSpec = tween(180)
+            ),
+            modifier = Modifier
+                .padding(top = 64.dp, start = 20.dp, end = 20.dp)
+                .fillMaxWidth(0.94f)
+        ) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .outerGlow(color = greenPrimary, radius = 32.dp, alpha = 0.55f, cornerRadius = 28.dp)
+                    .shadow(
+                        elevation = 28.dp,
+                        shape = RoundedCornerShape(28.dp),
+                        clip = false,
+                        ambientColor = greenPrimary.copy(alpha = 0.3f),
+                        spotColor = greenPrimary.copy(alpha = 0.4f)
+                    )
+                    .clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) { /* catch clicks inside card */ },
+                shape = RoundedCornerShape(28.dp),
+                colors = CardDefaults.cardColors(containerColor = cardBgDark),
+                border = BorderStroke(1.5.dp, greenPrimary.copy(alpha = 0.6f))
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp)
+                ) {
+                    // Dialog Header
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column {
+                            Text(
+                                text = "Create Options",
+                                style = TextStyle(
+                                    fontSize = 18.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = textPrimary
+                                )
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "Select transaction type to open in app",
+                                style = TextStyle(
+                                    fontSize = 12.sp,
+                                    color = textMuted
+                                )
+                            )
+                        }
+                        IconButton(
+                            onClick = { showActionDialog = false },
+                            modifier = Modifier
+                                .size(32.dp)
+                                .background(borderDark, CircleShape)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Close dialog",
+                                tint = textMuted,
+                                modifier = Modifier.size(18.dp)
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Option 1: Create New Transaction
+                    ActionDialogOptionItem(
+                        icon = Icons.Default.AddCircleOutline,
+                        title = "Create New Transaction",
+                        description = "Log a single expense or income immediately",
+                        greenPrimary = greenPrimary,
+                        borderDark = borderDark,
+                        textPrimary = textPrimary,
+                        textMuted = textMuted,
+                        onClick = {
+                            val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
+                                flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                putExtra("navigate", "create_transaction")
+                            }
+                            context.startActivity(launchIntent)
+                            showActionDialog = false
+                            onClose()
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Option 2: Create Recurring Transaction
+                    ActionDialogOptionItem(
+                        icon = Icons.Default.Autorenew,
+                        title = "Create Recurring Transaction",
+                        description = "Schedule repeating bills, income, or subscriptions",
+                        greenPrimary = greenPrimary,
+                        borderDark = borderDark,
+                        textPrimary = textPrimary,
+                        textMuted = textMuted,
+                        onClick = {
+                            val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
+                                flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                putExtra("navigate", "create_recurring")
+                            }
+                            context.startActivity(launchIntent)
+                            showActionDialog = false
+                            onClose()
+                        }
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Option 3: Create Group Transaction
+                    ActionDialogOptionItem(
+                        icon = Icons.Default.Groups,
+                        title = "Create Group Transaction",
+                        description = "Split a bill with friends and track shared shares",
+                        greenPrimary = greenPrimary,
+                        borderDark = borderDark,
+                        textPrimary = textPrimary,
+                        textMuted = textMuted,
+                        onClick = {
+                            val launchIntent = context.packageManager.getLaunchIntentForPackage(context.packageName)?.apply {
+                                flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                                putExtra("navigate", "expense_splitter")
+                            }
+                            context.startActivity(launchIntent)
+                            showActionDialog = false
+                            onClose()
+                        }
+                    )
                 }
             }
         }
@@ -832,3 +984,68 @@ fun PopupCard(
         }
     }
 }
+
+@Composable
+private fun ActionDialogOptionItem(
+    icon: ImageVector,
+    title: String,
+    description: String,
+    greenPrimary: Color,
+    borderDark: Color,
+    textPrimary: Color,
+    textMuted: Color,
+    onClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(16.dp))
+            .background(borderDark.copy(alpha = 0.4f))
+            .border(1.dp, greenPrimary.copy(alpha = 0.25f), RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(14.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            modifier = Modifier
+                .size(42.dp)
+                .background(greenPrimary.copy(alpha = 0.15f), CircleShape)
+                .border(1.dp, greenPrimary.copy(alpha = 0.35f), CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = title,
+                tint = greenPrimary,
+                modifier = Modifier.size(22.dp)
+            )
+        }
+        Spacer(modifier = Modifier.width(14.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = title,
+                style = TextStyle(
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = textPrimary
+                )
+            )
+            Spacer(modifier = Modifier.height(2.dp))
+            Text(
+                text = description,
+                style = TextStyle(
+                    fontSize = 11.sp,
+                    color = textMuted,
+                    lineHeight = 15.sp
+                )
+            )
+        }
+        Icon(
+            imageVector = Icons.Default.ChevronRight,
+            contentDescription = null,
+            tint = greenPrimary.copy(alpha = 0.7f),
+            modifier = Modifier.size(18.dp)
+        )
+    }
+}
+

@@ -20,6 +20,7 @@ import 'timeline_screen.dart';
 import 'toolkit_screen.dart';
 import 'create_transaction_screen.dart';
 import 'create_recurring_transaction_screen.dart';
+import 'tools/expense_splitter_screen.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../services/tutorial_service.dart';
@@ -42,14 +43,31 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
     
     // Listen for native requests
     const MethodChannel('com.waypointlattice.tripl/popup').setMethodCallHandler((call) async {
-      if (call.method == 'navigate' && call.arguments == 'create_transaction') {
+      if (call.method == 'navigate') {
         if (mounted) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CreateTransactionScreen(),
-            ),
-          );
+          final destination = call.arguments as String?;
+          if (destination == 'create_transaction') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CreateTransactionScreen(),
+              ),
+            );
+          } else if (destination == 'create_recurring') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CreateRecurringTransactionScreen(),
+              ),
+            );
+          } else if (destination == 'expense_splitter') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ExpenseSplitterScreen(),
+              ),
+            );
+          }
         }
       } else if (call.method == 'onBackTapStateChanged') {
         final enabled = call.arguments as bool;
@@ -449,6 +467,21 @@ class _MainScreenState extends ConsumerState<MainScreen> with WidgetsBindingObse
                                 context,
                                 MaterialPageRoute(
                                   builder: (context) => const CreateRecurringTransactionScreen(),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 16),
+                          _buildSpeedDialItem(
+                            context,
+                            icon: Icons.groups_rounded,
+                            label: 'Group Transaction',
+                            onTap: () {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ExpenseSplitterScreen(),
                                 ),
                               );
                             },

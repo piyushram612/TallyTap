@@ -57,12 +57,13 @@ class MainActivity : FlutterFragmentActivity() {
     }
 
     private fun handleIntent(intent: Intent?) {
-        if (intent != null && intent.getStringExtra("navigate") == "create_transaction") {
+        if (intent != null && intent.hasExtra("navigate")) {
+            val destination = intent.getStringExtra("navigate") ?: "create_transaction"
             android.os.Handler(android.os.Looper.getMainLooper()).postDelayed({
                 flutterEngineInstance?.let { engine ->
-                    android.util.Log.d("MainActivity", "Invoking navigate/create_transaction channel call to Flutter")
+                    android.util.Log.d("MainActivity", "Invoking navigate/$destination channel call to Flutter")
                     MethodChannel(engine.dartExecutor.binaryMessenger, CHANNEL)
-                        .invokeMethod("navigate", "create_transaction")
+                        .invokeMethod("navigate", destination)
                 }
             }, 600) // 600ms delay to ensure Flutter app state is active
         }

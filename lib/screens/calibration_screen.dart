@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/theme.dart';
 import '../providers/app_state_provider.dart';
+import '../providers/theme_provider.dart';
 import '../services/platform_service.dart';
 import 'main_screen.dart';
 
@@ -168,6 +169,8 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
 
   @override
   Widget build(BuildContext context) {
+    ref.watch(themeProvider);
+
     return Scaffold(
       backgroundColor: TriplTheme.obsidianBg,
       body: SafeArea(
@@ -249,9 +252,15 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
                   onPressed: _calibrationSucceeded ? _onDone : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: TriplTheme.primaryMint,
-                    foregroundColor: TriplTheme.obsidianBg,
+                    foregroundColor: TriplTheme.isLight
+                        ? Colors.white
+                        : TriplTheme.obsidianBg,
                     disabledBackgroundColor:
                         TriplTheme.primaryMint.withOpacity(0.45),
+                    disabledForegroundColor: (TriplTheme.isLight
+                            ? Colors.white
+                            : TriplTheme.obsidianBg)
+                        .withOpacity(0.6),
                     minimumSize: const Size.fromHeight(52),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
@@ -307,8 +316,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
 
   Widget _buildPhoneGraphic() {
     final isSuccess = _status == _TapStatus.success;
-    final glowColor =
-        isSuccess ? const Color(0xFF22C55E) : TriplTheme.primaryMint;
+    final glowColor = TriplTheme.primaryMint;
 
     return AnimatedBuilder(
       animation: _pulseAnim,
@@ -324,7 +332,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
         height: 220,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(32),
-          color: const Color(0xFF0D1A14),
+          color: TriplTheme.obsidianCard,
           border: Border.all(
             color: glowColor.withOpacity(isSuccess ? 0.9 : 0.35),
             width: isSuccess ? 2.0 : 1.5,
@@ -402,7 +410,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
       height: 52,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFF1D2F28), width: 1.2),
+        border: Border.all(color: TriplTheme.borderGreen, width: 1.2),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -419,18 +427,15 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
         height: 12,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: const Color(0xFF1D2F28), width: 1.2),
-          color: const Color(0xFF0A0F0D),
+          border: Border.all(color: TriplTheme.borderGreen, width: 1.2),
+          color: TriplTheme.obsidianBg,
         ),
       );
 
   // ── Dot Row ────────────────────────────────────────────────────────────────
 
   Widget _buildDotRow() {
-    final isSuccess = _status == _TapStatus.success;
-    final dotColor = isSuccess
-        ? const Color(0xFF22C55E)
-        : TriplTheme.primaryMint;
+    final dotColor = TriplTheme.primaryMint;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -469,7 +474,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
     switch (_status) {
       case _TapStatus.success:
         text = 'Perfect! Triple back tap registered ✓';
-        color = const Color(0xFF22C55E);
+        color = TriplTheme.primaryMint;
         break;
       case _TapStatus.failure:
         text = 'Not detected — try again';
@@ -502,7 +507,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: const Color(0xFF0D1A14),
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: TriplTheme.borderGreen, width: 0.8),
       ),
@@ -623,7 +628,7 @@ class _CalibrationScreenState extends ConsumerState<CalibrationScreen>
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
       decoration: BoxDecoration(
-        color: const Color(0xFF0D1A14),
+        color: TriplTheme.obsidianCard,
         borderRadius: BorderRadius.circular(18),
         border: Border.all(color: TriplTheme.borderGreen, width: 0.8),
       ),

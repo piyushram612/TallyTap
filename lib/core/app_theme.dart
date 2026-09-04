@@ -265,7 +265,12 @@ class AppThemeConfig {
           }
           return null;
         }),
-        todayForegroundColor: WidgetStateProperty.all(primaryAccent),
+        todayForegroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return isDark ? Colors.black : Colors.white;
+          }
+          return primaryAccent;
+        }),
         todayBorder: BorderSide(color: primaryAccent, width: 1.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
