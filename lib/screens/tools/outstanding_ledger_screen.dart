@@ -475,20 +475,8 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                                         final isSynth = allTx.any((t) => t.id == r.id && t.wasFinishLater);
                                                         if (isSynth) {
                                                           final tx = allTx.firstWhere((t) => t.id == r.id);
-                                                          final updatedTx = ExpenseTransaction(
-                                                            id: tx.id,
-                                                            amount: tx.amount,
-                                                            merchant: tx.merchant,
-                                                            date: tx.date,
-                                                            paymentMethod: tx.paymentMethod,
-                                                            category: tx.category,
-                                                            notes: tx.notes,
-                                                            paidTo: tx.paidTo,
-                                                            needsVerification: tx.needsVerification,
-                                                            reminderDate: tx.reminderDate,
-                                                            wasFinishLater: tx.wasFinishLater,
+                                                          final updatedTx = tx.copyWith(
                                                             hideFromLedger: true,
-                                                            groupId: tx.groupId,
                                                           );
                                                           ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
                                                         } else {
@@ -503,28 +491,78 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
                                         );
                                       }).toList(),
 
-                                      // Settle Entire Balance CTA
+                                      // Settle Balance CTAs
                                       if (netPerson != 0) ...[
                                         const SizedBox(height: 12),
-                                        ElevatedButton.icon(
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: netPerson > 0 ? TriplTheme.primaryMint : const Color(0xFFF59E0B),
-                                            foregroundColor: TriplTheme.obsidianBg,
-                                            minimumSize: const Size.fromHeight(40),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius: BorderRadius.circular(10),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 3,
+                                              child: ElevatedButton.icon(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: netPerson > 0 ? TriplTheme.primaryMint : const Color(0xFFF59E0B),
+                                                  foregroundColor: TriplTheme.obsidianBg,
+                                                  minimumSize: const Size.fromHeight(40),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                ),
+                                                icon: const Icon(Icons.handshake_rounded, size: 16),
+                                                label: Text(
+                                                  'Settle Net ($currency${netPerson.abs().toStringAsFixed(0)})',
+                                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                onPressed: () {
+                                                  HapticFeedback.mediumImpact();
+                                                  _showSettleNetDialog(
+                                                    context,
+                                                    person,
+                                                    netPerson,
+                                                    items.where((r) => !r.isSettled).toList(),
+                                                    initialPartial: false,
+                                                  );
+                                                },
+                                              ),
                                             ),
-                                          ),
-                                          icon: const Icon(Icons.handshake_rounded, size: 16),
-                                          label: Text(
-                                            'Settle Net Balance ($currency${netPerson.abs().toStringAsFixed(0)})',
-                                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
-                                          ),
-                                          onPressed: () {
-                                            HapticFeedback.mediumImpact();
-                                            // Settle all active transactions for this person
-                                            _showSettleNetDialog(context, person, netPerson, items.where((r) => !r.isSettled).toList());
-                                          },
+                                            const SizedBox(width: 8),
+                                            Expanded(
+                                              flex: 2,
+                                              child: OutlinedButton.icon(
+                                                style: OutlinedButton.styleFrom(
+                                                  foregroundColor: netPerson > 0 ? TriplTheme.primaryMint : const Color(0xFFF59E0B),
+                                                  side: BorderSide(
+                                                    color: (netPerson > 0 ? TriplTheme.primaryMint : const Color(0xFFF59E0B)).withOpacity(0.5),
+                                                    width: 1.2,
+                                                  ),
+                                                  minimumSize: const Size.fromHeight(40),
+                                                  padding: const EdgeInsets.symmetric(horizontal: 6),
+                                                  shape: RoundedRectangleBorder(
+                                                    borderRadius: BorderRadius.circular(10),
+                                                  ),
+                                                ),
+                                                icon: const Icon(Icons.pie_chart_outline_rounded, size: 15),
+                                                label: const Text(
+                                                  'Partial',
+                                                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                ),
+                                                onPressed: () {
+                                                  HapticFeedback.mediumImpact();
+                                                  _showSettleNetDialog(
+                                                    context,
+                                                    person,
+                                                    netPerson,
+                                                    items.where((r) => !r.isSettled).toList(),
+                                                    initialPartial: true,
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ],
@@ -571,187 +609,364 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
       selectedSource = sources.isNotEmpty ? sources.first : 'Cash';
     }
 
+    bool isPartial = false;
+    final partialController = TextEditingController();
+    final currency = ref.read(currencyProvider);
+
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
-        builder: (context, setStateDialog) => AlertDialog(
-          backgroundColor: TriplTheme.obsidianCard,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
-          ),
-          title: Text(
-            record.isLent ? 'Settle Lent Balance' : 'Settle Owed Balance',
-            style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                record.isLent
-                    ? 'Confirm Rahul paid you back the amount of ${record.amount} INR.'
-                        .replaceAll('Rahul', record.personName)
-                        .replaceAll('1,200', record.amount.toStringAsFixed(0))
-                    : 'Confirm you paid Rahul back the amount of ${record.amount} INR.'
-                        .replaceAll('Rahul', record.personName)
-                        .replaceAll('1,200', record.amount.toStringAsFixed(0)),
-                style: TextStyle(color: TriplTheme.textLight, fontSize: 13, height: 1.4),
-              ),
-              const SizedBox(height: 20),
-              Row(
+        builder: (context, setStateDialog) {
+          final partialVal = MathEvaluator.tryParseAmount(partialController.text) ?? 0.0;
+          final remaining = (record.amount - partialVal).clamp(0.0, record.amount);
+
+          return AlertDialog(
+            backgroundColor: TriplTheme.obsidianCard,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
+            ),
+            title: Text(
+              record.isLent ? 'Settle Lent Balance' : 'Settle Owed Balance',
+              style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Checkbox(
-                    value: recordTimelineTx,
-                    activeColor: TriplTheme.primaryMint,
-                    onChanged: (val) {
-                      setStateDialog(() {
-                        recordTimelineTx = val ?? true;
-                      });
-                    },
-                  ),
-                  Expanded(
-                    child: Text(
-                      isSynth ? 'Complete transaction in timeline' : 'Record Settlement in Timeline',
-                      style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
+                  // Full vs Partial Tab Switcher
+                  Container(
+                    height: 40,
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      color: TriplTheme.obsidianBg,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: TriplTheme.borderGreen),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              setStateDialog(() => isPartial = false);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: !isPartial ? TriplTheme.primaryMint : Colors.transparent,
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              child: Text(
+                                'Full ($currency${record.amount.toStringAsFixed(0)})',
+                                style: TextStyle(
+                                  color: !isPartial ? TriplTheme.obsidianBg : TriplTheme.textGray,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              setStateDialog(() => isPartial = true);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: isPartial ? TriplTheme.primaryMint : Colors.transparent,
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              child: Text(
+                                'Partial Amount',
+                                style: TextStyle(
+                                  color: isPartial ? TriplTheme.obsidianBg : TriplTheme.textGray,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              if (recordTimelineTx) ...[
-                const SizedBox(height: 12),
-                Text(
-                  'SELECT PAYMENT SOURCE',
-                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: TriplTheme.obsidianBg,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: TriplTheme.borderGreen),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: selectedSource,
-                      dropdownColor: TriplTheme.obsidianCard,
-                      isExpanded: true,
+                  const SizedBox(height: 16),
+
+                  if (!isPartial) ...[
+                    Text(
+                      record.isLent
+                          ? 'Confirm Rahul paid you back the full amount of $currency${record.amount.toStringAsFixed(0)}.'
+                              .replaceAll('Rahul', record.personName)
+                          : 'Confirm you paid Rahul back the full amount of $currency${record.amount.toStringAsFixed(0)}.'
+                              .replaceAll('Rahul', record.personName),
+                      style: TextStyle(color: TriplTheme.textLight, fontSize: 13, height: 1.4),
+                    ),
+                  ] else ...[
+                    Text(
+                      'AMOUNT TO SETTLE',
+                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
+                    ),
+                    const SizedBox(height: 6),
+                    TextField(
+                      controller: partialController,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\+\-\*\/\×\÷\%\ \(\)]')),
+                      ],
                       style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
-                      items: ref.read(sourcesListProvider).map((s) {
-                        return DropdownMenuItem<String>(
-                          value: s,
-                          child: Text(s),
+                      decoration: InputDecoration(
+                        prefixText: '$currency ',
+                        prefixStyle: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
+                        hintText: '0.00',
+                        hintStyle: TextStyle(color: TriplTheme.textGray),
+                        filled: true,
+                        fillColor: TriplTheme.obsidianBg,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: TriplTheme.borderGreen),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: TriplTheme.primaryMint),
+                        ),
+                      ),
+                      onChanged: (_) => setStateDialog(() {}),
+                    ),
+                    const SizedBox(height: 8),
+                    // Quick Chips
+                    Row(
+                      children: [0.25, 0.5, 0.75].map((factor) {
+                        final amt = (record.amount * factor).round();
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 6),
+                          child: InkWell(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              setStateDialog(() {
+                                partialController.text = amt.toString();
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: TriplTheme.obsidianBg,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: TriplTheme.borderGreen),
+                              ),
+                              child: Text(
+                                '${(factor * 100).toInt()}% ($currency$amt)',
+                                style: TextStyle(color: TriplTheme.textGray, fontSize: 10, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
                         );
                       }).toList(),
-                      onChanged: (val) {
-                        if (val != null) {
-                          setStateDialog(() {
-                            selectedSource = val;
-                          });
-                        }
-                      },
                     ),
-                  ),
-                ),
-              ],
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: TriplTheme.primaryMint,
-                foregroundColor: TriplTheme.obsidianBg,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-              onPressed: () async {
-                final allTx = ref.read(transactionListProvider);
-                final isSynth = allTx.any((t) => t.id == record.id && t.wasFinishLater);
-                ExpenseTransaction? synthTx;
-                if (isSynth) {
-                  synthTx = allTx.firstWhere((t) => t.id == record.id);
-                }
+                    const SizedBox(height: 8),
+                    Text(
+                      'Remaining after settlement: $currency${remaining.toStringAsFixed(0)}',
+                      style: TextStyle(color: TriplTheme.primaryMint.withOpacity(0.9), fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                  ],
 
-                if (isSynth && synthTx != null) {
-                  if (recordTimelineTx) {
-                    final updatedTx = ExpenseTransaction(
-                      id: synthTx.id,
-                      amount: synthTx.amount,
-                      merchant: synthTx.merchant,
-                      date: synthTx.date,
-                      paymentMethod: selectedSource, // Set to selected source
-                      category: synthTx.category,
-                      notes: synthTx.notes,
-                      paidTo: synthTx.paidTo,
-                      needsVerification: false, // Mark completed
-                      reminderDate: null,
-                      wasFinishLater: synthTx.wasFinishLater,
-                      hideFromLedger: synthTx.hideFromLedger,
-                      groupId: synthTx.groupId,
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: recordTimelineTx,
+                        activeColor: TriplTheme.primaryMint,
+                        onChanged: (val) {
+                          setStateDialog(() {
+                            recordTimelineTx = val ?? true;
+                          });
+                        },
+                      ),
+                      Expanded(
+                        child: Text(
+                          isSynth
+                              ? 'Complete transaction in timeline'
+                              : 'Record Settlement in Timeline',
+                          style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (recordTimelineTx) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      'SELECT PAYMENT SOURCE',
+                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: TriplTheme.obsidianBg,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: TriplTheme.borderGreen),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedSource,
+                          dropdownColor: TriplTheme.obsidianCard,
+                          isExpanded: true,
+                          style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
+                          items: ref.read(sourcesListProvider).map((s) {
+                            return DropdownMenuItem<String>(
+                              value: s,
+                              child: Text(s),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            if (val != null) {
+                              setStateDialog(() {
+                                selectedSource = val;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: TriplTheme.primaryMint,
+                  foregroundColor: TriplTheme.obsidianBg,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                onPressed: () async {
+                  final amtToSettle = isPartial
+                      ? (MathEvaluator.tryParseAmount(partialController.text) ?? 0.0)
+                      : record.amount;
+
+                  if (amtToSettle <= 0) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter a valid amount greater than 0'), behavior: SnackBarBehavior.floating),
                     );
-                    await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
-                    NotificationService.cancelNotification(synthTx.id);
-                    if (context.mounted) {
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Transaction completed successfully'), behavior: SnackBarBehavior.floating),
+                    return;
+                  }
+
+                  if (amtToSettle > record.amount) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Amount cannot exceed $currency${record.amount.toStringAsFixed(0)}'), behavior: SnackBarBehavior.floating),
+                    );
+                    return;
+                  }
+
+                  final isFull = amtToSettle >= record.amount - 0.0001;
+
+                  if (isSynth && synthTx != null) {
+                    if (isFull) {
+                      if (recordTimelineTx) {
+                        final updatedTx = synthTx.copyWith(
+                          paymentMethod: selectedSource,
+                          needsVerification: false,
+                          reminderDate: null,
+                        );
+                        await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
+                        NotificationService.cancelNotification(synthTx.id);
+                      } else {
+                        final updatedTx = synthTx.copyWith(
+                          hideFromLedger: true,
+                        );
+                        await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
+                      }
+                    } else {
+                      final updatedTx = synthTx.copyWith(
+                        amount: synthTx.amount - amtToSettle,
+                      );
+                      await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
+
+                      if (recordTimelineTx) {
+                        final completedTx = ExpenseTransaction(
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
+                          amount: amtToSettle,
+                          merchant: synthTx.merchant,
+                          date: DateTime.now(),
+                          paymentMethod: selectedSource,
+                          category: synthTx.category,
+                          notes: '${synthTx.notes} (Partial settlement)'.trim(),
+                          paidTo: synthTx.paidTo,
+                          needsVerification: false,
+                          isIncome: synthTx.isIncome,
+                        );
+                        await ref.read(transactionListProvider.notifier).addTransaction(completedTx);
+                      }
+
+                      await ref.read(outstandingListProvider.notifier).addRecord(
+                        OutstandingRecord(
+                          id: DateTime.now().millisecondsSinceEpoch.toString(),
+                          personName: record.personName,
+                          amount: amtToSettle,
+                          notes: '${record.notes} (Partial settlement)'.trim(),
+                          date: DateTime.now(),
+                          isLent: record.isLent,
+                          isSettled: true,
+                          settledDate: DateTime.now(),
+                        ),
                       );
                     }
                   } else {
-                    final updatedTx = ExpenseTransaction(
-                      id: synthTx.id,
-                      amount: synthTx.amount,
-                      merchant: synthTx.merchant,
-                      date: synthTx.date,
-                      paymentMethod: synthTx.paymentMethod,
-                      category: synthTx.category,
-                      notes: synthTx.notes,
-                      paidTo: synthTx.paidTo,
-                      needsVerification: synthTx.needsVerification, // remains true
-                      reminderDate: synthTx.reminderDate,
-                      wasFinishLater: synthTx.wasFinishLater,
-                      hideFromLedger: true, // hide from ledger
-                      groupId: synthTx.groupId,
-                    );
-                    await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
-                    if (context.mounted) {
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Transaction hidden from ledger'), behavior: SnackBarBehavior.floating),
-                      );
+                    if (isFull) {
+                      await ref.read(outstandingListProvider.notifier).settleRecord(
+                            record.id,
+                            recordTimelineTx: recordTimelineTx,
+                            paymentMethod: recordTimelineTx ? selectedSource : null,
+                          );
+                    } else {
+                      await ref.read(outstandingListProvider.notifier).settleRecordPartial(
+                            record.id,
+                            amtToSettle,
+                            recordTimelineTx: recordTimelineTx,
+                            paymentMethod: recordTimelineTx ? selectedSource : null,
+                          );
                     }
                   }
-                } else {
-                  await ref.read(outstandingListProvider.notifier).settleRecord(
-                        record.id,
-                        recordTimelineTx: recordTimelineTx,
-                        paymentMethod: recordTimelineTx ? selectedSource : null,
-                      );
+
                   if (context.mounted) {
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Settled ${record.personName}\'s log!'),
+                        content: Text(isFull
+                            ? 'Settled ${record.personName}\'s log!'
+                            : 'Settled $currency${amtToSettle.toStringAsFixed(0)} for ${record.personName}! Remaining: $currency${(record.amount - amtToSettle).toStringAsFixed(0)}'),
                         behavior: SnackBarBehavior.floating,
                       ),
                     );
                   }
-                }
-              },
-              child: const Text('Settle', style: TextStyle(fontWeight: FontWeight.bold)),
-            ),
-          ],
-        ),
+                },
+                child: Text(isPartial ? 'Settle Partial' : 'Settle', style: const TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
 
   // Settle Net Balance Dialog
-  void _showSettleNetDialog(BuildContext context, String person, double netAmount, List<OutstandingRecord> activeItems) {
+  void _showSettleNetDialog(
+    BuildContext context,
+    String person,
+    double netAmount,
+    List<OutstandingRecord> activeItems, {
+    bool initialPartial = false,
+  }) {
     final allTx = ref.read(transactionListProvider);
     final synthesizedItems = activeItems.where((r) => allTx.any((t) => t.id == r.id && t.wasFinishLater)).toList();
     final manualItems = activeItems.where((r) => !allTx.any((t) => t.id == r.id && t.wasFinishLater)).toList();
@@ -778,195 +993,440 @@ class _OutstandingLedgerScreenState extends ConsumerState<OutstandingLedgerScree
       }
     }
 
+    bool isPartial = initialPartial;
+    final partialAmountController = TextEditingController();
+    final currency = ref.read(currencyProvider);
+
     showDialog(
       context: context,
       builder: (context) => StatefulBuilder(
-        builder: (context, setStateDialog) => AlertDialog(
-          backgroundColor: TriplTheme.obsidianCard,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-            side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
-          ),
-          title: Text(
-            'Settle Net Account',
-            style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text(
-                netAmount > 0
-                    ? 'Confirm Rahul paid you the net outstanding balance of ${netAmount.abs().toStringAsFixed(0)} INR.'
-                        .replaceAll('Rahul', person)
-                    : 'Confirm you paid Rahul the net outstanding balance of ${netAmount.abs().toStringAsFixed(0)} INR.'
-                        .replaceAll('Rahul', person),
-                style: TextStyle(color: TriplTheme.textLight, fontSize: 13, height: 1.4),
-              ),
-              const SizedBox(height: 20),
-              Row(
+        builder: (context, setStateDialog) {
+          final partialVal = MathEvaluator.tryParseAmount(partialAmountController.text) ?? 0.0;
+          final remaining = (netAmount.abs() - partialVal).clamp(0.0, netAmount.abs());
+
+          return AlertDialog(
+            backgroundColor: TriplTheme.obsidianCard,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              side: BorderSide(color: TriplTheme.borderGreen, width: 1.5),
+            ),
+            title: Text(
+              isPartial ? 'Settle Partial Balance' : 'Settle Net Account',
+              style: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Checkbox(
-                    value: recordTimelineTx,
-                    activeColor: TriplTheme.primaryMint,
-                    onChanged: (val) {
-                      setStateDialog(() {
-                        recordTimelineTx = val ?? true;
-                      });
-                    },
-                  ),
-                  Expanded(
-                    child: Text(
-                      onlySynthesized 
-                          ? 'Complete transaction(s) in timeline' 
-                          : mixed 
-                              ? 'Record manual settlement & complete pending'
-                              : 'Record Settlement in Timeline',
-                      style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
+                  // Mode Selector Tabs
+                  Container(
+                    height: 40,
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      color: TriplTheme.obsidianBg,
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(color: TriplTheme.borderGreen),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              setStateDialog(() => isPartial = false);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: !isPartial ? TriplTheme.primaryMint : Colors.transparent,
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              child: Text(
+                                'Full Net ($currency${netAmount.abs().toStringAsFixed(0)})',
+                                style: TextStyle(
+                                  color: !isPartial ? TriplTheme.obsidianBg : TriplTheme.textGray,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              setStateDialog(() => isPartial = true);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: isPartial ? TriplTheme.primaryMint : Colors.transparent,
+                                borderRadius: BorderRadius.circular(9),
+                              ),
+                              child: Text(
+                                'Partial Amount',
+                                style: TextStyle(
+                                  color: isPartial ? TriplTheme.obsidianBg : TriplTheme.textGray,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-              if (recordTimelineTx) ...[
-                const SizedBox(height: 12),
-                Text(
-                  'SELECT PAYMENT SOURCE',
-                  style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
-                ),
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: TriplTheme.obsidianBg,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: TriplTheme.borderGreen),
-                  ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
-                      value: selectedSource,
-                      dropdownColor: TriplTheme.obsidianCard,
-                      isExpanded: true,
+                  const SizedBox(height: 16),
+
+                  if (!isPartial) ...[
+                    Text(
+                      netAmount > 0
+                          ? 'Confirm Rahul paid you the full net balance of $currency${netAmount.abs().toStringAsFixed(0)}.'
+                              .replaceAll('Rahul', person)
+                          : 'Confirm you paid Rahul the full net balance of $currency${netAmount.abs().toStringAsFixed(0)}.'
+                              .replaceAll('Rahul', person),
+                      style: TextStyle(color: TriplTheme.textLight, fontSize: 13, height: 1.4),
+                    ),
+                  ] else ...[
+                    Text(
+                      'AMOUNT TO SETTLE',
+                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
+                    ),
+                    const SizedBox(height: 6),
+                    TextField(
+                      controller: partialAmountController,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9\.\+\-\*\/\×\÷\%\ \(\)]')),
+                      ],
                       style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
-                      items: ref.read(sourcesListProvider).map((s) {
-                        return DropdownMenuItem<String>(
-                          value: s,
-                          child: Text(s),
+                      decoration: InputDecoration(
+                        prefixText: '$currency ',
+                        prefixStyle: TextStyle(color: TriplTheme.primaryMint, fontWeight: FontWeight.bold),
+                        hintText: '0.00',
+                        hintStyle: TextStyle(color: TriplTheme.textGray),
+                        filled: true,
+                        fillColor: TriplTheme.obsidianBg,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: TriplTheme.borderGreen),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: TriplTheme.primaryMint),
+                        ),
+                      ),
+                      onChanged: (_) => setStateDialog(() {}),
+                    ),
+                    const SizedBox(height: 8),
+                    // Quick Chips
+                    Row(
+                      children: [0.25, 0.5, 0.75].map((factor) {
+                        final amt = (netAmount.abs() * factor).round();
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 6),
+                          child: InkWell(
+                            onTap: () {
+                              HapticFeedback.selectionClick();
+                              setStateDialog(() {
+                                partialAmountController.text = amt.toString();
+                              });
+                            },
+                            borderRadius: BorderRadius.circular(8),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: TriplTheme.obsidianBg,
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(color: TriplTheme.borderGreen),
+                              ),
+                              child: Text(
+                                '${(factor * 100).toInt()}% ($currency$amt)',
+                                style: TextStyle(color: TriplTheme.textGray, fontSize: 10, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
                         );
                       }).toList(),
-                      onChanged: (val) {
-                        if (val != null) {
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Remaining balance after settlement: $currency${remaining.toStringAsFixed(0)}',
+                      style: TextStyle(color: TriplTheme.primaryMint.withOpacity(0.9), fontSize: 12, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+
+                  const SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: recordTimelineTx,
+                        activeColor: TriplTheme.primaryMint,
+                        onChanged: (val) {
                           setStateDialog(() {
-                            selectedSource = val;
+                            recordTimelineTx = val ?? true;
                           });
-                        }
-                      },
-                    ),
+                        },
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              onlySynthesized 
+                                  ? 'Complete transaction(s) in timeline' 
+                                  : mixed 
+                                      ? 'Record settlement & complete pending'
+                                      : 'Record Settlement in Timeline',
+                              style: TextStyle(color: TriplTheme.textLight, fontSize: 13, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              netAmount > 0 ? 'Logged as Income (+)' : 'Logged as Expense (-)',
+                              style: TextStyle(
+                                color: netAmount > 0 ? const Color(0xFF10B981) : TriplTheme.textGray,
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: TriplTheme.primaryMint,
-                foregroundColor: TriplTheme.obsidianBg,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-              ),
-              onPressed: () async {
-                // Settle synthesized logs for this person
-                for (final record in synthesizedItems) {
-                  final synthTx = allTx.firstWhere((t) => t.id == record.id);
-                  if (recordTimelineTx) {
-                    final updatedTx = ExpenseTransaction(
-                      id: synthTx.id,
-                      amount: synthTx.amount,
-                      merchant: synthTx.merchant,
-                      date: synthTx.date,
-                      paymentMethod: selectedSource, // Update payment source
-                      category: synthTx.category,
-                      notes: synthTx.notes,
-                      paidTo: synthTx.paidTo,
-                      needsVerification: false,
-                      reminderDate: null,
-                      wasFinishLater: synthTx.wasFinishLater,
-                      hideFromLedger: synthTx.hideFromLedger,
-                      groupId: synthTx.groupId,
-                    );
-                    await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
-                    NotificationService.cancelNotification(synthTx.id);
-                  } else {
-                    final updatedTx = ExpenseTransaction(
-                      id: synthTx.id,
-                      amount: synthTx.amount,
-                      merchant: synthTx.merchant,
-                      date: synthTx.date,
-                      paymentMethod: synthTx.paymentMethod,
-                      category: synthTx.category,
-                      notes: synthTx.notes,
-                      paidTo: synthTx.paidTo,
-                      needsVerification: synthTx.needsVerification,
-                      reminderDate: synthTx.reminderDate,
-                      wasFinishLater: synthTx.wasFinishLater,
-                      hideFromLedger: true,
-                      groupId: synthTx.groupId,
-                    );
-                    await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
-                  }
-                }
-
-                // Settle manual logs for this person
-                for (final record in manualItems) {
-                  await ref.read(outstandingListProvider.notifier).settleRecord(record.id, recordTimelineTx: false);
-                }
-
-                // If timeline tracking was requested and there are manual items, log the NET settlement as a single entry
-                if (recordTimelineTx && manualItems.isNotEmpty) {
-                  // Calculate net amount strictly for manual items to prevent double accounting
-                  double manualNetAmount = 0;
-                  for (final record in manualItems) {
-                     manualNetAmount += record.isLent ? record.amount : -record.amount;
-                  }
-                  
-                  if (manualNetAmount != 0) {
-                    final isIncome = manualNetAmount > 0;
-                    final txId = DateTime.now().millisecondsSinceEpoch.toString();
-                    
-                    final netTx = ExpenseTransaction(
-                      id: txId,
-                      amount: manualNetAmount.abs(),
-                      merchant: person,
-                      date: DateTime.now(),
-                      paymentMethod: selectedSource,
-                      category: isIncome ? 'Income' : 'Other',
-                      notes: isIncome 
-                          ? 'Settled net balance: $person paid back'
-                          : 'Settled net balance: Paid back $person',
-                      paidTo: !isIncome ? person : '',
-                    );
-
-                    await ref.read(transactionListProvider.notifier).addTransaction(netTx);
-                  }
-                }
-
-                if (context.mounted) {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Net outstanding for $person settled!'),
-                      behavior: SnackBarBehavior.floating,
+                  if (recordTimelineTx) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      'SELECT PAYMENT SOURCE',
+                      style: TextStyle(fontSize: 9, fontWeight: FontWeight.w800, color: TriplTheme.textGray, letterSpacing: 1.0),
                     ),
-                  );
-                }
-              },
-              child: const Text('Settle Net', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: TriplTheme.obsidianBg,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: TriplTheme.borderGreen),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedSource,
+                          dropdownColor: TriplTheme.obsidianCard,
+                          isExpanded: true,
+                          style: TextStyle(color: TriplTheme.textLight, fontWeight: FontWeight.bold),
+                          items: ref.read(sourcesListProvider).map((s) {
+                            return DropdownMenuItem<String>(
+                              value: s,
+                              child: Text(s),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            if (val != null) {
+                              setStateDialog(() {
+                                selectedSource = val;
+                              });
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
             ),
-          ],
-        ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel', style: TextStyle(color: TriplTheme.textGray)),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: TriplTheme.primaryMint,
+                  foregroundColor: TriplTheme.obsidianBg,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                onPressed: () async {
+                  final settleAmount = isPartial
+                      ? (MathEvaluator.tryParseAmount(partialAmountController.text) ?? 0.0)
+                      : netAmount.abs();
+
+                  if (settleAmount <= 0) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter a valid amount greater than 0'), behavior: SnackBarBehavior.floating),
+                    );
+                    return;
+                  }
+
+                  if (settleAmount > netAmount.abs()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Amount cannot exceed net balance ($currency${netAmount.abs().toStringAsFixed(0)})'), behavior: SnackBarBehavior.floating),
+                    );
+                    return;
+                  }
+
+                  final isFull = settleAmount >= netAmount.abs() - 0.0001;
+
+                  if (isFull) {
+                    // Settle synthesized logs for this person
+                    for (final record in synthesizedItems) {
+                      final synthTx = allTx.firstWhere((t) => t.id == record.id);
+                      if (recordTimelineTx) {
+                        final updatedTx = synthTx.copyWith(
+                          paymentMethod: selectedSource,
+                          needsVerification: false,
+                          reminderDate: null,
+                        );
+                        await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
+                        NotificationService.cancelNotification(synthTx.id);
+                      } else {
+                        final updatedTx = synthTx.copyWith(
+                          hideFromLedger: true,
+                        );
+                        await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
+                      }
+                    }
+
+                    // Settle manual logs for this person
+                    for (final record in manualItems) {
+                      await ref.read(outstandingListProvider.notifier).settleRecord(record.id, recordTimelineTx: false);
+                    }
+
+                    // If timeline tracking was requested and there are manual items, log the NET settlement as a single entry
+                    if (recordTimelineTx && manualItems.isNotEmpty) {
+                      double manualNetAmount = 0;
+                      for (final record in manualItems) {
+                        manualNetAmount += record.isLent ? record.amount : -record.amount;
+                      }
+
+                      if (manualNetAmount != 0) {
+                        final isIncome = manualNetAmount > 0;
+                        final txId = DateTime.now().millisecondsSinceEpoch.toString();
+
+                        final netTx = ExpenseTransaction(
+                          id: txId,
+                          amount: manualNetAmount.abs(),
+                          merchant: person,
+                          date: DateTime.now(),
+                          paymentMethod: selectedSource,
+                          category: isIncome ? 'Income' : 'Other',
+                          notes: isIncome
+                              ? 'Settled net balance: $person paid back'
+                              : 'Settled net balance: Paid back $person',
+                          paidTo: !isIncome ? person : '',
+                          isIncome: isIncome, // <<-- FIXED: Explicitly set isIncome!
+                        );
+
+                        await ref.read(transactionListProvider.notifier).addTransaction(netTx);
+                      }
+                    }
+                  } else {
+                    // Partial settlement across records
+                    double remainingToSettle = settleAmount;
+
+                    // 1. Settle synthesized items first if any
+                    for (final record in synthesizedItems) {
+                      if (remainingToSettle <= 0) break;
+                      final synthTx = allTx.firstWhere((t) => t.id == record.id);
+                      if (synthTx.amount <= remainingToSettle + 0.0001) {
+                        remainingToSettle -= synthTx.amount;
+                        final updatedTx = synthTx.copyWith(
+                          paymentMethod: selectedSource,
+                          needsVerification: false,
+                          reminderDate: null,
+                        );
+                        await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
+                        NotificationService.cancelNotification(synthTx.id);
+                      } else {
+                        final portion = remainingToSettle;
+                        remainingToSettle = 0;
+                        final updatedTx = synthTx.copyWith(
+                          amount: synthTx.amount - portion,
+                        );
+                        await ref.read(transactionListProvider.notifier).updateTransaction(updatedTx);
+
+                        if (recordTimelineTx) {
+                          final splitTx = ExpenseTransaction(
+                            id: DateTime.now().millisecondsSinceEpoch.toString(),
+                            amount: portion,
+                            merchant: synthTx.merchant,
+                            date: DateTime.now(),
+                            paymentMethod: selectedSource,
+                            category: synthTx.category,
+                            notes: '${synthTx.notes} (Partial settlement)'.trim(),
+                            paidTo: synthTx.paidTo,
+                            needsVerification: false,
+                            isIncome: synthTx.isIncome,
+                          );
+                          await ref.read(transactionListProvider.notifier).addTransaction(splitTx);
+                        }
+
+                        await ref.read(outstandingListProvider.notifier).addRecord(
+                          OutstandingRecord(
+                            id: DateTime.now().millisecondsSinceEpoch.toString(),
+                            personName: person,
+                            amount: portion,
+                            notes: 'Partial settlement',
+                            date: DateTime.now(),
+                            isLent: synthTx.isIncome,
+                            isSettled: true,
+                            settledDate: DateTime.now(),
+                          ),
+                        );
+                      }
+                    }
+
+                    // 2. Settle manual items with remainingToSettle
+                    if (remainingToSettle > 0) {
+                      final isLentDirection = netAmount > 0;
+                      String? timelineTxId;
+                      if (recordTimelineTx) {
+                        timelineTxId = DateTime.now().millisecondsSinceEpoch.toString();
+                        final isIncome = isLentDirection;
+                        final partialTx = ExpenseTransaction(
+                          id: timelineTxId,
+                          amount: remainingToSettle,
+                          merchant: person,
+                          date: DateTime.now(),
+                          paymentMethod: selectedSource,
+                          category: isIncome ? 'Income' : 'Other',
+                          notes: isIncome
+                              ? 'Partial settlement: $person paid back'
+                              : 'Partial settlement: Paid back $person',
+                          paidTo: !isIncome ? person : '',
+                          isIncome: isIncome, // <<-- FIXED: Explicitly set isIncome!
+                        );
+                        await ref.read(transactionListProvider.notifier).addTransaction(partialTx);
+                      }
+
+                      await ref.read(outstandingListProvider.notifier).settlePersonAmount(
+                        person,
+                        remainingToSettle,
+                        isLentDirection,
+                        linkedTimelineTxId: timelineTxId,
+                      );
+                    }
+                  }
+
+                  if (context.mounted) {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(isFull
+                            ? 'Net outstanding for $person settled!'
+                            : 'Settled $currency${settleAmount.toStringAsFixed(0)} for $person! Remaining: $currency${(netAmount.abs() - settleAmount).toStringAsFixed(0)}'),
+                        behavior: SnackBarBehavior.floating,
+                      ),
+                    );
+                  }
+                },
+                child: Text(isPartial ? 'Settle Partial' : 'Settle Net', style: const TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
